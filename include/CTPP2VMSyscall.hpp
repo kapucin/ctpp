@@ -58,61 +58,61 @@ class Logger;
 class CTPP2DECL SyscallHandler
 {
 public:
-	/**
-	  @brief Global Handler initialization
-	  @param oCDT - initial data
-	  @return 0 - if success, -1 - if any error occured
-	*/
-	virtual INT_32 InitHandler(CDT & oCDT);
+  /**
+    @brief Global Handler initialization
+    @param oCDT - initial data
+    @return 0 - if success, -1 - if any error occured
+  */
+  virtual INT_32 InitHandler(CDT & oCDT);
 
-	/**
-	  @brief Pre-execution handler setup
-	  @param oCollector - output data collector
-	  @param oCDT - CTPP2 parameters
-	  @param oSyscalls - Syscalls segment
-	  @param oStaticData - Static data segment
-	  @param oStaticText - Static text segment
-	  @return 0 - if success, -1 - if any error occured
-	*/
-	virtual INT_32 PreExecuteSetup(OutputCollector          & oCollector,
-	                               CDT                      & oCDT,
-	                               const ReducedStaticText  & oSyscalls,
-	                               const ReducedStaticData  & oStaticData,
-	                               const ReducedStaticText  & oStaticText,
-	                               Logger                   & oLogger);
+  /**
+    @brief Pre-execution handler setup
+    @param oCollector - output data collector
+    @param oCDT - CTPP2 parameters
+    @param oSyscalls - Syscalls segment
+    @param oStaticData - Static data segment
+    @param oStaticText - Static text segment
+    @return 0 - if success, -1 - if any error occured
+  */
+  virtual INT_32 PreExecuteSetup(OutputCollector          & oCollector,
+                                 CDT                      & oCDT,
+                                 const ReducedStaticText  & oSyscalls,
+                                 const ReducedStaticData  & oStaticData,
+                                 const ReducedStaticText  & oStaticText,
+                                 Logger                   & oLogger);
 
-	/**
-	  @brief Handler
-	  @param aArguments - list of arguments
-	  @param iArgNum - number of arguments
-	  @param oCDTRetVal - return value
-	*/
-	virtual INT_32 Handler(CDT            * aArguments,
-	                       const UINT_32    iArgNum,
-	                       CDT            & oCDTRetVal,
-	                       Logger         & oLogger) = 0;
+  /**
+    @brief Handler
+    @param aArguments - list of arguments
+    @param iArgNum - number of arguments
+    @param oCDTRetVal - return value
+  */
+  virtual INT_32 Handler(CDT            * aArguments,
+                         const UINT_32    iArgNum,
+                         CDT            & oCDTRetVal,
+                         Logger         & oLogger) = 0;
 
-	/**
-	  @brief Get function name
-	*/
-	virtual CCHAR_P GetName() const = 0;
+  /**
+    @brief Get function name
+  */
+  virtual CCHAR_P GetName() const = 0;
 
-	/**
-	  @brief Get API version
-	*/
-	virtual INT_32 GetVersion() const;
+  /**
+    @brief Get API version
+  */
+  virtual INT_32 GetVersion() const;
 
-	/**
-	  @brief Handler resources destructor
-	  @param oCDT - data, same of in InitHandler
-	  @return 0 - if success, -1 - if any erro occured
-	*/
-	virtual INT_32 DestroyHandler(CDT & oCDT) throw();
+  /**
+    @brief Handler resources destructor
+    @param oCDT - data, same of in InitHandler
+    @return 0 - if success, -1 - if any erro occured
+  */
+  virtual INT_32 DestroyHandler(CDT & oCDT) throw();
 
-	/**
-	  @brief A destructor
-	*/
-	virtual ~SyscallHandler() throw();
+  /**
+    @brief A destructor
+  */
+  virtual ~SyscallHandler() throw();
 };
 
 } // namespace CTPP

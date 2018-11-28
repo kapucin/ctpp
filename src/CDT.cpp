@@ -56,33 +56,33 @@ STLW::string EscapeJSONString(const STLW::string  & sSource,
 */
 struct CDT::_CDT
 {
-	/** References counter               */
-	UINT_32           refcount;
-	/** Value type fpr complex datatypes */
-	mutable eValType  value_type;
+  /** References counter               */
+  UINT_32           refcount;
+  /** Value type fpr complex datatypes */
+  mutable eValType  value_type;
 
-	/** Union */
-	union
-	{
-		/** String */
-		String           * s_data;
-		/** Array  */
-		Vector           * v_data;
-		/** Hash   */
-		Map              * m_data;
-	} u;
+  /** Union */
+  union
+  {
+    /** String */
+    String           * s_data;
+    /** Array  */
+    Vector           * v_data;
+    /** Hash   */
+    Map              * m_data;
+  } u;
 
-	/** Complex datatypes */
-	mutable union
-	{
-		/** Signed interger                */
-		INT_64                 i_data;
-		/** Floating point value           */
-		W_FLOAT                d_data;
-	} uc;
+  /** Complex datatypes */
+  mutable union
+  {
+    /** Signed interger                */
+    INT_64                 i_data;
+    /** Floating point value           */
+    W_FLOAT                d_data;
+  } uc;
 
-	/** Constructor */
-	_CDT();
+  /** Constructor */
+  _CDT();
 };
 
 //
@@ -90,8 +90,8 @@ struct CDT::_CDT
 //
 CDT::_CDT::_CDT(): refcount(1), value_type(UNDEF)
 {
-	u.s_data  = NULL;
-	uc.i_data = 0;
+  u.s_data  = NULL;
+  uc.i_data = 0;
 }
 
 // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -105,7 +105,7 @@ static const CDT oNonExistentCDT;
 //
 CDT::Iterator CDT::Begin()
 {
-	if (eValueType != HASH_VAL) { throw CDTAccessException(); }
+  if (eValueType != HASH_VAL) { throw CDTAccessException(); }
 
 return Iterator(u.p_data -> u.m_data -> begin());
 }
@@ -115,9 +115,9 @@ return Iterator(u.p_data -> u.m_data -> begin());
 //
 CDT::Iterator CDT::End()
 {
-	if (eValueType != HASH_VAL) { throw CDTAccessException(); }
+  if (eValueType != HASH_VAL) { throw CDTAccessException(); }
 
-	return Iterator(u.p_data -> u.m_data -> end());
+  return Iterator(u.p_data -> u.m_data -> end());
 }
 
 //
@@ -125,7 +125,7 @@ CDT::Iterator CDT::End()
 //
 CDT::Iterator CDT::Find(const STLW::string & sKey)
 {
-	if (eValueType != HASH_VAL) { throw CDTAccessException(); }
+  if (eValueType != HASH_VAL) { throw CDTAccessException(); }
 
 return Iterator(u.p_data -> u.m_data -> find(sKey));
 }
@@ -135,7 +135,7 @@ return Iterator(u.p_data -> u.m_data -> find(sKey));
 //
 CDT::ConstIterator CDT::Begin() const
 {
-	if (eValueType != HASH_VAL) { throw CDTAccessException(); }
+  if (eValueType != HASH_VAL) { throw CDTAccessException(); }
 
 return ConstIterator(Iterator(u.p_data -> u.m_data -> begin()));
 }
@@ -145,7 +145,7 @@ return ConstIterator(Iterator(u.p_data -> u.m_data -> begin()));
 //
 CDT::ConstIterator CDT::End() const
 {
-	if (eValueType != HASH_VAL) { throw CDTAccessException(); }
+  if (eValueType != HASH_VAL) { throw CDTAccessException(); }
 
 return ConstIterator(Iterator(u.p_data -> u.m_data -> end()));
 }
@@ -155,7 +155,7 @@ return ConstIterator(Iterator(u.p_data -> u.m_data -> end()));
 //
 CDT::ConstIterator CDT::Find(const STLW::string & sKey) const
 {
-	if (eValueType != HASH_VAL) { throw CDTAccessException(); }
+  if (eValueType != HASH_VAL) { throw CDTAccessException(); }
 
 return ConstIterator(Iterator(u.p_data -> u.m_data -> find(sKey)));
 }
@@ -172,22 +172,22 @@ return ConstIterator(Iterator(u.p_data -> u.m_data -> find(sKey)));
 class SortHelper
 {
 public:
-	/**
-	  @brief Constructor
-	  @param oISortingComparator - "Real" sorting comparator
-	*/
-	SortHelper(const CDT::SortingComparator  & oISortingComparator);
+  /**
+    @brief Constructor
+    @param oISortingComparator - "Real" sorting comparator
+  */
+  SortHelper(const CDT::SortingComparator  & oISortingComparator);
 
-	/**
-	  @brief Comparison operator
-	  @param oX - first value to compare
-	  @param oY - seond value to compare
-	  @return true, if oX < oY, false - otherwise
-	*/
-	bool operator()(const CDT & oX, const CDT & oY) const;
+  /**
+    @brief Comparison operator
+    @param oX - first value to compare
+    @param oY - seond value to compare
+    @return true, if oX < oY, false - otherwise
+  */
+  bool operator()(const CDT & oX, const CDT & oY) const;
 private:
-	/** "Real" comparator */
-	const CDT::SortingComparator  & oSortingComparator;
+  /** "Real" comparator */
+  const CDT::SortingComparator  & oSortingComparator;
 };
 
 //
@@ -210,53 +210,53 @@ bool SortHelper::operator()(const CDT & oX, const CDT & oY) const { return oSort
 //
 CDT::CDT(const eValType & oValue): eValueType(oValue)
 {
-	switch (eValueType)
-	{
-		case UNDEF:
-			break;
+  switch (eValueType)
+  {
+    case UNDEF:
+      break;
 
-		case INT_VAL:
-			u.i_data = 0;
-			break;
+    case INT_VAL:
+      u.i_data = 0;
+      break;
 
-		case REAL_VAL:
-			u.d_data = 0;
-			break;
+    case REAL_VAL:
+      u.d_data = 0;
+      break;
 
-		case STRING_VAL:
-			u.p_data = new _CDT();
-			u.p_data -> u.s_data = new String;
-			break;
+    case STRING_VAL:
+      u.p_data = new _CDT();
+      u.p_data -> u.s_data = new String;
+      break;
 
-		case STRING_INT_VAL:
-			u.p_data = new _CDT();
-			u.p_data -> value_type = INT_VAL;
-			u.p_data -> u.s_data = new String;
-			break;
+    case STRING_INT_VAL:
+      u.p_data = new _CDT();
+      u.p_data -> value_type = INT_VAL;
+      u.p_data -> u.s_data = new String;
+      break;
 
-		case STRING_REAL_VAL:
-			u.p_data = new _CDT();
-			u.p_data -> value_type = REAL_VAL;
-			u.p_data -> u.s_data = new String;
-			break;
+    case STRING_REAL_VAL:
+      u.p_data = new _CDT();
+      u.p_data -> value_type = REAL_VAL;
+      u.p_data -> u.s_data = new String;
+      break;
 
-		case ARRAY_VAL:
-			u.p_data = new _CDT();
-			u.p_data -> u.v_data = new Vector;
-			break;
+    case ARRAY_VAL:
+      u.p_data = new _CDT();
+      u.p_data -> u.v_data = new Vector;
+      break;
 
-		case HASH_VAL:
-			u.p_data = new _CDT();
-			u.p_data -> u.m_data = new Map;
-			break;
+    case HASH_VAL:
+      u.p_data = new _CDT();
+      u.p_data -> u.m_data = new Map;
+      break;
 
-		case POINTER_VAL:
-			u.pp_data = NULL;
-			break;
+    case POINTER_VAL:
+      u.pp_data = NULL;
+      break;
 
-		default:
-			throw CDTTypeCastException("No such type");
-	}
+    default:
+      throw CDTTypeCastException("No such type");
+  }
 }
 
 //
@@ -264,42 +264,42 @@ CDT::CDT(const eValType & oValue): eValueType(oValue)
 //
 CDT::CDT(const CDT & oCDT)
 {
-	if (this == &oCDT)
-	{
-		eValueType = UNDEF;
-		return;
-	}
+  if (this == &oCDT)
+  {
+    eValueType = UNDEF;
+    return;
+  }
 
-	eValueType = oCDT.eValueType;
-	switch (eValueType)
-	{
-		case UNDEF:
-			break;
+  eValueType = oCDT.eValueType;
+  switch (eValueType)
+  {
+    case UNDEF:
+      break;
 
-		case INT_VAL:
-			u.i_data = oCDT.u.i_data;
-			break;
+    case INT_VAL:
+      u.i_data = oCDT.u.i_data;
+      break;
 
-		case REAL_VAL:
-			u.d_data = oCDT.u.d_data;
-			break;
+    case REAL_VAL:
+      u.d_data = oCDT.u.d_data;
+      break;
 
-		case POINTER_VAL:
-			u.pp_data = oCDT.u.pp_data;
-			break;
+    case POINTER_VAL:
+      u.pp_data = oCDT.u.pp_data;
+      break;
 
-		case STRING_VAL:
-		case STRING_REAL_VAL:
-		case STRING_INT_VAL:
-		case ARRAY_VAL:
-		case HASH_VAL:
-			u.p_data = oCDT.u.p_data;
-			++(u.p_data -> refcount);
-			break;
+    case STRING_VAL:
+    case STRING_REAL_VAL:
+    case STRING_INT_VAL:
+    case ARRAY_VAL:
+    case HASH_VAL:
+      u.p_data = oCDT.u.p_data;
+      ++(u.p_data -> refcount);
+      break;
 
-		default:
-			throw CDTTypeCastException("No such type");
-	}
+    default:
+      throw CDTTypeCastException("No such type");
+  }
 }
 
 //
@@ -307,68 +307,68 @@ CDT::CDT(const CDT & oCDT)
 //
 CDT & CDT::operator=(const CDT & oCDT)
 {
-	if (this == &oCDT) { return *this; }
+  if (this == &oCDT) { return *this; }
 
-	// oCDT can be implicitly destoyed if it's nested somethere
-	// in `this` (if we call Destroy()), so make some copies
+  // oCDT can be implicitly destoyed if it's nested somethere
+  // in `this` (if we call Destroy()), so make some copies
 
-	_CDT    * pTMP         = oCDT.u.p_data;
-	INT_64    iIntVal      = oCDT.u.i_data;
-	W_FLOAT   dFloatVal    = oCDT.u.d_data;
-	void    * vPointerVal  = oCDT.u.pp_data;
-	eValType  eOrigValType = oCDT.eValueType;
+  _CDT    * pTMP         = oCDT.u.p_data;
+  INT_64    iIntVal      = oCDT.u.i_data;
+  W_FLOAT   dFloatVal    = oCDT.u.d_data;
+  void    * vPointerVal  = oCDT.u.pp_data;
+  eValType  eOrigValType = oCDT.eValueType;
 
-	// Destroy object if need
-	if (eValueType >= STRING_VAL)
-	{
-		if (oCDT.eValueType >= STRING_VAL && oCDT.u.p_data -> refcount == 1)
-		{
-			// oCDT can be a child of this with u.refcount = 1;
-			// so we increase it's refcount
-			++(pTMP -> refcount);
-			Destroy();
-			// now decrease it so
-			// if oCDT was a child of `this` it's 0 and it will be increased later
-			// otherwise it's 1
-			--(pTMP -> refcount);
-		}
-		else
-		{
-			Destroy();
-		}
-	}
+  // Destroy object if need
+  if (eValueType >= STRING_VAL)
+  {
+    if (oCDT.eValueType >= STRING_VAL && oCDT.u.p_data -> refcount == 1)
+    {
+      // oCDT can be a child of this with u.refcount = 1;
+      // so we increase it's refcount
+      ++(pTMP -> refcount);
+      Destroy();
+      // now decrease it so
+      // if oCDT was a child of `this` it's 0 and it will be increased later
+      // otherwise it's 1
+      --(pTMP -> refcount);
+    }
+    else
+    {
+      Destroy();
+    }
+  }
 
-	eValueType = eOrigValType;
+  eValueType = eOrigValType;
 
-	switch (eValueType)
-	{
-		case UNDEF:
-			break;
+  switch (eValueType)
+  {
+    case UNDEF:
+      break;
 
-		case INT_VAL:
-			u.i_data = iIntVal;
-			break;
+    case INT_VAL:
+      u.i_data = iIntVal;
+      break;
 
-		case REAL_VAL:
-			u.d_data = dFloatVal;
-			break;
+    case REAL_VAL:
+      u.d_data = dFloatVal;
+      break;
 
-		case POINTER_VAL:
-			u.pp_data = vPointerVal;
-			break;
+    case POINTER_VAL:
+      u.pp_data = vPointerVal;
+      break;
 
-		case STRING_VAL:
-		case STRING_REAL_VAL:
-		case STRING_INT_VAL:
-		case ARRAY_VAL:
-		case HASH_VAL:
-			u.p_data = pTMP;
-			++u.p_data -> refcount;
-			break;
+    case STRING_VAL:
+    case STRING_REAL_VAL:
+    case STRING_INT_VAL:
+    case ARRAY_VAL:
+    case HASH_VAL:
+      u.p_data = pTMP;
+      ++u.p_data -> refcount;
+      break;
 
-		default:
-			throw CDTTypeCastException("No such type");
-	}
+    default:
+      throw CDTTypeCastException("No such type");
+  }
 
 return *this;
 }
@@ -405,8 +405,8 @@ CDT::CDT(const W_FLOAT  oValue): eValueType(REAL_VAL)      { u.d_data = oValue; 
 //
 CDT::CDT(const STLW::string & oValue): eValueType(STRING_VAL)
 {
-	u.p_data = new _CDT();
-	u.p_data -> u.s_data = new String(oValue);
+  u.p_data = new _CDT();
+  u.p_data -> u.s_data = new String(oValue);
 }
 
 //
@@ -414,8 +414,8 @@ CDT::CDT(const STLW::string & oValue): eValueType(STRING_VAL)
 //
 CDT::CDT(CCHAR_P oValue): eValueType(STRING_VAL)
 {
-	u.p_data = new _CDT();
-	u.p_data -> u.s_data = new STLW::string(oValue);
+  u.p_data = new _CDT();
+  u.p_data -> u.s_data = new STLW::string(oValue);
 }
 
 //
@@ -430,11 +430,11 @@ CDT::CDT(void * oValue): eValueType(POINTER_VAL) { u.pp_data = oValue; }
 //
 CDT & CDT::operator=(const INT_64  oValue)
 {
-	// Destroy object if need
-	if (eValueType >= STRING_VAL) { Destroy(); }
+  // Destroy object if need
+  if (eValueType >= STRING_VAL) { Destroy(); }
 
-	eValueType = INT_VAL;
-	u.i_data   = oValue;
+  eValueType = INT_VAL;
+  u.i_data   = oValue;
 
 return *this;
 }
@@ -459,11 +459,11 @@ CDT & CDT::operator=(const UINT_32  oValue) { return operator=(UINT_64(oValue));
 //
 CDT & CDT::operator=(const W_FLOAT  oValue)
 {
-	// Destroy object if need
-	if (eValueType >= STRING_VAL) { Destroy(); }
+  // Destroy object if need
+  if (eValueType >= STRING_VAL) { Destroy(); }
 
-	eValueType = REAL_VAL;
-	u.d_data   = oValue;
+  eValueType = REAL_VAL;
+  u.d_data   = oValue;
 
 return *this;
 }
@@ -473,12 +473,12 @@ return *this;
 //
 CDT & CDT::operator=(const STLW::string & oValue)
 {
-	// Destroy object if need
-	if (eValueType >= STRING_VAL) { Destroy(); }
+  // Destroy object if need
+  if (eValueType >= STRING_VAL) { Destroy(); }
 
-	eValueType = STRING_VAL;
-	u.p_data = new _CDT();
-	u.p_data -> u.s_data = new String(oValue);
+  eValueType = STRING_VAL;
+  u.p_data = new _CDT();
+  u.p_data -> u.s_data = new String(oValue);
 
 return *this;
 }
@@ -488,12 +488,12 @@ return *this;
 //
 CDT & CDT::operator=(CCHAR_P oValue)
 {
-	// Destroy object if need
-	if (eValueType >= STRING_VAL) { Destroy(); }
+  // Destroy object if need
+  if (eValueType >= STRING_VAL) { Destroy(); }
 
-	eValueType = STRING_VAL;
-	u.p_data = new _CDT();
-	u.p_data -> u.s_data = new String(oValue);
+  eValueType = STRING_VAL;
+  u.p_data = new _CDT();
+  u.p_data -> u.s_data = new String(oValue);
 
 return *this;
 }
@@ -503,11 +503,11 @@ return *this;
 //
 CDT & CDT::operator=(void * oValue)
 {
-	// Destroy object if need
-	if (eValueType >= STRING_VAL) { Destroy(); }
+  // Destroy object if need
+  if (eValueType >= STRING_VAL) { Destroy(); }
 
-	eValueType = POINTER_VAL;
-	u.pp_data  = oValue;
+  eValueType = POINTER_VAL;
+  u.pp_data  = oValue;
 
 return *this;
 }
@@ -519,21 +519,21 @@ return *this;
 //
 CDT & CDT::operator[](const UINT_32  iPos)
 {
-	if (eValueType == UNDEF)
-	{
-		eValueType = ARRAY_VAL;
-		u.p_data = new _CDT;
-		u.p_data -> u.v_data = new Vector(iPos + 1);
-	}
-	else if (eValueType != ARRAY_VAL) { throw CDTAccessException(); }
+  if (eValueType == UNDEF)
+  {
+    eValueType = ARRAY_VAL;
+    u.p_data = new _CDT;
+    u.p_data -> u.v_data = new Vector(iPos + 1);
+  }
+  else if (eValueType != ARRAY_VAL) { throw CDTAccessException(); }
 
-	// Unshare complex type
-	Unshare();
+  // Unshare complex type
+  Unshare();
 
-	UINT_32 iSize = u.p_data -> u.v_data -> size();
+  UINT_32 iSize = u.p_data -> u.v_data -> size();
 
-	if      (iPos == iSize) { u.p_data -> u.v_data -> push_back(CDT()); }
-	else if (iPos > iSize)  { u.p_data -> u.v_data -> resize(iPos + 1); }
+  if      (iPos == iSize) { u.p_data -> u.v_data -> push_back(CDT()); }
+  else if (iPos > iSize)  { u.p_data -> u.v_data -> resize(iPos + 1); }
 
 return u.p_data -> u.v_data -> operator[](iPos);
 }
@@ -548,16 +548,16 @@ const CDT & CDT::operator[](const UINT_32  iPos) const { return GetCDT(iPos); }
 //
 CDT & CDT::operator[](const STLW::string & sKey)
 {
-	if (eValueType == UNDEF)
-	{
-		eValueType = HASH_VAL;
-		u.p_data = new _CDT;
-		u.p_data -> u.m_data = new Map;
-	}
-	else if (eValueType != HASH_VAL) { throw CDTAccessException(); }
+  if (eValueType == UNDEF)
+  {
+    eValueType = HASH_VAL;
+    u.p_data = new _CDT;
+    u.p_data -> u.m_data = new Map;
+  }
+  else if (eValueType != HASH_VAL) { throw CDTAccessException(); }
 
-	// Unshare complex type
-	Unshare();
+  // Unshare complex type
+  Unshare();
 
 return u.p_data -> u.m_data -> operator[](sKey);
 }
@@ -572,9 +572,9 @@ const CDT & CDT::operator[](const STLW::string & sKey) const { return GetCDT(sKe
 //
 const CDT & CDT::GetCDT(const UINT_32  iPos) const
 {
-	if (eValueType != ARRAY_VAL) { return oNonExistentCDT; }
+  if (eValueType != ARRAY_VAL) { return oNonExistentCDT; }
 
-	if (iPos >= u.p_data -> u.v_data -> size()) { throw CDTRangeException(); }
+  if (iPos >= u.p_data -> u.v_data -> size()) { throw CDTRangeException(); }
 
 return u.p_data -> u.v_data -> operator[](iPos);
 }
@@ -584,7 +584,7 @@ return u.p_data -> u.v_data -> operator[](iPos);
 //
 const CDT & CDT::GetCDT(const STLW::string & sKey) const
 {
-	bool bFlag = 0;
+  bool bFlag = 0;
 
 return GetExistedCDT(sKey, bFlag);
 }
@@ -594,20 +594,20 @@ return GetExistedCDT(sKey, bFlag);
 //
 const CDT & CDT::GetExistedCDT(const STLW::string & sKey, bool & bCDTExist) const
 {
-	// CDT Does Not exist
-	if (eValueType != HASH_VAL)
-	{
-		bCDTExist = false;
-		return oNonExistentCDT;
-	}
+  // CDT Does Not exist
+  if (eValueType != HASH_VAL)
+  {
+    bCDTExist = false;
+    return oNonExistentCDT;
+  }
 
-	Map::iterator itmHash = u.p_data -> u.m_data -> find(sKey);
-	if (itmHash == u.p_data -> u.m_data -> end())
-	{
-		bCDTExist = false;
-		return oNonExistentCDT;
-	}
-	bCDTExist = true;
+  Map::iterator itmHash = u.p_data -> u.m_data -> find(sKey);
+  if (itmHash == u.p_data -> u.m_data -> end())
+  {
+    bCDTExist = false;
+    return oNonExistentCDT;
+  }
+  bCDTExist = true;
 
 return itmHash -> second;
 }
@@ -617,14 +617,14 @@ return itmHash -> second;
 //
 bool CDT::Erase(const STLW::string & sKey)
 {
-	if (eValueType != HASH_VAL) { throw CDTAccessException(); }
+  if (eValueType != HASH_VAL) { throw CDTAccessException(); }
 
-	Unshare();
+  Unshare();
 
-	Map::iterator itmHash = u.p_data -> u.m_data -> find(sKey);
-	if (itmHash == u.p_data -> u.m_data -> end()) { return false; }
+  Map::iterator itmHash = u.p_data -> u.m_data -> find(sKey);
+  if (itmHash == u.p_data -> u.m_data -> end()) { return false; }
 
-	u.p_data -> u.m_data -> erase(itmHash);
+  u.p_data -> u.m_data -> erase(itmHash);
 
 return true;
 }
@@ -634,9 +634,9 @@ return true;
 //
 bool CDT::Exists(const UINT_32  iPos) const
 {
-	if (eValueType != ARRAY_VAL) { throw CDTAccessException(); }
+  if (eValueType != ARRAY_VAL) { throw CDTAccessException(); }
 
-	if (iPos >= u.p_data -> u.v_data -> size()) { return false; }
+  if (iPos >= u.p_data -> u.v_data -> size()) { return false; }
 
 return true;
 }
@@ -646,10 +646,10 @@ return true;
 //
 bool CDT::Exists(const STLW::string & sKey) const
 {
-	if (eValueType != HASH_VAL) { throw CDTAccessException(); }
+  if (eValueType != HASH_VAL) { throw CDTAccessException(); }
 
-	Map::iterator itmHash = u.p_data -> u.m_data -> find(sKey);
-	if (itmHash == u.p_data -> u.m_data -> end()) { return false; }
+  Map::iterator itmHash = u.p_data -> u.m_data -> find(sKey);
+  if (itmHash == u.p_data -> u.m_data -> end()) { return false; }
 
 return true;
 }
@@ -694,16 +694,16 @@ void CDT::PushBack(CCHAR_P oValue)              { PushBack(CDT(oValue)); }
 //
 void CDT::PushBack(const CDT & oValue)
 {
-	if      (eValueType == ARRAY_VAL) { u.p_data -> u.v_data -> push_back(oValue); }
-	else if (eValueType == UNDEF)
-	{
-		(*this) = CDT(CDT::ARRAY_VAL);
-		u.p_data -> u.v_data -> push_back(oValue);
-	}
-	else
-	{
-		throw CDTAccessException();
-	}
+  if      (eValueType == ARRAY_VAL) { u.p_data -> u.v_data -> push_back(oValue); }
+  else if (eValueType == UNDEF)
+  {
+    (*this) = CDT(CDT::ARRAY_VAL);
+    u.p_data -> u.v_data -> push_back(oValue);
+  }
+  else
+  {
+    throw CDTAccessException();
+  }
 }
 
 //
@@ -711,37 +711,37 @@ void CDT::PushBack(const CDT & oValue)
 //
 bool CDT::Nonzero() const
 {
-	switch (eValueType)
-	{
-		case UNDEF:
-			break;
+  switch (eValueType)
+  {
+    case UNDEF:
+      break;
 
-		case INT_VAL:
-			if (u.i_data != 0) { return true; }
-			break;
+    case INT_VAL:
+      if (u.i_data != 0) { return true; }
+      break;
 
-		case REAL_VAL:
-			if (u.d_data != 0) { return true; }
-			break;
+    case REAL_VAL:
+      if (u.d_data != 0) { return true; }
+      break;
 
-		case STRING_VAL:
-		case STRING_REAL_VAL:
-		case STRING_INT_VAL:
-			if (u.p_data -> u.s_data -> size() != 0) { return true; }
-			break;
+    case STRING_VAL:
+    case STRING_REAL_VAL:
+    case STRING_INT_VAL:
+      if (u.p_data -> u.s_data -> size() != 0) { return true; }
+      break;
 
-		case ARRAY_VAL:
-			if (u.p_data -> u.v_data -> size() != 0) { return true; }
-			break;
+    case ARRAY_VAL:
+      if (u.p_data -> u.v_data -> size() != 0) { return true; }
+      break;
 
-		case HASH_VAL:
-			if (u.p_data -> u.m_data -> size() != 0) { return true; }
-			break;
+    case HASH_VAL:
+      if (u.p_data -> u.m_data -> size() != 0) { return true; }
+      break;
 
-		case POINTER_VAL:
-			if (u.pp_data != NULL)                   { return true; }
-			break;
-	}
+    case POINTER_VAL:
+      if (u.pp_data != NULL)                   { return true; }
+      break;
+  }
 
 return false;
 }
@@ -751,9 +751,9 @@ return false;
 //
 CDT & CDT::At(const UINT_32  iPos)
 {
-	if (eValueType != ARRAY_VAL) { throw CDTAccessException(); }
+  if (eValueType != ARRAY_VAL) { throw CDTAccessException(); }
 
-	if (iPos >= u.p_data -> u.v_data -> size()) { throw CDTRangeException(); }
+  if (iPos >= u.p_data -> u.v_data -> size()) { throw CDTRangeException(); }
 
 return u.p_data -> u.v_data -> operator[](iPos);
 }
@@ -763,10 +763,10 @@ return u.p_data -> u.v_data -> operator[](iPos);
 //
 CDT & CDT::At(const STLW::string & sKey)
 {
-	if (eValueType != HASH_VAL) { throw CDTAccessException(); }
+  if (eValueType != HASH_VAL) { throw CDTAccessException(); }
 
-	Map::iterator itmHash = u.p_data -> u.m_data -> find(sKey);
-	if (itmHash == u.p_data -> u.m_data -> end()) { throw CDTRangeException(); }
+  Map::iterator itmHash = u.p_data -> u.m_data -> find(sKey);
+  if (itmHash == u.p_data -> u.m_data -> end()) { throw CDTRangeException(); }
 
 return itmHash -> second;
 }
@@ -778,41 +778,41 @@ return itmHash -> second;
 //
 CDT CDT::operator+(const INT_64  oValue) const
 {
-	switch (eValueType)
-	{
-		case UNDEF:
-			return CDT(oValue);
+  switch (eValueType)
+  {
+    case UNDEF:
+      return CDT(oValue);
 
-		case INT_VAL:
-			return CDT(u.i_data + oValue);
+    case INT_VAL:
+      return CDT(u.i_data + oValue);
 
-		case REAL_VAL:
-			return CDT(u.d_data + oValue);
+    case REAL_VAL:
+      return CDT(u.d_data + oValue);
 
-		case STRING_VAL:
-			{
-				CheckComplexDataType();
-				if (eValueType != STRING_VAL) { return this -> operator+(oValue); }
+    case STRING_VAL:
+      {
+        CheckComplexDataType();
+        if (eValueType != STRING_VAL) { return this -> operator+(oValue); }
 
-				INT_64   iData;
-				W_FLOAT  dData;
-				eValType eType = CastToNumber(iData, dData);
+        INT_64   iData;
+        W_FLOAT  dData;
+        eValType eType = CastToNumber(iData, dData);
 
-				if (eType == INT_VAL) { return CDT(iData + oValue); }
+        if (eType == INT_VAL) { return CDT(iData + oValue); }
 
-				return CDT(dData + oValue);
-			}
+        return CDT(dData + oValue);
+      }
 
-		case STRING_INT_VAL:
-			return CDT(u.p_data -> uc.i_data + oValue);
+    case STRING_INT_VAL:
+      return CDT(u.p_data -> uc.i_data + oValue);
 
 
-		case STRING_REAL_VAL:
-			return CDT(u.p_data -> uc.d_data + oValue);
+    case STRING_REAL_VAL:
+      return CDT(u.p_data -> uc.d_data + oValue);
 
-		default:
-			throw CDTTypeCastException("operator+ (INT_64)");
-	}
+    default:
+      throw CDTTypeCastException("operator+ (INT_64)");
+  }
 
 // Make stupid compiler happy
 return CDT(*this);
@@ -838,40 +838,40 @@ CDT CDT::operator+(const UINT_32  oValue) const { return this -> operator+(UINT_
 //
 CDT CDT::operator+(const W_FLOAT  oValue) const
 {
-	switch (eValueType)
-	{
-		case UNDEF:
-			return CDT(oValue);
+  switch (eValueType)
+  {
+    case UNDEF:
+      return CDT(oValue);
 
-		case INT_VAL:
-			return CDT(u.i_data + oValue);
+    case INT_VAL:
+      return CDT(u.i_data + oValue);
 
-		case REAL_VAL:
-			return CDT(u.d_data + oValue);
+    case REAL_VAL:
+      return CDT(u.d_data + oValue);
 
-		case STRING_VAL:
-			{
-				CheckComplexDataType();
-				if (eValueType != STRING_VAL) { return this -> operator+(oValue); }
+    case STRING_VAL:
+      {
+        CheckComplexDataType();
+        if (eValueType != STRING_VAL) { return this -> operator+(oValue); }
 
-				INT_64   iData;
-				W_FLOAT  dData;
-				eValType eType = CastToNumber(iData, dData);
+        INT_64   iData;
+        W_FLOAT  dData;
+        eValType eType = CastToNumber(iData, dData);
 
-				if (eType == INT_VAL) { return CDT(iData + oValue); }
+        if (eType == INT_VAL) { return CDT(iData + oValue); }
 
-				return CDT(dData + oValue);
-			}
+        return CDT(dData + oValue);
+      }
 
-		case STRING_INT_VAL:
-			return CDT(u.p_data -> uc.i_data + oValue);
+    case STRING_INT_VAL:
+      return CDT(u.p_data -> uc.i_data + oValue);
 
-		case STRING_REAL_VAL:
-			return CDT(u.p_data -> uc.d_data + oValue);
+    case STRING_REAL_VAL:
+      return CDT(u.p_data -> uc.d_data + oValue);
 
-		default:
-			throw CDTTypeCastException("operator+(INT_64)");
-	}
+    default:
+      throw CDTTypeCastException("operator+(INT_64)");
+  }
 
 // Make stupid compiler happy
 return CDT(*this);
@@ -882,29 +882,29 @@ return CDT(*this);
 //
 CDT CDT::operator+(const CDT & oCDT) const
 {
-	INT_64   iData1;
-	W_FLOAT  dData1;
-	eValType eType1 = CastToNumber(iData1, dData1);
+  INT_64   iData1;
+  W_FLOAT  dData1;
+  eValType eType1 = CastToNumber(iData1, dData1);
 
-	INT_64   iData2;
-	W_FLOAT  dData2;
-	eValType eType2 = oCDT.CastToNumber(iData2, dData2);
+  INT_64   iData2;
+  W_FLOAT  dData2;
+  eValType eType2 = oCDT.CastToNumber(iData2, dData2);
 
-	// First argument is INT_VAL
-	if (eType1 == INT_VAL)
-	{
-		// First argument is INT_VAL, second argument is INT_VAL
-		if (eType2 == INT_VAL) { return CDT(iData1 + iData2); }
+  // First argument is INT_VAL
+  if (eType1 == INT_VAL)
+  {
+    // First argument is INT_VAL, second argument is INT_VAL
+    if (eType2 == INT_VAL) { return CDT(iData1 + iData2); }
 
-		// First argument is INT_VAL, second argument is REAL_VAL
-		return CDT(iData1 + dData2);
-	}
+    // First argument is INT_VAL, second argument is REAL_VAL
+    return CDT(iData1 + dData2);
+  }
 
-	// First argument is REAL_VAL, second argument is INT_VAL
-	if (eType2 == INT_VAL) { return CDT(dData1 + iData2); }
+  // First argument is REAL_VAL, second argument is INT_VAL
+  if (eType2 == INT_VAL) { return CDT(dData1 + iData2); }
 
-	// First argument is REAL_VAL, second argument is REAL_VAL
-	return CDT(dData1 + dData2);
+  // First argument is REAL_VAL, second argument is REAL_VAL
+  return CDT(dData1 + dData2);
 }
 
 // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -939,29 +939,29 @@ CDT CDT::operator-(const W_FLOAT  oValue) const { return this -> operator+(-oVal
 //
 CDT CDT::operator-(const CDT & oCDT) const
 {
-	INT_64   iData1;
-	W_FLOAT  dData1;
-	eValType eType1 = CastToNumber(iData1, dData1);
+  INT_64   iData1;
+  W_FLOAT  dData1;
+  eValType eType1 = CastToNumber(iData1, dData1);
 
-	INT_64   iData2;
-	W_FLOAT  dData2;
-	eValType eType2 = oCDT.CastToNumber(iData2, dData2);
+  INT_64   iData2;
+  W_FLOAT  dData2;
+  eValType eType2 = oCDT.CastToNumber(iData2, dData2);
 
-	// First argument is INT_VAL
-	if (eType1 == INT_VAL)
-	{
-		// First argument is INT_VAL, second argument is INT_VAL
-		if (eType2 == INT_VAL) { return CDT(iData1 - iData2); }
+  // First argument is INT_VAL
+  if (eType1 == INT_VAL)
+  {
+    // First argument is INT_VAL, second argument is INT_VAL
+    if (eType2 == INT_VAL) { return CDT(iData1 - iData2); }
 
-		// First argument is INT_VAL, second argument is REAL_VAL
-		return CDT(iData1 - dData2);
-	}
+    // First argument is INT_VAL, second argument is REAL_VAL
+    return CDT(iData1 - dData2);
+  }
 
-	// First argument is REAL_VAL, second argument is INT_VAL
-	if (eType2 == INT_VAL) { return CDT(dData1 - iData2); }
+  // First argument is REAL_VAL, second argument is INT_VAL
+  if (eType2 == INT_VAL) { return CDT(dData1 - iData2); }
 
-	// First argument is REAL_VAL, second argument is REAL_VAL
-	return CDT(dData1 - dData2);
+  // First argument is REAL_VAL, second argument is REAL_VAL
+  return CDT(dData1 - dData2);
 }
 
 // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -971,40 +971,40 @@ CDT CDT::operator-(const CDT & oCDT) const
 //
 CDT CDT::operator*(const INT_64  oValue) const
 {
-	switch (eValueType)
-	{
-		case UNDEF:
-			return CDT(INT_64(0));
+  switch (eValueType)
+  {
+    case UNDEF:
+      return CDT(INT_64(0));
 
-		case INT_VAL:
-			return CDT(u.i_data * oValue);
+    case INT_VAL:
+      return CDT(u.i_data * oValue);
 
-		case REAL_VAL:
-			return CDT(u.d_data * oValue);
+    case REAL_VAL:
+      return CDT(u.d_data * oValue);
 
-		case STRING_VAL:
-			{
-				CheckComplexDataType();
-				if (eValueType != STRING_VAL) { return this -> operator*(oValue); }
+    case STRING_VAL:
+      {
+        CheckComplexDataType();
+        if (eValueType != STRING_VAL) { return this -> operator*(oValue); }
 
-				INT_64   iData;
-				W_FLOAT  dData;
-				eValType eType = CastToNumber(iData, dData);
+        INT_64   iData;
+        W_FLOAT  dData;
+        eValType eType = CastToNumber(iData, dData);
 
-				if (eType == INT_VAL) { return CDT(iData * oValue); }
+        if (eType == INT_VAL) { return CDT(iData * oValue); }
 
-				return CDT(dData * oValue);
-			}
+        return CDT(dData * oValue);
+      }
 
-		case STRING_INT_VAL:
-			return CDT(u.p_data -> uc.i_data * oValue);
+    case STRING_INT_VAL:
+      return CDT(u.p_data -> uc.i_data * oValue);
 
-		case STRING_REAL_VAL:
-			return CDT(u.p_data -> uc.d_data * oValue);
+    case STRING_REAL_VAL:
+      return CDT(u.p_data -> uc.d_data * oValue);
 
-		default:
-			throw CDTTypeCastException("operator*(INT_64)");
-	}
+    default:
+      throw CDTTypeCastException("operator*(INT_64)");
+  }
 
 // Make stupid compiler happy
 return CDT(*this);
@@ -1030,40 +1030,40 @@ CDT CDT::operator*(const UINT_32  oValue) const { return this -> operator*(UINT_
 //
 CDT CDT::operator*(const W_FLOAT  oValue) const
 {
-	switch (eValueType)
-	{
-		case UNDEF:
-			return CDT(INT_64(0));
+  switch (eValueType)
+  {
+    case UNDEF:
+      return CDT(INT_64(0));
 
-		case INT_VAL:
-			return CDT(u.i_data * oValue);
+    case INT_VAL:
+      return CDT(u.i_data * oValue);
 
-		case REAL_VAL:
-			return CDT(u.d_data * oValue);
+    case REAL_VAL:
+      return CDT(u.d_data * oValue);
 
-		case STRING_VAL:
-			{
-				CheckComplexDataType();
-				if (eValueType != STRING_VAL) { return this -> operator*(oValue); }
+    case STRING_VAL:
+      {
+        CheckComplexDataType();
+        if (eValueType != STRING_VAL) { return this -> operator*(oValue); }
 
-				INT_64   iData;
-				W_FLOAT  dData;
-				eValType eType = CastToNumber(iData, dData);
+        INT_64   iData;
+        W_FLOAT  dData;
+        eValType eType = CastToNumber(iData, dData);
 
-				if (eType == INT_VAL) { return CDT(iData * oValue); }
+        if (eType == INT_VAL) { return CDT(iData * oValue); }
 
-				return CDT(dData * oValue);
-			}
+        return CDT(dData * oValue);
+      }
 
-		case STRING_INT_VAL:
-			return CDT(u.p_data -> uc.i_data * oValue);
+    case STRING_INT_VAL:
+      return CDT(u.p_data -> uc.i_data * oValue);
 
-		case STRING_REAL_VAL:
-			return CDT(u.p_data -> uc.d_data * oValue);
+    case STRING_REAL_VAL:
+      return CDT(u.p_data -> uc.d_data * oValue);
 
-		default:
-			throw CDTTypeCastException("operator*(W_FLOAT)");
-	}
+    default:
+      throw CDTTypeCastException("operator*(W_FLOAT)");
+  }
 
 // Make stupid compiler happy
 return CDT(*this);
@@ -1074,29 +1074,29 @@ return CDT(*this);
 //
 CDT CDT::operator*(const CDT & oCDT) const
 {
-	INT_64   iData1;
-	W_FLOAT  dData1;
-	eValType eType1 = CastToNumber(iData1, dData1);
+  INT_64   iData1;
+  W_FLOAT  dData1;
+  eValType eType1 = CastToNumber(iData1, dData1);
 
-	INT_64   iData2;
-	W_FLOAT  dData2;
-	eValType eType2 = oCDT.CastToNumber(iData2, dData2);
+  INT_64   iData2;
+  W_FLOAT  dData2;
+  eValType eType2 = oCDT.CastToNumber(iData2, dData2);
 
-	// First argument is INT_VAL
-	if (eType1 == INT_VAL)
-	{
-		// First argument is INT_VAL, second argument is INT_VAL
-		if (eType2 == INT_VAL) { return CDT(iData1 * iData2); }
+  // First argument is INT_VAL
+  if (eType1 == INT_VAL)
+  {
+    // First argument is INT_VAL, second argument is INT_VAL
+    if (eType2 == INT_VAL) { return CDT(iData1 * iData2); }
 
-		// First argument is INT_VAL, second argument is REAL_VAL
-		return CDT(iData1 * dData2);
-	}
+    // First argument is INT_VAL, second argument is REAL_VAL
+    return CDT(iData1 * dData2);
+  }
 
-	// First argument is REAL_VAL, second argument is INT_VAL
-	if (eType2 == INT_VAL) { return CDT(dData1 * iData2); }
+  // First argument is REAL_VAL, second argument is INT_VAL
+  if (eType2 == INT_VAL) { return CDT(dData1 * iData2); }
 
-	// First argument is REAL_VAL, second argument is REAL_VAL
-	return CDT(dData1 * dData2);
+  // First argument is REAL_VAL, second argument is REAL_VAL
+  return CDT(dData1 * dData2);
 }
 
 // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1106,41 +1106,41 @@ CDT CDT::operator*(const CDT & oCDT) const
 //
 CDT CDT::operator/(const INT_64  oValue) const
 {
-	switch (eValueType)
-	{
-		case UNDEF:
-			return CDT(0 / oValue);
+  switch (eValueType)
+  {
+    case UNDEF:
+      return CDT(0 / oValue);
 
-		case INT_VAL:
-			return CDT(u.i_data / oValue);
+    case INT_VAL:
+      return CDT(u.i_data / oValue);
 
-		case REAL_VAL:
-			return CDT(u.d_data / oValue);
+    case REAL_VAL:
+      return CDT(u.d_data / oValue);
 
-		case STRING_VAL:
-			{
-				CheckComplexDataType();
-				if (eValueType != STRING_VAL) { return this -> operator/(oValue); }
+    case STRING_VAL:
+      {
+        CheckComplexDataType();
+        if (eValueType != STRING_VAL) { return this -> operator/(oValue); }
 
-				INT_64   iData;
-				W_FLOAT  dData;
-				eValType eType = CastToNumber(iData, dData);
+        INT_64   iData;
+        W_FLOAT  dData;
+        eValType eType = CastToNumber(iData, dData);
 
-				if (eType == INT_VAL) { return CDT(iData / oValue); }
+        if (eType == INT_VAL) { return CDT(iData / oValue); }
 
-				return CDT(dData / oValue);
-			}
+        return CDT(dData / oValue);
+      }
 
-		case STRING_INT_VAL:
-			return CDT(u.p_data -> uc.i_data / oValue);
+    case STRING_INT_VAL:
+      return CDT(u.p_data -> uc.i_data / oValue);
 
 
-		case STRING_REAL_VAL:
-			return CDT(u.p_data -> uc.d_data / oValue);
+    case STRING_REAL_VAL:
+      return CDT(u.p_data -> uc.d_data / oValue);
 
-		default:
-			throw CDTTypeCastException("operator/(INT_64)");
-	}
+    default:
+      throw CDTTypeCastException("operator/(INT_64)");
+  }
 
 // Make stupid compiler happy
 return CDT(*this);
@@ -1166,43 +1166,43 @@ CDT CDT::operator/(const UINT_32  oValue) const { return this -> operator/(UINT_
 //
 CDT CDT::operator/(const W_FLOAT  oValue) const
 {
-	switch (eValueType)
-	{
-		case UNDEF:
-			// Keep this
-			// For explanation see IEEE standard 754 for floating-point arithmetic
-			return CDT(0.0 / oValue);
+  switch (eValueType)
+  {
+    case UNDEF:
+      // Keep this
+      // For explanation see IEEE standard 754 for floating-point arithmetic
+      return CDT(0.0 / oValue);
 
-		case INT_VAL:
-			return CDT(u.i_data / oValue);
+    case INT_VAL:
+      return CDT(u.i_data / oValue);
 
-		case REAL_VAL:
-			return CDT(u.d_data / oValue);
+    case REAL_VAL:
+      return CDT(u.d_data / oValue);
 
-		case STRING_VAL:
-			{
-				CheckComplexDataType();
-				if (eValueType != STRING_VAL) { return this -> operator/(oValue); }
+    case STRING_VAL:
+      {
+        CheckComplexDataType();
+        if (eValueType != STRING_VAL) { return this -> operator/(oValue); }
 
-				INT_64   iData;
-				W_FLOAT  dData;
-				eValType eType = CastToNumber(iData, dData);
+        INT_64   iData;
+        W_FLOAT  dData;
+        eValType eType = CastToNumber(iData, dData);
 
-				if (eType == INT_VAL) { return CDT(iData / oValue); }
+        if (eType == INT_VAL) { return CDT(iData / oValue); }
 
-				return CDT(dData / oValue);
-			}
+        return CDT(dData / oValue);
+      }
 
-		case STRING_INT_VAL:
-			return CDT(u.p_data -> uc.i_data / oValue);
+    case STRING_INT_VAL:
+      return CDT(u.p_data -> uc.i_data / oValue);
 
 
-		case STRING_REAL_VAL:
-			return CDT(u.p_data -> uc.d_data / oValue);
+    case STRING_REAL_VAL:
+      return CDT(u.p_data -> uc.d_data / oValue);
 
-		default:
-			throw CDTTypeCastException("operator/(W_FLOAT)");
-	}
+    default:
+      throw CDTTypeCastException("operator/(W_FLOAT)");
+  }
 
 // Make stupid compiler happy
 return CDT(*this);
@@ -1213,29 +1213,29 @@ return CDT(*this);
 //
 CDT CDT::operator/(const CDT & oCDT) const
 {
-	INT_64   iData1;
-	W_FLOAT  dData1;
-	eValType eType1 = CastToNumber(iData1, dData1);
+  INT_64   iData1;
+  W_FLOAT  dData1;
+  eValType eType1 = CastToNumber(iData1, dData1);
 
-	INT_64   iData2;
-	W_FLOAT  dData2;
-	eValType eType2 = oCDT.CastToNumber(iData2, dData2);
+  INT_64   iData2;
+  W_FLOAT  dData2;
+  eValType eType2 = oCDT.CastToNumber(iData2, dData2);
 
-	// First argument is INT_VAL
-	if (eType1 == INT_VAL)
-	{
-		// First argument is INT_VAL, second argument is INT_VAL
-		if (eType2 == INT_VAL) { return CDT(iData1 / iData2); }
+  // First argument is INT_VAL
+  if (eType1 == INT_VAL)
+  {
+    // First argument is INT_VAL, second argument is INT_VAL
+    if (eType2 == INT_VAL) { return CDT(iData1 / iData2); }
 
-		// First argument is INT_VAL, second argument is REAL_VAL
-		return CDT(iData1 / dData2);
-	}
+    // First argument is INT_VAL, second argument is REAL_VAL
+    return CDT(iData1 / dData2);
+  }
 
-	// First argument is REAL_VAL, second argument is INT_VAL
-	if (eType2 == INT_VAL) { return CDT(dData1 / iData2); }
+  // First argument is REAL_VAL, second argument is INT_VAL
+  if (eType2 == INT_VAL) { return CDT(dData1 / iData2); }
 
-	// First argument is REAL_VAL, second argument is REAL_VAL
-	return CDT(dData1 / dData2);
+  // First argument is REAL_VAL, second argument is REAL_VAL
+  return CDT(dData1 / dData2);
 }
 
 // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1245,45 +1245,45 @@ CDT CDT::operator/(const CDT & oCDT) const
 //
 CDT & CDT::operator+=(const INT_64  oValue)
 {
-	switch (eValueType)
-	{
-		case UNDEF:
-			(*this) = CDT(oValue);
-			break;
+  switch (eValueType)
+  {
+    case UNDEF:
+      (*this) = CDT(oValue);
+      break;
 
-		case INT_VAL:
-			u.i_data += oValue;
-			break;
+    case INT_VAL:
+      u.i_data += oValue;
+      break;
 
-		case REAL_VAL:
-			u.d_data += oValue;
-			break;
+    case REAL_VAL:
+      u.d_data += oValue;
+      break;
 
-		case STRING_VAL:
-			{
-				CheckComplexDataType();
-				if (eValueType != STRING_VAL) { return this -> operator+=(oValue); }
+    case STRING_VAL:
+      {
+        CheckComplexDataType();
+        if (eValueType != STRING_VAL) { return this -> operator+=(oValue); }
 
-				INT_64   iData;
-				W_FLOAT  dData;
-				eValType eType = CastToNumber(iData, dData);
+        INT_64   iData;
+        W_FLOAT  dData;
+        eValType eType = CastToNumber(iData, dData);
 
-				if (eType == INT_VAL) { (*this) = CDT(iData + oValue); }
-				else                  { (*this) = CDT(dData + oValue); }
-			}
-			break;
+        if (eType == INT_VAL) { (*this) = CDT(iData + oValue); }
+        else                  { (*this) = CDT(dData + oValue); }
+      }
+      break;
 
-		case STRING_INT_VAL:
-			(*this) = CDT(u.p_data -> uc.i_data + oValue);
-			break;
+    case STRING_INT_VAL:
+      (*this) = CDT(u.p_data -> uc.i_data + oValue);
+      break;
 
-		case STRING_REAL_VAL:
-			(*this) = CDT(u.p_data -> uc.d_data + oValue);
-			break;
+    case STRING_REAL_VAL:
+      (*this) = CDT(u.p_data -> uc.d_data + oValue);
+      break;
 
-		default:
-			throw CDTTypeCastException("operator+=(INT_64)");
-	}
+    default:
+      throw CDTTypeCastException("operator+=(INT_64)");
+  }
 
 return *this;
 }
@@ -1308,45 +1308,45 @@ CDT & CDT::operator+=(const UINT_32  oValue) { return this -> operator+=(UINT_64
 //
 CDT & CDT::operator+=(const W_FLOAT  oValue)
 {
-	switch (eValueType)
-	{
-		case UNDEF:
-			(*this) = CDT(oValue);
-			break;
+  switch (eValueType)
+  {
+    case UNDEF:
+      (*this) = CDT(oValue);
+      break;
 
-		case INT_VAL:
-			u.i_data += INT_64(oValue);
-			break;
+    case INT_VAL:
+      u.i_data += INT_64(oValue);
+      break;
 
-		case REAL_VAL:
-			u.d_data += oValue;
-			break;
+    case REAL_VAL:
+      u.d_data += oValue;
+      break;
 
-		case STRING_VAL:
-			{
-				CheckComplexDataType();
-				if (eValueType != STRING_VAL) { return this -> operator+=(oValue); }
+    case STRING_VAL:
+      {
+        CheckComplexDataType();
+        if (eValueType != STRING_VAL) { return this -> operator+=(oValue); }
 
-				INT_64   iData;
-				W_FLOAT  dData;
-				eValType eType = CastToNumber(iData, dData);
+        INT_64   iData;
+        W_FLOAT  dData;
+        eValType eType = CastToNumber(iData, dData);
 
-				if (eType == INT_VAL) { (*this) = CDT(iData + oValue); }
-				else                  { (*this) = CDT(dData + oValue); }
-			}
-			break;
+        if (eType == INT_VAL) { (*this) = CDT(iData + oValue); }
+        else                  { (*this) = CDT(dData + oValue); }
+      }
+      break;
 
-		case STRING_INT_VAL:
-			(*this) = CDT(u.p_data -> uc.i_data + oValue);
-			break;
+    case STRING_INT_VAL:
+      (*this) = CDT(u.p_data -> uc.i_data + oValue);
+      break;
 
-		case STRING_REAL_VAL:
-			(*this) = CDT(u.p_data -> uc.d_data + oValue);
-			break;
+    case STRING_REAL_VAL:
+      (*this) = CDT(u.p_data -> uc.d_data + oValue);
+      break;
 
-		default:
-			throw CDTTypeCastException("operator+=(W_FLOAT)");
-	}
+    default:
+      throw CDTTypeCastException("operator+=(W_FLOAT)");
+  }
 
 return *this;
 }
@@ -1356,29 +1356,29 @@ return *this;
 //
 CDT & CDT::operator+=(const CDT & oCDT)
 {
-	INT_64   iData1;
-	W_FLOAT  dData1;
-	eValType eType1 = CastToNumber(iData1, dData1);
+  INT_64   iData1;
+  W_FLOAT  dData1;
+  eValType eType1 = CastToNumber(iData1, dData1);
 
-	INT_64   iData2;
-	W_FLOAT  dData2;
-	eValType eType2 = oCDT.CastToNumber(iData2, dData2);
+  INT_64   iData2;
+  W_FLOAT  dData2;
+  eValType eType2 = oCDT.CastToNumber(iData2, dData2);
 
-	// First argument is INT_VAL
-	if (eType1 == INT_VAL)
-	{
-		// First argument is INT_VAL, second argument is INT_VAL
-		if (eType2 == INT_VAL) { (*this) = CDT(iData1 + iData2); }
-		// First argument is INT_VAL, second argument is REAL_VAL
-		else                   { (*this) = CDT(iData1 + dData2); }
-	}
-	else
-	{
-		// First argument is REAL_VAL, second argument is INT_VAL
-		if (eType2 == INT_VAL) { (*this) = CDT(dData1 + iData2); }
-		// First argument is REAL_VAL, second argument is REAL_VAL
-		else                   { (*this) = CDT(dData1 + dData2); }
-	}
+  // First argument is INT_VAL
+  if (eType1 == INT_VAL)
+  {
+    // First argument is INT_VAL, second argument is INT_VAL
+    if (eType2 == INT_VAL) { (*this) = CDT(iData1 + iData2); }
+    // First argument is INT_VAL, second argument is REAL_VAL
+    else                   { (*this) = CDT(iData1 + dData2); }
+  }
+  else
+  {
+    // First argument is REAL_VAL, second argument is INT_VAL
+    if (eType2 == INT_VAL) { (*this) = CDT(dData1 + iData2); }
+    // First argument is REAL_VAL, second argument is REAL_VAL
+    else                   { (*this) = CDT(dData1 + dData2); }
+  }
 
 return *this;
 }
@@ -1415,29 +1415,29 @@ CDT & CDT::operator-=(const W_FLOAT  oValue) { return this -> operator+=(- oValu
 //
 CDT & CDT::operator-=(const CDT &  oCDT)
 {
-	INT_64   iData1;
-	W_FLOAT  dData1;
-	eValType eType1 = CastToNumber(iData1, dData1);
+  INT_64   iData1;
+  W_FLOAT  dData1;
+  eValType eType1 = CastToNumber(iData1, dData1);
 
-	INT_64   iData2;
-	W_FLOAT  dData2;
-	eValType eType2 = oCDT.CastToNumber(iData2, dData2);
+  INT_64   iData2;
+  W_FLOAT  dData2;
+  eValType eType2 = oCDT.CastToNumber(iData2, dData2);
 
-	// First argument is INT_VAL
-	if (eType1 == INT_VAL)
-	{
-		// First argument is INT_VAL, second argument is INT_VAL
-		if (eType2 == INT_VAL) { (*this) = CDT(iData1 - iData2); }
-		// First argument is INT_VAL, second argument is REAL_VAL
-		else                   { (*this) = CDT(iData1 - dData2); }
-	}
-	else
-	{
-		// First argument is REAL_VAL, second argument is INT_VAL
-		if (eType2 == INT_VAL) { (*this) = CDT(dData1 - iData2); }
-		// First argument is REAL_VAL, second argument is REAL_VAL
-		else                   { (*this) = CDT(dData1 - dData2); }
-	}
+  // First argument is INT_VAL
+  if (eType1 == INT_VAL)
+  {
+    // First argument is INT_VAL, second argument is INT_VAL
+    if (eType2 == INT_VAL) { (*this) = CDT(iData1 - iData2); }
+    // First argument is INT_VAL, second argument is REAL_VAL
+    else                   { (*this) = CDT(iData1 - dData2); }
+  }
+  else
+  {
+    // First argument is REAL_VAL, second argument is INT_VAL
+    if (eType2 == INT_VAL) { (*this) = CDT(dData1 - iData2); }
+    // First argument is REAL_VAL, second argument is REAL_VAL
+    else                   { (*this) = CDT(dData1 - dData2); }
+  }
 
 return *this;
 }
@@ -1449,45 +1449,45 @@ return *this;
 //
 CDT & CDT::operator*=(const INT_64  oValue)
 {
-	switch (eValueType)
-	{
-		case UNDEF:
-			(*this) = CDT(0);
-			break;
+  switch (eValueType)
+  {
+    case UNDEF:
+      (*this) = CDT(0);
+      break;
 
-		case INT_VAL:
-			u.i_data *= oValue;
-			break;
+    case INT_VAL:
+      u.i_data *= oValue;
+      break;
 
-		case REAL_VAL:
-			u.d_data *= oValue;
-			break;
+    case REAL_VAL:
+      u.d_data *= oValue;
+      break;
 
-		case STRING_VAL:
-			{
-				CheckComplexDataType();
-				if (eValueType != STRING_VAL) { return this -> operator*=(oValue); }
+    case STRING_VAL:
+      {
+        CheckComplexDataType();
+        if (eValueType != STRING_VAL) { return this -> operator*=(oValue); }
 
-				INT_64   iData;
-				W_FLOAT  dData;
-				eValType eType = CastToNumber(iData, dData);
+        INT_64   iData;
+        W_FLOAT  dData;
+        eValType eType = CastToNumber(iData, dData);
 
-				if (eType == INT_VAL) { (*this) = CDT(iData * oValue); }
-				else                  { (*this) = CDT(dData * oValue); }
-			}
-			break;
+        if (eType == INT_VAL) { (*this) = CDT(iData * oValue); }
+        else                  { (*this) = CDT(dData * oValue); }
+      }
+      break;
 
-		case STRING_INT_VAL:
-			(*this) = CDT(u.p_data -> uc.i_data * oValue);
-			break;
+    case STRING_INT_VAL:
+      (*this) = CDT(u.p_data -> uc.i_data * oValue);
+      break;
 
-		case STRING_REAL_VAL:
-			(*this) = CDT(u.p_data -> uc.d_data * oValue);
-			break;
+    case STRING_REAL_VAL:
+      (*this) = CDT(u.p_data -> uc.d_data * oValue);
+      break;
 
-		default:
-			throw CDTTypeCastException("operator*=(INT_64)");
-	}
+    default:
+      throw CDTTypeCastException("operator*=(INT_64)");
+  }
 
 return *this;
 }
@@ -1512,50 +1512,50 @@ CDT & CDT::operator*=(const UINT_32  oValue) { return this -> operator*=(INT_64(
 //
 CDT & CDT::operator*=(const W_FLOAT  oValue)
 {
-	switch (eValueType)
-	{
-		case UNDEF:
-			(*this) = CDT(0.0);
-			break;
+  switch (eValueType)
+  {
+    case UNDEF:
+      (*this) = CDT(0.0);
+      break;
 
-		case INT_VAL:
-			{
-				eValueType = REAL_VAL;
+    case INT_VAL:
+      {
+        eValueType = REAL_VAL;
 
-				const W_FLOAT dTMP = u.i_data * oValue;
-				u.d_data = dTMP;
-			}
-			break;
+        const W_FLOAT dTMP = u.i_data * oValue;
+        u.d_data = dTMP;
+      }
+      break;
 
-		case REAL_VAL:
-			u.d_data *= oValue;
-			break;
+    case REAL_VAL:
+      u.d_data *= oValue;
+      break;
 
-		case STRING_VAL:
-			{
-				CheckComplexDataType();
-				if (eValueType != STRING_VAL) { return this -> operator*=(oValue); }
+    case STRING_VAL:
+      {
+        CheckComplexDataType();
+        if (eValueType != STRING_VAL) { return this -> operator*=(oValue); }
 
-				INT_64   iData;
-				W_FLOAT  dData;
-				eValType eType = CastToNumber(iData, dData);
+        INT_64   iData;
+        W_FLOAT  dData;
+        eValType eType = CastToNumber(iData, dData);
 
-				if (eType == INT_VAL) { (*this) = CDT(iData * oValue); }
-				else                  { (*this) = CDT(dData * oValue); }
-			}
-			break;
+        if (eType == INT_VAL) { (*this) = CDT(iData * oValue); }
+        else                  { (*this) = CDT(dData * oValue); }
+      }
+      break;
 
-		case STRING_INT_VAL:
-			(*this) = CDT(u.p_data -> uc.i_data * oValue);
-			break;
+    case STRING_INT_VAL:
+      (*this) = CDT(u.p_data -> uc.i_data * oValue);
+      break;
 
-		case STRING_REAL_VAL:
-			(*this) = CDT(u.p_data -> uc.d_data * oValue);
-			break;
+    case STRING_REAL_VAL:
+      (*this) = CDT(u.p_data -> uc.d_data * oValue);
+      break;
 
-		default:
-			throw CDTTypeCastException("operator*=(W_FLOAT)");
-	}
+    default:
+      throw CDTTypeCastException("operator*=(W_FLOAT)");
+  }
 
 return *this;
 }
@@ -1565,29 +1565,29 @@ return *this;
 //
 CDT & CDT::operator*=(const CDT & oCDT)
 {
-	INT_64   iData1;
-	W_FLOAT  dData1;
-	eValType eType1 = CastToNumber(iData1, dData1);
+  INT_64   iData1;
+  W_FLOAT  dData1;
+  eValType eType1 = CastToNumber(iData1, dData1);
 
-	INT_64   iData2;
-	W_FLOAT  dData2;
-	eValType eType2 = oCDT.CastToNumber(iData2, dData2);
+  INT_64   iData2;
+  W_FLOAT  dData2;
+  eValType eType2 = oCDT.CastToNumber(iData2, dData2);
 
-	// First argument is INT_VAL
-	if (eType1 == INT_VAL)
-	{
-		// First argument is INT_VAL, second argument is INT_VAL
-		if (eType2 == INT_VAL) { (*this) = CDT(iData1 * iData2); }
-		// First argument is INT_VAL, second argument is REAL_VAL
-		else                   { (*this) = CDT(iData1 * dData2); }
-	}
-	else
-	{
-		// First argument is REAL_VAL, second argument is INT_VAL
-		if (eType2 == INT_VAL) { (*this) = CDT(dData1 * iData2); }
-		// First argument is REAL_VAL, second argument is REAL_VAL
-		else                   { (*this) = CDT(dData1 * dData2); }
-	}
+  // First argument is INT_VAL
+  if (eType1 == INT_VAL)
+  {
+    // First argument is INT_VAL, second argument is INT_VAL
+    if (eType2 == INT_VAL) { (*this) = CDT(iData1 * iData2); }
+    // First argument is INT_VAL, second argument is REAL_VAL
+    else                   { (*this) = CDT(iData1 * dData2); }
+  }
+  else
+  {
+    // First argument is REAL_VAL, second argument is INT_VAL
+    if (eType2 == INT_VAL) { (*this) = CDT(dData1 * iData2); }
+    // First argument is REAL_VAL, second argument is REAL_VAL
+    else                   { (*this) = CDT(dData1 * dData2); }
+  }
 
 return *this;
 }
@@ -1599,45 +1599,45 @@ return *this;
 //
 CDT & CDT::operator/=(const INT_64  oValue)
 {
-	switch (eValueType)
-	{
-		case UNDEF:
-			(*this) = CDT(0 / oValue);
-			break;
+  switch (eValueType)
+  {
+    case UNDEF:
+      (*this) = CDT(0 / oValue);
+      break;
 
-		case INT_VAL:
-			u.i_data /= oValue;
-			break;
+    case INT_VAL:
+      u.i_data /= oValue;
+      break;
 
-		case REAL_VAL:
-			u.d_data /= oValue;
-			break;
+    case REAL_VAL:
+      u.d_data /= oValue;
+      break;
 
-		case STRING_VAL:
-			{
-				CheckComplexDataType();
-				if (eValueType != STRING_VAL) { return this -> operator/=(oValue); }
+    case STRING_VAL:
+      {
+        CheckComplexDataType();
+        if (eValueType != STRING_VAL) { return this -> operator/=(oValue); }
 
-				INT_64   iData;
-				W_FLOAT  dData;
-				eValType eType = CastToNumber(iData, dData);
+        INT_64   iData;
+        W_FLOAT  dData;
+        eValType eType = CastToNumber(iData, dData);
 
-				if (eType == INT_VAL) { (*this) = CDT(iData / oValue); }
-				else                  { (*this) = CDT(dData / oValue); }
-			}
-			break;
+        if (eType == INT_VAL) { (*this) = CDT(iData / oValue); }
+        else                  { (*this) = CDT(dData / oValue); }
+      }
+      break;
 
-		case STRING_INT_VAL:
-			(*this) = CDT(u.p_data -> uc.i_data / oValue);
-			break;
+    case STRING_INT_VAL:
+      (*this) = CDT(u.p_data -> uc.i_data / oValue);
+      break;
 
-		case STRING_REAL_VAL:
-			(*this) = CDT(u.p_data -> uc.d_data / oValue);
-			break;
+    case STRING_REAL_VAL:
+      (*this) = CDT(u.p_data -> uc.d_data / oValue);
+      break;
 
-		default:
-			throw CDTTypeCastException("operator/=(INT_64)");
-	}
+    default:
+      throw CDTTypeCastException("operator/=(INT_64)");
+  }
 
 return *this;
 }
@@ -1662,50 +1662,50 @@ CDT & CDT::operator/=(const UINT_32  oValue) { return this -> operator/=(UINT_64
 //
 CDT & CDT::operator/=(const W_FLOAT  oValue)
 {
-	switch (eValueType)
-	{
-		case UNDEF:
-			(*this) = CDT(0.0 / oValue);
-			break;
+  switch (eValueType)
+  {
+    case UNDEF:
+      (*this) = CDT(0.0 / oValue);
+      break;
 
-		case INT_VAL:
-			{
-				eValueType = REAL_VAL;
+    case INT_VAL:
+      {
+        eValueType = REAL_VAL;
 
-				const W_FLOAT dTMP = u.i_data / oValue;
-				u.d_data = dTMP;
-			}
-			break;
+        const W_FLOAT dTMP = u.i_data / oValue;
+        u.d_data = dTMP;
+      }
+      break;
 
-		case REAL_VAL:
-			u.d_data /= oValue;
-			break;
+    case REAL_VAL:
+      u.d_data /= oValue;
+      break;
 
-		case STRING_VAL:
-			{
-				CheckComplexDataType();
-				if (eValueType != STRING_VAL) { return this -> operator/=(oValue); }
+    case STRING_VAL:
+      {
+        CheckComplexDataType();
+        if (eValueType != STRING_VAL) { return this -> operator/=(oValue); }
 
-				INT_64   iData;
-				W_FLOAT  dData;
-				eValType eType = CastToNumber(iData, dData);
+        INT_64   iData;
+        W_FLOAT  dData;
+        eValType eType = CastToNumber(iData, dData);
 
-				if (eType == INT_VAL) { (*this) = CDT(iData / oValue); }
-				else                  { (*this) = CDT(dData / oValue); }
-			}
-			break;
+        if (eType == INT_VAL) { (*this) = CDT(iData / oValue); }
+        else                  { (*this) = CDT(dData / oValue); }
+      }
+      break;
 
-		case STRING_INT_VAL:
-			(*this) = CDT(u.p_data -> uc.i_data / oValue);
-			break;
+    case STRING_INT_VAL:
+      (*this) = CDT(u.p_data -> uc.i_data / oValue);
+      break;
 
-		case STRING_REAL_VAL:
-			(*this) = CDT(u.p_data -> uc.d_data / oValue);
-			break;
+    case STRING_REAL_VAL:
+      (*this) = CDT(u.p_data -> uc.d_data / oValue);
+      break;
 
-		default:
-			throw CDTTypeCastException("operator*=(W_FLOAT)");
-	}
+    default:
+      throw CDTTypeCastException("operator*=(W_FLOAT)");
+  }
 
 return *this;
 }
@@ -1715,29 +1715,29 @@ return *this;
 //
 CDT & CDT::operator/=(const CDT & oCDT)
 {
-	INT_64   iData1;
-	W_FLOAT  dData1;
-	eValType eType1 = CastToNumber(iData1, dData1);
+  INT_64   iData1;
+  W_FLOAT  dData1;
+  eValType eType1 = CastToNumber(iData1, dData1);
 
-	INT_64   iData2;
-	W_FLOAT  dData2;
-	eValType eType2 = oCDT.CastToNumber(iData2, dData2);
+  INT_64   iData2;
+  W_FLOAT  dData2;
+  eValType eType2 = oCDT.CastToNumber(iData2, dData2);
 
-	// First argument is INT_VAL
-	if (eType1 == INT_VAL)
-	{
-		// First argument is INT_VAL, second argument is INT_VAL
-		if (eType2 == INT_VAL) { (*this) = CDT(iData1 / iData2); }
-		// First argument is INT_VAL, second argument is REAL_VAL
-		else                   { (*this) = CDT(iData1 / dData2); }
-	}
-	else
-	{
-		// First argument is REAL_VAL, second argument is INT_VAL
-		if (eType2 == INT_VAL) { (*this) = CDT(dData1 / iData2); }
-		// First argument is REAL_VAL, second argument is REAL_VAL
-		else                   { (*this) = CDT(dData1 / dData2); }
-	}
+  // First argument is INT_VAL
+  if (eType1 == INT_VAL)
+  {
+    // First argument is INT_VAL, second argument is INT_VAL
+    if (eType2 == INT_VAL) { (*this) = CDT(iData1 / iData2); }
+    // First argument is INT_VAL, second argument is REAL_VAL
+    else                   { (*this) = CDT(iData1 / dData2); }
+  }
+  else
+  {
+    // First argument is REAL_VAL, second argument is INT_VAL
+    if (eType2 == INT_VAL) { (*this) = CDT(dData1 / iData2); }
+    // First argument is REAL_VAL, second argument is REAL_VAL
+    else                   { (*this) = CDT(dData1 / dData2); }
+  }
 
 return *this;
 }
@@ -1749,20 +1749,20 @@ return *this;
 //
 bool CDT::operator==(const INT_64  oValue) const
 {
-	if      (eValueType == INT_VAL)         { return u.i_data == oValue;              }
-	else if (eValueType == REAL_VAL)        { return u.d_data == oValue;              }
-	else if (eValueType == STRING_INT_VAL)  { return u.p_data -> uc.i_data == oValue; }
-	else if (eValueType == STRING_REAL_VAL) { return u.p_data -> uc.d_data == oValue; }
+  if      (eValueType == INT_VAL)         { return u.i_data == oValue;              }
+  else if (eValueType == REAL_VAL)        { return u.d_data == oValue;              }
+  else if (eValueType == STRING_INT_VAL)  { return u.p_data -> uc.i_data == oValue; }
+  else if (eValueType == STRING_REAL_VAL) { return u.p_data -> uc.d_data == oValue; }
 
 #if THROW_EXCEPTION_IN_COMPARATORS
-	else
-	{
-		STLW::string sError("Can't compare ");
-		sError.append(PrintableType());
-		sError.append(" and INTEGER data types. Use `Equal`, `EQ` method instead.");
+  else
+  {
+    STLW::string sError("Can't compare ");
+    sError.append(PrintableType());
+    sError.append(" and INTEGER data types. Use `Equal`, `EQ` method instead.");
 
-		throw CTPPLogicError(sError.c_str());
-	}
+    throw CTPPLogicError(sError.c_str());
+  }
 #endif
 return false;
 }
@@ -1787,19 +1787,19 @@ bool CDT::operator==(const UINT_32  oValue) const { return operator==(UINT_64(oV
 //
 bool CDT::operator==(const W_FLOAT  oValue) const
 {
-	if      (eValueType == INT_VAL)         { return u.i_data == oValue;              }
-	else if (eValueType == REAL_VAL)        { return u.d_data == oValue;              }
-	else if (eValueType == STRING_INT_VAL)  { return u.p_data -> uc.i_data == oValue; }
-	else if (eValueType == STRING_REAL_VAL) { return u.p_data -> uc.d_data == oValue; }
+  if      (eValueType == INT_VAL)         { return u.i_data == oValue;              }
+  else if (eValueType == REAL_VAL)        { return u.d_data == oValue;              }
+  else if (eValueType == STRING_INT_VAL)  { return u.p_data -> uc.i_data == oValue; }
+  else if (eValueType == STRING_REAL_VAL) { return u.p_data -> uc.d_data == oValue; }
 #if THROW_EXCEPTION_IN_COMPARATORS
-	else
-	{
-		STLW::string sError("Can't compare ");
-		sError.append(PrintableType());
-		sError.append(" and REAL data types. Use `Equal`, `EQ` method instead.");
+  else
+  {
+    STLW::string sError("Can't compare ");
+    sError.append(PrintableType());
+    sError.append(" and REAL data types. Use `Equal`, `EQ` method instead.");
 
-		throw CTPPLogicError(sError.c_str());
-	}
+    throw CTPPLogicError(sError.c_str());
+  }
 #endif
 return false;
 }
@@ -1810,16 +1810,16 @@ return false;
 bool CDT::operator==(CCHAR_P oValue) const
 {
 #if THROW_EXCEPTION_IN_COMPARATORS
-	if      (eValueType != STRING_VAL &&
-		 eValueType != STRING_INT_VAL &&
-		 eValueType != STRING_REAL_VAL)
-	{
-		STLW::string sError("Can't compare ");
-		sError.append(PrintableType());
-		sError.append(" and STRING data types. Use `Greater`, `GT` method instead.");
+  if      (eValueType != STRING_VAL &&
+     eValueType != STRING_INT_VAL &&
+     eValueType != STRING_REAL_VAL)
+  {
+    STLW::string sError("Can't compare ");
+    sError.append(PrintableType());
+    sError.append(" and STRING data types. Use `Greater`, `GT` method instead.");
 
-		throw CTPPLogicError(sError.c_str());
-	}
+    throw CTPPLogicError(sError.c_str());
+  }
 #endif
 
 return GetString() == STLW::string(oValue);
@@ -1831,17 +1831,17 @@ return GetString() == STLW::string(oValue);
 bool CDT::operator==(const STLW::string & oValue) const
 {
 #if THROW_EXCEPTION_IN_COMPARATORS
-	if      (eValueType != STRING_VAL &&
-		 eValueType != STRING_INT_VAL &&
-		 eValueType != STRING_REAL_VAL)
-	{
+  if      (eValueType != STRING_VAL &&
+     eValueType != STRING_INT_VAL &&
+     eValueType != STRING_REAL_VAL)
+  {
 
-		STLW::string sError("Can't compare ");
-		sError.append(PrintableType());
-		sError.append(" and STRING data types. Use `Equal`, `EQ` method instead.");
+    STLW::string sError("Can't compare ");
+    sError.append(PrintableType());
+    sError.append(" and STRING data types. Use `Equal`, `EQ` method instead.");
 
-		throw CTPPLogicError(sError.c_str());
-	}
+    throw CTPPLogicError(sError.c_str());
+  }
 #endif
 
 return GetString() == oValue;
@@ -1852,47 +1852,47 @@ return GetString() == oValue;
 //
 bool CDT::operator==(const CDT & oCDT) const
 {
-	if      (eValueType == UNDEF && oCDT.eValueType == UNDEF)
-	{
-		return true;
-	}
-	// Integer-to-Integer
-	else if ((eValueType      == INT_VAL || eValueType      == STRING_INT_VAL) &&
-	         (oCDT.eValueType == INT_VAL || oCDT.eValueType == STRING_INT_VAL)
-		)
-	{
-		return GetInt() == oCDT.GetInt();
-	}
-	// (Integer, Real, String+Integer, String+Real)-to-(Integer, Real, String+Integer, String+Real)
-	else if ((eValueType      == REAL_VAL || eValueType      == STRING_REAL_VAL ||
-		  eValueType      == INT_VAL  || eValueType      == STRING_INT_VAL) &&
-	         (oCDT.eValueType == REAL_VAL || oCDT.eValueType == STRING_REAL_VAL ||
-	          oCDT.eValueType == INT_VAL  || oCDT.eValueType == STRING_INT_VAL)
-		)
-	{
-		return GetFloat() == oCDT.GetFloat();
-	}
-	// (String, String+Integer, String+Real)-to-(String, String+Integer, String+Real)
-	else if ((eValueType      == STRING_VAL || eValueType      == STRING_REAL_VAL || eValueType      == STRING_INT_VAL) &&
-		 (oCDT.eValueType == STRING_VAL || oCDT.eValueType == STRING_REAL_VAL || oCDT.eValueType == STRING_INT_VAL))
-	{
-		return *(u.p_data -> u.s_data) == *(oCDT.u.p_data -> u.s_data);
-	}
-	else if (eValueType == POINTER_VAL && oCDT.eValueType == POINTER_VAL)
-	{
-		return u.pp_data == oCDT.u.pp_data;
-	}
+  if      (eValueType == UNDEF && oCDT.eValueType == UNDEF)
+  {
+    return true;
+  }
+  // Integer-to-Integer
+  else if ((eValueType      == INT_VAL || eValueType      == STRING_INT_VAL) &&
+           (oCDT.eValueType == INT_VAL || oCDT.eValueType == STRING_INT_VAL)
+    )
+  {
+    return GetInt() == oCDT.GetInt();
+  }
+  // (Integer, Real, String+Integer, String+Real)-to-(Integer, Real, String+Integer, String+Real)
+  else if ((eValueType      == REAL_VAL || eValueType      == STRING_REAL_VAL ||
+      eValueType      == INT_VAL  || eValueType      == STRING_INT_VAL) &&
+           (oCDT.eValueType == REAL_VAL || oCDT.eValueType == STRING_REAL_VAL ||
+            oCDT.eValueType == INT_VAL  || oCDT.eValueType == STRING_INT_VAL)
+    )
+  {
+    return GetFloat() == oCDT.GetFloat();
+  }
+  // (String, String+Integer, String+Real)-to-(String, String+Integer, String+Real)
+  else if ((eValueType      == STRING_VAL || eValueType      == STRING_REAL_VAL || eValueType      == STRING_INT_VAL) &&
+     (oCDT.eValueType == STRING_VAL || oCDT.eValueType == STRING_REAL_VAL || oCDT.eValueType == STRING_INT_VAL))
+  {
+    return *(u.p_data -> u.s_data) == *(oCDT.u.p_data -> u.s_data);
+  }
+  else if (eValueType == POINTER_VAL && oCDT.eValueType == POINTER_VAL)
+  {
+    return u.pp_data == oCDT.u.pp_data;
+  }
 #if THROW_EXCEPTION_IN_COMPARATORS
-	else
-	{
-		STLW::string sError("Can't compare ");
-		sError.append(PrintableType());
-		sError.append(" and ");
-		sError.append(oCDT.PrintableType());
-		sError.append(" data types. Use `Equal`, `EQ` method instead.");
+  else
+  {
+    STLW::string sError("Can't compare ");
+    sError.append(PrintableType());
+    sError.append(" and ");
+    sError.append(oCDT.PrintableType());
+    sError.append(" data types. Use `Equal`, `EQ` method instead.");
 
-		throw CTPPLogicError(sError.c_str());
-	}
+    throw CTPPLogicError(sError.c_str());
+  }
 #endif
 
 return false;
@@ -1906,20 +1906,20 @@ return false;
 bool CDT::operator!=(const INT_64  oValue)  const
 {
 #if THROW_EXCEPTION_IN_COMPARATORS
-	try
-	{
-		return ! this -> operator==(oValue);
-	}
-	catch (CTPPLogicError & e)
-	{
-		STLW::string sError("Can't compare ");
-		sError.append(PrintableType());
-		sError.append(" and REAL data types. Use `NotEqual`, `NE` method instead.");
+  try
+  {
+    return ! this -> operator==(oValue);
+  }
+  catch (CTPPLogicError & e)
+  {
+    STLW::string sError("Can't compare ");
+    sError.append(PrintableType());
+    sError.append(" and REAL data types. Use `NotEqual`, `NE` method instead.");
 
-		throw CTPPLogicError(sError.c_str());
-	}
+    throw CTPPLogicError(sError.c_str());
+  }
 #else
-	return ! this -> operator==(oValue);
+  return ! this -> operator==(oValue);
 #endif
 return false;
 }
@@ -1930,20 +1930,20 @@ return false;
 bool CDT::operator!=(const UINT_64  oValue)  const
 {
 #if THROW_EXCEPTION_IN_COMPARATORS
-	try
-	{
-		return ! this -> operator==(oValue);
-	}
-	catch (CTPPLogicError & e)
-	{
-		STLW::string sError("Can't compare ");
-		sError.append(PrintableType());
-		sError.append(" and REAL data types. Use `NotEqual`, `NE` method instead.");
+  try
+  {
+    return ! this -> operator==(oValue);
+  }
+  catch (CTPPLogicError & e)
+  {
+    STLW::string sError("Can't compare ");
+    sError.append(PrintableType());
+    sError.append(" and REAL data types. Use `NotEqual`, `NE` method instead.");
 
-		throw CTPPLogicError(sError.c_str());
-	}
+    throw CTPPLogicError(sError.c_str());
+  }
 #else
-	return ! this -> operator==(oValue);
+  return ! this -> operator==(oValue);
 #endif
 return false;
 }
@@ -1954,20 +1954,20 @@ return false;
 bool CDT::operator!=(const INT_32  oValue)  const
 {
 #if THROW_EXCEPTION_IN_COMPARATORS
-	try
-	{
-		return ! this -> operator==(oValue);
-	}
-	catch (CTPPLogicError & e)
-	{
-		STLW::string sError("Can't compare ");
-		sError.append(PrintableType());
-		sError.append(" and REAL data types. Use `NotEqual`, `NE` method instead.");
+  try
+  {
+    return ! this -> operator==(oValue);
+  }
+  catch (CTPPLogicError & e)
+  {
+    STLW::string sError("Can't compare ");
+    sError.append(PrintableType());
+    sError.append(" and REAL data types. Use `NotEqual`, `NE` method instead.");
 
-		throw CTPPLogicError(sError.c_str());
-	}
+    throw CTPPLogicError(sError.c_str());
+  }
 #else
-	return ! this -> operator==(oValue);
+  return ! this -> operator==(oValue);
 #endif
 return false;
 }
@@ -1978,20 +1978,20 @@ return false;
 bool CDT::operator!=(const UINT_32  oValue) const
 {
 #if THROW_EXCEPTION_IN_COMPARATORS
-	try
-	{
-		return ! this -> operator==(oValue);
-	}
-	catch (CTPPLogicError & e)
-	{
-		STLW::string sError("Can't compare ");
-		sError.append(PrintableType());
-		sError.append(" and REAL data types. Use `NotEqual`, `NE` method instead.");
+  try
+  {
+    return ! this -> operator==(oValue);
+  }
+  catch (CTPPLogicError & e)
+  {
+    STLW::string sError("Can't compare ");
+    sError.append(PrintableType());
+    sError.append(" and REAL data types. Use `NotEqual`, `NE` method instead.");
 
-		throw CTPPLogicError(sError.c_str());
-	}
+    throw CTPPLogicError(sError.c_str());
+  }
 #else
-	return ! this -> operator==(oValue);
+  return ! this -> operator==(oValue);
 #endif
 return false;
 }
@@ -2002,20 +2002,20 @@ return false;
 bool CDT::operator!=(const W_FLOAT  oValue)  const
 {
 #if THROW_EXCEPTION_IN_COMPARATORS
-	try
-	{
-		return ! this -> operator==(oValue);
-	}
-	catch (CTPPLogicError & e)
-	{
-		STLW::string sError("Can't compare ");
-		sError.append(PrintableType());
-		sError.append(" and REAL data types. Use `NotEqual`, `NE` method instead.");
+  try
+  {
+    return ! this -> operator==(oValue);
+  }
+  catch (CTPPLogicError & e)
+  {
+    STLW::string sError("Can't compare ");
+    sError.append(PrintableType());
+    sError.append(" and REAL data types. Use `NotEqual`, `NE` method instead.");
 
-		throw CTPPLogicError(sError.c_str());
-	}
+    throw CTPPLogicError(sError.c_str());
+  }
 #else
-	return ! this -> operator==(oValue);
+  return ! this -> operator==(oValue);
 #endif
 return false;
 }
@@ -2026,20 +2026,20 @@ return false;
 bool CDT::operator!=(CCHAR_P oValue) const
 {
 #if THROW_EXCEPTION_IN_COMPARATORS
-	try
-	{
-		return ! this -> operator!=(oValue);
-	}
-	catch (CTPPLogicError & e)
-	{
-		STLW::string sError("Can't compare ");
-		sError.append(PrintableType());
-		sError.append(" and STRING data types. Use `NotEqual`, `NE` method instead.");
+  try
+  {
+    return ! this -> operator!=(oValue);
+  }
+  catch (CTPPLogicError & e)
+  {
+    STLW::string sError("Can't compare ");
+    sError.append(PrintableType());
+    sError.append(" and STRING data types. Use `NotEqual`, `NE` method instead.");
 
-		throw CTPPLogicError(sError.c_str());
-	}
+    throw CTPPLogicError(sError.c_str());
+  }
 #else
-	return ! this -> operator==(oValue);
+  return ! this -> operator==(oValue);
 #endif
 return false;
 }
@@ -2050,20 +2050,20 @@ return false;
 bool CDT::operator!=(const STLW::string & oValue) const
 {
 #if THROW_EXCEPTION_IN_COMPARATORS
-	try
-	{
-		return ! this -> operator!=(oValue);
-	}
-	catch (CTPPLogicError & e)
-	{
-		STLW::string sError("Can't compare ");
-		sError.append(PrintableType());
-		sError.append(" and STRING data types. Use `NotEqual`, `NE` method instead.");
+  try
+  {
+    return ! this -> operator!=(oValue);
+  }
+  catch (CTPPLogicError & e)
+  {
+    STLW::string sError("Can't compare ");
+    sError.append(PrintableType());
+    sError.append(" and STRING data types. Use `NotEqual`, `NE` method instead.");
 
-		throw CTPPLogicError(sError.c_str());
-	}
+    throw CTPPLogicError(sError.c_str());
+  }
 #else
-	return ! this -> operator==(oValue);
+  return ! this -> operator==(oValue);
 #endif
 return false;
 }
@@ -2074,22 +2074,22 @@ return false;
 bool CDT::operator!=(const CDT & oCDT) const
 {
 #if THROW_EXCEPTION_IN_COMPARATORS
-	try
-	{
-		return ! this -> operator==(oCDT);
-	}
-	catch (CTPPLogicError & e)
-	{
-		STLW::string sError("Can't compare ");
-		sError.append(PrintableType());
-		sError.append(" and ");
-		sError.append(oCDT.PrintableType());
-		sError.append(" data types. Use `NotEqual`, `NE` method instead.");
+  try
+  {
+    return ! this -> operator==(oCDT);
+  }
+  catch (CTPPLogicError & e)
+  {
+    STLW::string sError("Can't compare ");
+    sError.append(PrintableType());
+    sError.append(" and ");
+    sError.append(oCDT.PrintableType());
+    sError.append(" data types. Use `NotEqual`, `NE` method instead.");
 
-		throw CTPPLogicError(sError.c_str());
-	}
+    throw CTPPLogicError(sError.c_str());
+  }
 #else
-	return ! this -> operator==(oCDT);
+  return ! this -> operator==(oCDT);
 #endif
 return false;
 }
@@ -2101,19 +2101,19 @@ return false;
 //
 bool CDT::operator>(const INT_64  oValue)  const
 {
-	if      (eValueType == INT_VAL)         { return u.i_data > oValue;              }
-	else if (eValueType == REAL_VAL)        { return u.d_data > oValue;              }
-	else if (eValueType == STRING_INT_VAL)  { return u.p_data -> uc.i_data > oValue; }
-	else if (eValueType == STRING_REAL_VAL) { return u.p_data -> uc.d_data > oValue; }
+  if      (eValueType == INT_VAL)         { return u.i_data > oValue;              }
+  else if (eValueType == REAL_VAL)        { return u.d_data > oValue;              }
+  else if (eValueType == STRING_INT_VAL)  { return u.p_data -> uc.i_data > oValue; }
+  else if (eValueType == STRING_REAL_VAL) { return u.p_data -> uc.d_data > oValue; }
 #if THROW_EXCEPTION_IN_COMPARATORS
-	else
-	{
-		STLW::string sError("Can't compare ");
-		sError.append(PrintableType());
-		sError.append(" and INTEGER data types. Use `Greater`, `GT` method instead.");
+  else
+  {
+    STLW::string sError("Can't compare ");
+    sError.append(PrintableType());
+    sError.append(" and INTEGER data types. Use `Greater`, `GT` method instead.");
 
-		throw CTPPLogicError(sError.c_str());
-	}
+    throw CTPPLogicError(sError.c_str());
+  }
 #endif
 return false;
 }
@@ -2138,19 +2138,19 @@ bool CDT::operator>(const UINT_32  oValue) const { return operator>(UINT_64(oVal
 //
 bool CDT::operator>(const W_FLOAT  oValue) const
 {
-	if      (eValueType == INT_VAL)         { return u.i_data > oValue;              }
-	else if (eValueType == REAL_VAL)        { return u.d_data > oValue;              }
-	else if (eValueType == STRING_INT_VAL)  { return u.p_data -> uc.i_data > oValue; }
-	else if (eValueType == STRING_REAL_VAL) { return u.p_data -> uc.d_data > oValue; }
+  if      (eValueType == INT_VAL)         { return u.i_data > oValue;              }
+  else if (eValueType == REAL_VAL)        { return u.d_data > oValue;              }
+  else if (eValueType == STRING_INT_VAL)  { return u.p_data -> uc.i_data > oValue; }
+  else if (eValueType == STRING_REAL_VAL) { return u.p_data -> uc.d_data > oValue; }
 #if THROW_EXCEPTION_IN_COMPARATORS
-	else
-	{
-		STLW::string sError("Can't compare ");
-		sError.append(PrintableType());
-		sError.append(" and REAL data types. Use `Greater`, `GT` method instead.");
+  else
+  {
+    STLW::string sError("Can't compare ");
+    sError.append(PrintableType());
+    sError.append(" and REAL data types. Use `Greater`, `GT` method instead.");
 
-		throw CTPPLogicError(sError.c_str());
-	}
+    throw CTPPLogicError(sError.c_str());
+  }
 #endif
 return false;
 }
@@ -2161,16 +2161,16 @@ return false;
 bool CDT::operator>(CCHAR_P oValue) const
 {
 #if THROW_EXCEPTION_IN_COMPARATORS
-	if      (eValueType != STRING_VAL &&
-		 eValueType != STRING_INT_VAL &&
-		 eValueType != STRING_REAL_VAL)
-	{
-		STLW::string sError("Can't compare ");
-		sError.append(PrintableType());
-		sError.append(" and STRING data types. Use `Greater`, `GT` method instead.");
+  if      (eValueType != STRING_VAL &&
+     eValueType != STRING_INT_VAL &&
+     eValueType != STRING_REAL_VAL)
+  {
+    STLW::string sError("Can't compare ");
+    sError.append(PrintableType());
+    sError.append(" and STRING data types. Use `Greater`, `GT` method instead.");
 
-		throw CTPPLogicError(sError.c_str());
-	}
+    throw CTPPLogicError(sError.c_str());
+  }
 #endif
 
 return GetString() > STLW::string(oValue);
@@ -2182,16 +2182,16 @@ return GetString() > STLW::string(oValue);
 bool CDT::operator>(const STLW::string & oValue) const
 {
 #if THROW_EXCEPTION_IN_COMPARATORS
-	if      (eValueType != STRING_VAL &&
-		 eValueType != STRING_INT_VAL &&
-		 eValueType != STRING_REAL_VAL)
-	{
-		STLW::string sError("Can't compare ");
-		sError.append(PrintableType());
-		sError.append(" and STRING data types. Use `Greater`, `GT` method instead.");
+  if      (eValueType != STRING_VAL &&
+     eValueType != STRING_INT_VAL &&
+     eValueType != STRING_REAL_VAL)
+  {
+    STLW::string sError("Can't compare ");
+    sError.append(PrintableType());
+    sError.append(" and STRING data types. Use `Greater`, `GT` method instead.");
 
-		throw CTPPLogicError(sError.c_str());
-	}
+    throw CTPPLogicError(sError.c_str());
+  }
 #endif
 
 return GetString() > oValue;
@@ -2202,47 +2202,47 @@ return GetString() > oValue;
 //
 bool CDT::operator>(const CDT & oCDT) const
 {
-	if      (eValueType == UNDEF && oCDT.eValueType == UNDEF)
-	{
-		return false;
-	}
-	// Integer-to-Integer
-	else if ((eValueType      == INT_VAL || eValueType      == STRING_INT_VAL) &&
-	         (oCDT.eValueType == INT_VAL || oCDT.eValueType == STRING_INT_VAL)
-		)
-	{
-		return GetInt() > oCDT.GetInt();
-	}
-	// (Integer, Real, String+Integer, String+Real)-to-(Integer, Real, String+Integer, String+Real)
-	else if ((eValueType      == REAL_VAL || eValueType      == STRING_REAL_VAL ||
-		  eValueType      == INT_VAL  || eValueType      == STRING_INT_VAL) &&
-	         (oCDT.eValueType == REAL_VAL || oCDT.eValueType == STRING_REAL_VAL ||
-	          oCDT.eValueType == INT_VAL  || oCDT.eValueType == STRING_INT_VAL)
-		)
-	{
-		return GetFloat() > oCDT.GetFloat();
-	}
-	// (String, String+Integer, String+Real)-to-(String, String+Integer, String+Real)
-	else if ((eValueType      == STRING_VAL || eValueType      == STRING_REAL_VAL || eValueType      == STRING_INT_VAL) &&
-		 (oCDT.eValueType == STRING_VAL || oCDT.eValueType == STRING_REAL_VAL || oCDT.eValueType == STRING_INT_VAL))
-	{
-		return *(u.p_data -> u.s_data) > *(oCDT.u.p_data -> u.s_data);
-	}
-	else if (eValueType == POINTER_VAL && oCDT.eValueType == POINTER_VAL)
-	{
-		return u.pp_data > oCDT.u.pp_data;
-	}
+  if      (eValueType == UNDEF && oCDT.eValueType == UNDEF)
+  {
+    return false;
+  }
+  // Integer-to-Integer
+  else if ((eValueType      == INT_VAL || eValueType      == STRING_INT_VAL) &&
+           (oCDT.eValueType == INT_VAL || oCDT.eValueType == STRING_INT_VAL)
+    )
+  {
+    return GetInt() > oCDT.GetInt();
+  }
+  // (Integer, Real, String+Integer, String+Real)-to-(Integer, Real, String+Integer, String+Real)
+  else if ((eValueType      == REAL_VAL || eValueType      == STRING_REAL_VAL ||
+      eValueType      == INT_VAL  || eValueType      == STRING_INT_VAL) &&
+           (oCDT.eValueType == REAL_VAL || oCDT.eValueType == STRING_REAL_VAL ||
+            oCDT.eValueType == INT_VAL  || oCDT.eValueType == STRING_INT_VAL)
+    )
+  {
+    return GetFloat() > oCDT.GetFloat();
+  }
+  // (String, String+Integer, String+Real)-to-(String, String+Integer, String+Real)
+  else if ((eValueType      == STRING_VAL || eValueType      == STRING_REAL_VAL || eValueType      == STRING_INT_VAL) &&
+     (oCDT.eValueType == STRING_VAL || oCDT.eValueType == STRING_REAL_VAL || oCDT.eValueType == STRING_INT_VAL))
+  {
+    return *(u.p_data -> u.s_data) > *(oCDT.u.p_data -> u.s_data);
+  }
+  else if (eValueType == POINTER_VAL && oCDT.eValueType == POINTER_VAL)
+  {
+    return u.pp_data > oCDT.u.pp_data;
+  }
 #if THROW_EXCEPTION_IN_COMPARATORS
-	else
-	{
-		STLW::string sError("Can't compare ");
-		sError.append(PrintableType());
-		sError.append(" and ");
-		sError.append(oCDT.PrintableType());
-		sError.append(" data types. Use `Greater`, `GT` method instead.");
+  else
+  {
+    STLW::string sError("Can't compare ");
+    sError.append(PrintableType());
+    sError.append(" and ");
+    sError.append(oCDT.PrintableType());
+    sError.append(" data types. Use `Greater`, `GT` method instead.");
 
-		throw CTPPLogicError(sError.c_str());
-	}
+    throw CTPPLogicError(sError.c_str());
+  }
 #endif
 return false;
 }
@@ -2254,19 +2254,19 @@ return false;
 //
 bool CDT::operator<(const INT_64  oValue) const
 {
-	if      (eValueType == INT_VAL)         { return u.i_data < oValue;              }
-	else if (eValueType == REAL_VAL)        { return u.d_data < oValue;              }
-	else if (eValueType == STRING_INT_VAL)  { return u.p_data -> uc.i_data < oValue; }
-	else if (eValueType == STRING_REAL_VAL) { return u.p_data -> uc.d_data < oValue; }
+  if      (eValueType == INT_VAL)         { return u.i_data < oValue;              }
+  else if (eValueType == REAL_VAL)        { return u.d_data < oValue;              }
+  else if (eValueType == STRING_INT_VAL)  { return u.p_data -> uc.i_data < oValue; }
+  else if (eValueType == STRING_REAL_VAL) { return u.p_data -> uc.d_data < oValue; }
 #if THROW_EXCEPTION_IN_COMPARATORS
-	else
-	{
-		STLW::string sError("Can't compare ");
-		sError.append(PrintableType());
-		sError.append(" and INTEGER data types. Use `Less`, `LT` method instead.");
+  else
+  {
+    STLW::string sError("Can't compare ");
+    sError.append(PrintableType());
+    sError.append(" and INTEGER data types. Use `Less`, `LT` method instead.");
 
-		throw CTPPLogicError(sError.c_str());
-	}
+    throw CTPPLogicError(sError.c_str());
+  }
 #endif
 return false;
 }
@@ -2291,19 +2291,19 @@ bool CDT::operator<(const UINT_32  oValue) const { return operator<(UINT_64(oVal
 //
 bool CDT::operator<(const W_FLOAT  oValue) const
 {
-	if      (eValueType == INT_VAL)         { return u.i_data < oValue;              }
-	else if (eValueType == REAL_VAL)        { return u.d_data < oValue;              }
-	else if (eValueType == STRING_INT_VAL)  { return u.p_data -> uc.i_data < oValue; }
-	else if (eValueType == STRING_REAL_VAL) { return u.p_data -> uc.d_data < oValue; }
+  if      (eValueType == INT_VAL)         { return u.i_data < oValue;              }
+  else if (eValueType == REAL_VAL)        { return u.d_data < oValue;              }
+  else if (eValueType == STRING_INT_VAL)  { return u.p_data -> uc.i_data < oValue; }
+  else if (eValueType == STRING_REAL_VAL) { return u.p_data -> uc.d_data < oValue; }
 #if THROW_EXCEPTION_IN_COMPARATORS
-	else
-	{
-		STLW::string sError("Can't compare ");
-		sError.append(PrintableType());
-		sError.append(" and REAL data types. Use `Less`, `LT` method instead.");
+  else
+  {
+    STLW::string sError("Can't compare ");
+    sError.append(PrintableType());
+    sError.append(" and REAL data types. Use `Less`, `LT` method instead.");
 
-		throw CTPPLogicError(sError.c_str());
-	}
+    throw CTPPLogicError(sError.c_str());
+  }
 #endif
 return false;
 }
@@ -2314,16 +2314,16 @@ return false;
 bool CDT::operator<(CCHAR_P oValue) const
 {
 #if THROW_EXCEPTION_IN_COMPARATORS
-	if      (eValueType != STRING_VAL &&
-		 eValueType != STRING_INT_VAL &&
-		 eValueType != STRING_REAL_VAL)
-	{
-		STLW::string sError("Can't compare ");
-		sError.append(PrintableType());
-		sError.append(" and STRING data types. Use `Less`, `LT` method instead.");
+  if      (eValueType != STRING_VAL &&
+     eValueType != STRING_INT_VAL &&
+     eValueType != STRING_REAL_VAL)
+  {
+    STLW::string sError("Can't compare ");
+    sError.append(PrintableType());
+    sError.append(" and STRING data types. Use `Less`, `LT` method instead.");
 
-		throw CTPPLogicError(sError.c_str());
-	}
+    throw CTPPLogicError(sError.c_str());
+  }
 #endif
 
 return GetString() < STLW::string(oValue);
@@ -2335,16 +2335,16 @@ return GetString() < STLW::string(oValue);
 bool CDT::operator<(const STLW::string & oValue) const
 {
 #if THROW_EXCEPTION_IN_COMPARATORS
-	if      (eValueType != STRING_VAL &&
-		 eValueType != STRING_INT_VAL &&
-		 eValueType != STRING_REAL_VAL)
-	{
-		STLW::string sError("Can't compare ");
-		sError.append(PrintableType());
-		sError.append(" and STRING data types. Use `Less`, `LT` method instead.");
+  if      (eValueType != STRING_VAL &&
+     eValueType != STRING_INT_VAL &&
+     eValueType != STRING_REAL_VAL)
+  {
+    STLW::string sError("Can't compare ");
+    sError.append(PrintableType());
+    sError.append(" and STRING data types. Use `Less`, `LT` method instead.");
 
-		throw CTPPLogicError(sError.c_str());
-	}
+    throw CTPPLogicError(sError.c_str());
+  }
 #endif
 
 return GetString() < oValue;
@@ -2355,47 +2355,47 @@ return GetString() < oValue;
 //
 bool CDT::operator<(const CDT & oCDT) const
 {
-	if      (eValueType == UNDEF && oCDT.eValueType == UNDEF)
-	{
-		return false;
-	}
-	// Integer-to-Integer
-	else if ((eValueType      == INT_VAL || eValueType      == STRING_INT_VAL) &&
-	         (oCDT.eValueType == INT_VAL || oCDT.eValueType == STRING_INT_VAL)
-		)
-	{
-		return GetInt() < oCDT.GetInt();
-	}
-	// (Integer, Real, String+Integer, String+Real)-to-(Integer, Real, String+Integer, String+Real)
-	else if ((eValueType      == REAL_VAL || eValueType      == STRING_REAL_VAL ||
-		  eValueType      == INT_VAL  || eValueType      == STRING_INT_VAL) &&
-	         (oCDT.eValueType == REAL_VAL || oCDT.eValueType == STRING_REAL_VAL ||
-	          oCDT.eValueType == INT_VAL  || oCDT.eValueType == STRING_INT_VAL)
-		)
-	{
-		return GetFloat() < oCDT.GetFloat();
-	}
-	// (String, String+Integer, String+Real)-to-(String, String+Integer, String+Real)
-	else if ((eValueType      == STRING_VAL || eValueType      == STRING_REAL_VAL || eValueType      == STRING_INT_VAL) &&
-		 (oCDT.eValueType == STRING_VAL || oCDT.eValueType == STRING_REAL_VAL || oCDT.eValueType == STRING_INT_VAL))
-	{
-		return *(u.p_data -> u.s_data) < *(oCDT.u.p_data -> u.s_data);
-	}
-	else if (eValueType == POINTER_VAL && oCDT.eValueType == POINTER_VAL)
-	{
-		return u.pp_data < oCDT.u.pp_data;
-	}
+  if      (eValueType == UNDEF && oCDT.eValueType == UNDEF)
+  {
+    return false;
+  }
+  // Integer-to-Integer
+  else if ((eValueType      == INT_VAL || eValueType      == STRING_INT_VAL) &&
+           (oCDT.eValueType == INT_VAL || oCDT.eValueType == STRING_INT_VAL)
+    )
+  {
+    return GetInt() < oCDT.GetInt();
+  }
+  // (Integer, Real, String+Integer, String+Real)-to-(Integer, Real, String+Integer, String+Real)
+  else if ((eValueType      == REAL_VAL || eValueType      == STRING_REAL_VAL ||
+      eValueType      == INT_VAL  || eValueType      == STRING_INT_VAL) &&
+           (oCDT.eValueType == REAL_VAL || oCDT.eValueType == STRING_REAL_VAL ||
+            oCDT.eValueType == INT_VAL  || oCDT.eValueType == STRING_INT_VAL)
+    )
+  {
+    return GetFloat() < oCDT.GetFloat();
+  }
+  // (String, String+Integer, String+Real)-to-(String, String+Integer, String+Real)
+  else if ((eValueType      == STRING_VAL || eValueType      == STRING_REAL_VAL || eValueType      == STRING_INT_VAL) &&
+     (oCDT.eValueType == STRING_VAL || oCDT.eValueType == STRING_REAL_VAL || oCDT.eValueType == STRING_INT_VAL))
+  {
+    return *(u.p_data -> u.s_data) < *(oCDT.u.p_data -> u.s_data);
+  }
+  else if (eValueType == POINTER_VAL && oCDT.eValueType == POINTER_VAL)
+  {
+    return u.pp_data < oCDT.u.pp_data;
+  }
 #if THROW_EXCEPTION_IN_COMPARATORS
-	else
-	{
-		STLW::string sError("Can't compare ");
-		sError.append(PrintableType());
-		sError.append(" and ");
-		sError.append(oCDT.PrintableType());
-		sError.append(" data types. Use `Less`, `LT` method instead.");
+  else
+  {
+    STLW::string sError("Can't compare ");
+    sError.append(PrintableType());
+    sError.append(" and ");
+    sError.append(oCDT.PrintableType());
+    sError.append(" data types. Use `Less`, `LT` method instead.");
 
-		throw CTPPLogicError(sError.c_str());
-	}
+    throw CTPPLogicError(sError.c_str());
+  }
 #endif
 return false;
 }
@@ -2407,19 +2407,19 @@ return false;
 //
 bool CDT::operator<=(const INT_64  oValue)  const
 {
-	if      (eValueType == INT_VAL)         { return u.i_data <= oValue;              }
-	else if (eValueType == REAL_VAL)        { return u.d_data <= oValue;              }
-	else if (eValueType == STRING_INT_VAL)  { return u.p_data -> uc.i_data <= oValue; }
-	else if (eValueType == STRING_REAL_VAL) { return u.p_data -> uc.d_data <= oValue; }
+  if      (eValueType == INT_VAL)         { return u.i_data <= oValue;              }
+  else if (eValueType == REAL_VAL)        { return u.d_data <= oValue;              }
+  else if (eValueType == STRING_INT_VAL)  { return u.p_data -> uc.i_data <= oValue; }
+  else if (eValueType == STRING_REAL_VAL) { return u.p_data -> uc.d_data <= oValue; }
 #if THROW_EXCEPTION_IN_COMPARATORS
-	else
-	{
-		STLW::string sError("Can't compare ");
-		sError.append(PrintableType());
-		sError.append(" and INTEGER data types. Use `LessOrEqual`, `LE` method instead.");
+  else
+  {
+    STLW::string sError("Can't compare ");
+    sError.append(PrintableType());
+    sError.append(" and INTEGER data types. Use `LessOrEqual`, `LE` method instead.");
 
-		throw CTPPLogicError(sError.c_str());
-	}
+    throw CTPPLogicError(sError.c_str());
+  }
 #endif
 return false;
 }
@@ -2444,19 +2444,19 @@ bool CDT::operator<=(const UINT_32  oValue) const { return operator<=(UINT_64(oV
 //
 bool CDT::operator<=(const W_FLOAT  oValue) const
 {
-	if      (eValueType == INT_VAL)         { return u.i_data <= oValue;              }
-	else if (eValueType == REAL_VAL)        { return u.d_data <= oValue;              }
-	else if (eValueType == STRING_INT_VAL)  { return u.p_data -> uc.i_data <= oValue; }
-	else if (eValueType == STRING_REAL_VAL) { return u.p_data -> uc.d_data <= oValue; }
+  if      (eValueType == INT_VAL)         { return u.i_data <= oValue;              }
+  else if (eValueType == REAL_VAL)        { return u.d_data <= oValue;              }
+  else if (eValueType == STRING_INT_VAL)  { return u.p_data -> uc.i_data <= oValue; }
+  else if (eValueType == STRING_REAL_VAL) { return u.p_data -> uc.d_data <= oValue; }
 #if THROW_EXCEPTION_IN_COMPARATORS
-	else
-	{
-		STLW::string sError("Can't compare ");
-		sError.append(PrintableType());
-		sError.append(" and REAL data types. Use `LessOrEqual`, `LE` method instead.");
+  else
+  {
+    STLW::string sError("Can't compare ");
+    sError.append(PrintableType());
+    sError.append(" and REAL data types. Use `LessOrEqual`, `LE` method instead.");
 
-		throw CTPPLogicError(sError.c_str());
-	}
+    throw CTPPLogicError(sError.c_str());
+  }
 #endif
 return false;
 }
@@ -2467,16 +2467,16 @@ return false;
 bool CDT::operator<=(CCHAR_P oValue) const
 {
 #if THROW_EXCEPTION_IN_COMPARATORS
-	if      (eValueType != STRING_VAL &&
-		 eValueType != STRING_INT_VAL &&
-		 eValueType != STRING_REAL_VAL)
-	{
-		STLW::string sError("Can't compare ");
-		sError.append(PrintableType());
-		sError.append(" and STRING data types. Use `LessOrEqual`, `LE` method instead.");
+  if      (eValueType != STRING_VAL &&
+     eValueType != STRING_INT_VAL &&
+     eValueType != STRING_REAL_VAL)
+  {
+    STLW::string sError("Can't compare ");
+    sError.append(PrintableType());
+    sError.append(" and STRING data types. Use `LessOrEqual`, `LE` method instead.");
 
-		throw CTPPLogicError(sError.c_str());
-	}
+    throw CTPPLogicError(sError.c_str());
+  }
 #endif
 
 return GetString() <= STLW::string(oValue);
@@ -2488,16 +2488,16 @@ return GetString() <= STLW::string(oValue);
 bool CDT::operator<=(const STLW::string & oValue) const
 {
 #if THROW_EXCEPTION_IN_COMPARATORS
-	if      (eValueType != STRING_VAL &&
-		 eValueType != STRING_INT_VAL &&
-		 eValueType != STRING_REAL_VAL)
-	{
-		STLW::string sError("Can't compare ");
-		sError.append(PrintableType());
-		sError.append(" and STRING data types. Use `LessOrEqual`, `LE` method instead.");
+  if      (eValueType != STRING_VAL &&
+     eValueType != STRING_INT_VAL &&
+     eValueType != STRING_REAL_VAL)
+  {
+    STLW::string sError("Can't compare ");
+    sError.append(PrintableType());
+    sError.append(" and STRING data types. Use `LessOrEqual`, `LE` method instead.");
 
-		throw CTPPLogicError(sError.c_str());
-	}
+    throw CTPPLogicError(sError.c_str());
+  }
 #endif
 
 return GetString() <= oValue;
@@ -2508,47 +2508,47 @@ return GetString() <= oValue;
 //
 bool CDT::operator<=(const CDT & oCDT) const
 {
-	if      (eValueType == UNDEF && oCDT.eValueType == UNDEF)
-	{
-		return true;
-	}
-	// Integer-to-Integer
-	else if ((eValueType      == INT_VAL || eValueType      == STRING_INT_VAL) &&
-	         (oCDT.eValueType == INT_VAL || oCDT.eValueType == STRING_INT_VAL)
-		)
-	{
-		return GetInt() <= oCDT.GetInt();
-	}
-	// (Integer, Real, String+Integer, String+Real)-to-(Integer, Real, String+Integer, String+Real)
-	else if ((eValueType      == REAL_VAL || eValueType      == STRING_REAL_VAL ||
-		  eValueType      == INT_VAL  || eValueType      == STRING_INT_VAL) &&
-	         (oCDT.eValueType == REAL_VAL || oCDT.eValueType == STRING_REAL_VAL ||
-	          oCDT.eValueType == INT_VAL  || oCDT.eValueType == STRING_INT_VAL)
-		)
-	{
-		return GetFloat() <= oCDT.GetFloat();
-	}
-	// (String, String+Integer, String+Real)-to-(String, String+Integer, String+Real)
-	else if ((eValueType      == STRING_VAL || eValueType      == STRING_REAL_VAL || eValueType      == STRING_INT_VAL) &&
-		 (oCDT.eValueType == STRING_VAL || oCDT.eValueType == STRING_REAL_VAL || oCDT.eValueType == STRING_INT_VAL))
-	{
-		return *(u.p_data -> u.s_data) <= *(oCDT.u.p_data -> u.s_data);
-	}
-	else if (eValueType == POINTER_VAL && oCDT.eValueType == POINTER_VAL)
-	{
-		return u.pp_data <= oCDT.u.pp_data;
-	}
+  if      (eValueType == UNDEF && oCDT.eValueType == UNDEF)
+  {
+    return true;
+  }
+  // Integer-to-Integer
+  else if ((eValueType      == INT_VAL || eValueType      == STRING_INT_VAL) &&
+           (oCDT.eValueType == INT_VAL || oCDT.eValueType == STRING_INT_VAL)
+    )
+  {
+    return GetInt() <= oCDT.GetInt();
+  }
+  // (Integer, Real, String+Integer, String+Real)-to-(Integer, Real, String+Integer, String+Real)
+  else if ((eValueType      == REAL_VAL || eValueType      == STRING_REAL_VAL ||
+      eValueType      == INT_VAL  || eValueType      == STRING_INT_VAL) &&
+           (oCDT.eValueType == REAL_VAL || oCDT.eValueType == STRING_REAL_VAL ||
+            oCDT.eValueType == INT_VAL  || oCDT.eValueType == STRING_INT_VAL)
+    )
+  {
+    return GetFloat() <= oCDT.GetFloat();
+  }
+  // (String, String+Integer, String+Real)-to-(String, String+Integer, String+Real)
+  else if ((eValueType      == STRING_VAL || eValueType      == STRING_REAL_VAL || eValueType      == STRING_INT_VAL) &&
+     (oCDT.eValueType == STRING_VAL || oCDT.eValueType == STRING_REAL_VAL || oCDT.eValueType == STRING_INT_VAL))
+  {
+    return *(u.p_data -> u.s_data) <= *(oCDT.u.p_data -> u.s_data);
+  }
+  else if (eValueType == POINTER_VAL && oCDT.eValueType == POINTER_VAL)
+  {
+    return u.pp_data <= oCDT.u.pp_data;
+  }
 #if THROW_EXCEPTION_IN_COMPARATORS
-	else
-	{
-		STLW::string sError("Can't compare ");
-		sError.append(PrintableType());
-		sError.append(" and ");
-		sError.append(oCDT.PrintableType());
-		sError.append(" data types. Use `LessOrEqual`, `LE` method instead.");
+  else
+  {
+    STLW::string sError("Can't compare ");
+    sError.append(PrintableType());
+    sError.append(" and ");
+    sError.append(oCDT.PrintableType());
+    sError.append(" data types. Use `LessOrEqual`, `LE` method instead.");
 
-		throw CTPPLogicError(sError.c_str());
-	}
+    throw CTPPLogicError(sError.c_str());
+  }
 #endif
 return false;
 }
@@ -2560,19 +2560,19 @@ return false;
 //
 bool CDT::operator>=(const INT_64  oValue)  const
 {
-	if      (eValueType == INT_VAL)         { return u.i_data >= oValue;              }
-	else if (eValueType == REAL_VAL)        { return u.d_data >= oValue;              }
-	else if (eValueType == STRING_INT_VAL)  { return u.p_data -> uc.i_data >= oValue; }
-	else if (eValueType == STRING_REAL_VAL) { return u.p_data -> uc.d_data >= oValue; }
+  if      (eValueType == INT_VAL)         { return u.i_data >= oValue;              }
+  else if (eValueType == REAL_VAL)        { return u.d_data >= oValue;              }
+  else if (eValueType == STRING_INT_VAL)  { return u.p_data -> uc.i_data >= oValue; }
+  else if (eValueType == STRING_REAL_VAL) { return u.p_data -> uc.d_data >= oValue; }
 #if THROW_EXCEPTION_IN_COMPARATORS
-	else
-	{
-		STLW::string sError("Can't compare ");
-		sError.append(PrintableType());
-		sError.append(" and INTEGER data types. Use `GreaterOrEqual`, `LE` method instead.");
+  else
+  {
+    STLW::string sError("Can't compare ");
+    sError.append(PrintableType());
+    sError.append(" and INTEGER data types. Use `GreaterOrEqual`, `LE` method instead.");
 
-		throw CTPPLogicError(sError.c_str());
-	}
+    throw CTPPLogicError(sError.c_str());
+  }
 #endif
 return false;
 }
@@ -2597,19 +2597,19 @@ bool CDT::operator>=(const UINT_32  oValue) const { return operator>=(UINT_64(oV
 //
 bool CDT::operator>=(const W_FLOAT  oValue) const
 {
-	if      (eValueType == INT_VAL)         { return u.i_data >= oValue;              }
-	else if (eValueType == REAL_VAL)        { return u.d_data >= oValue;              }
-	else if (eValueType == STRING_INT_VAL)  { return u.p_data -> uc.i_data >= oValue; }
-	else if (eValueType == STRING_REAL_VAL) { return u.p_data -> uc.d_data >= oValue; }
+  if      (eValueType == INT_VAL)         { return u.i_data >= oValue;              }
+  else if (eValueType == REAL_VAL)        { return u.d_data >= oValue;              }
+  else if (eValueType == STRING_INT_VAL)  { return u.p_data -> uc.i_data >= oValue; }
+  else if (eValueType == STRING_REAL_VAL) { return u.p_data -> uc.d_data >= oValue; }
 #if THROW_EXCEPTION_IN_COMPARATORS
-	else
-	{
-		STLW::string sError("Can't compare ");
-		sError.append(PrintableType());
-		sError.append(" and REAL data types. Use `GreaterOrEqual`, `GE` method instead.");
+  else
+  {
+    STLW::string sError("Can't compare ");
+    sError.append(PrintableType());
+    sError.append(" and REAL data types. Use `GreaterOrEqual`, `GE` method instead.");
 
-		throw CTPPLogicError(sError.c_str());
-	}
+    throw CTPPLogicError(sError.c_str());
+  }
 #endif
 return false;
 }
@@ -2620,16 +2620,16 @@ return false;
 bool CDT::operator>=(CCHAR_P oValue) const
 {
 #if THROW_EXCEPTION_IN_COMPARATORS
-	if      (eValueType != STRING_VAL &&
-		 eValueType != STRING_INT_VAL &&
-		 eValueType != STRING_REAL_VAL)
-	{
-		STLW::string sError("Can't compare ");
-		sError.append(PrintableType());
-		sError.append(" and STRING data types. Use `GreaterOrEqual`, `GE` method instead.");
+  if      (eValueType != STRING_VAL &&
+     eValueType != STRING_INT_VAL &&
+     eValueType != STRING_REAL_VAL)
+  {
+    STLW::string sError("Can't compare ");
+    sError.append(PrintableType());
+    sError.append(" and STRING data types. Use `GreaterOrEqual`, `GE` method instead.");
 
-		throw CTPPLogicError(sError.c_str());
-	}
+    throw CTPPLogicError(sError.c_str());
+  }
 #endif
 
 return GetString() >= STLW::string(oValue);
@@ -2641,16 +2641,16 @@ return GetString() >= STLW::string(oValue);
 bool CDT::operator>=(const STLW::string & oValue) const
 {
 #if THROW_EXCEPTION_IN_COMPARATORS
-	if      (eValueType != STRING_VAL &&
-		 eValueType != STRING_INT_VAL &&
-		 eValueType != STRING_REAL_VAL)
-	{
-		STLW::string sError("Can't compare ");
-		sError.append(PrintableType());
-		sError.append(" and STRING data types. Use `GreaterOrEqual`, `GE` method instead.");
+  if      (eValueType != STRING_VAL &&
+     eValueType != STRING_INT_VAL &&
+     eValueType != STRING_REAL_VAL)
+  {
+    STLW::string sError("Can't compare ");
+    sError.append(PrintableType());
+    sError.append(" and STRING data types. Use `GreaterOrEqual`, `GE` method instead.");
 
-		throw CTPPLogicError(sError.c_str());
-	}
+    throw CTPPLogicError(sError.c_str());
+  }
 #endif
 
 return GetString() >= oValue;
@@ -2661,47 +2661,47 @@ return GetString() >= oValue;
 //
 bool CDT::operator>=(const CDT & oCDT) const
 {
-	if      (eValueType == UNDEF && oCDT.eValueType == UNDEF)
-	{
-		return true;
-	}
-	// Integer-to-Integer
-	else if ((eValueType      == INT_VAL || eValueType      == STRING_INT_VAL) &&
-	         (oCDT.eValueType == INT_VAL || oCDT.eValueType == STRING_INT_VAL)
-		)
-	{
-		return GetInt() >= oCDT.GetInt();
-	}
-	// (Integer, Real, String+Integer, String+Real)-to-(Integer, Real, String+Integer, String+Real)
-	else if ((eValueType      == REAL_VAL || eValueType      == STRING_REAL_VAL ||
-		  eValueType      == INT_VAL  || eValueType      == STRING_INT_VAL) &&
-	         (oCDT.eValueType == REAL_VAL || oCDT.eValueType == STRING_REAL_VAL ||
-	          oCDT.eValueType == INT_VAL  || oCDT.eValueType == STRING_INT_VAL)
-		)
-	{
-		return GetFloat() >= oCDT.GetFloat();
-	}
-	// (String, String+Integer, String+Real)-to-(String, String+Integer, String+Real)
-	else if ((eValueType      == STRING_VAL || eValueType      == STRING_REAL_VAL || eValueType      == STRING_INT_VAL) &&
-		 (oCDT.eValueType == STRING_VAL || oCDT.eValueType == STRING_REAL_VAL || oCDT.eValueType == STRING_INT_VAL))
-	{
-		return *(u.p_data -> u.s_data) >= *(oCDT.u.p_data -> u.s_data);
-	}
-	else if (eValueType == POINTER_VAL && oCDT.eValueType == POINTER_VAL)
-	{
-		return u.pp_data >= oCDT.u.pp_data;
-	}
+  if      (eValueType == UNDEF && oCDT.eValueType == UNDEF)
+  {
+    return true;
+  }
+  // Integer-to-Integer
+  else if ((eValueType      == INT_VAL || eValueType      == STRING_INT_VAL) &&
+           (oCDT.eValueType == INT_VAL || oCDT.eValueType == STRING_INT_VAL)
+    )
+  {
+    return GetInt() >= oCDT.GetInt();
+  }
+  // (Integer, Real, String+Integer, String+Real)-to-(Integer, Real, String+Integer, String+Real)
+  else if ((eValueType      == REAL_VAL || eValueType      == STRING_REAL_VAL ||
+      eValueType      == INT_VAL  || eValueType      == STRING_INT_VAL) &&
+           (oCDT.eValueType == REAL_VAL || oCDT.eValueType == STRING_REAL_VAL ||
+            oCDT.eValueType == INT_VAL  || oCDT.eValueType == STRING_INT_VAL)
+    )
+  {
+    return GetFloat() >= oCDT.GetFloat();
+  }
+  // (String, String+Integer, String+Real)-to-(String, String+Integer, String+Real)
+  else if ((eValueType      == STRING_VAL || eValueType      == STRING_REAL_VAL || eValueType      == STRING_INT_VAL) &&
+     (oCDT.eValueType == STRING_VAL || oCDT.eValueType == STRING_REAL_VAL || oCDT.eValueType == STRING_INT_VAL))
+  {
+    return *(u.p_data -> u.s_data) >= *(oCDT.u.p_data -> u.s_data);
+  }
+  else if (eValueType == POINTER_VAL && oCDT.eValueType == POINTER_VAL)
+  {
+    return u.pp_data >= oCDT.u.pp_data;
+  }
 #if THROW_EXCEPTION_IN_COMPARATORS
-	else
-	{
-		STLW::string sError("Can't compare ");
-		sError.append(PrintableType());
-		sError.append(" and ");
-		sError.append(oCDT.PrintableType());
-		sError.append(" data types. Use `GreaterOrEqual`, `GE` method instead.");
+  else
+  {
+    STLW::string sError("Can't compare ");
+    sError.append(PrintableType());
+    sError.append(" and ");
+    sError.append(oCDT.PrintableType());
+    sError.append(" data types. Use `GreaterOrEqual`, `GE` method instead.");
 
-		throw CTPPLogicError(sError.c_str());
-	}
+    throw CTPPLogicError(sError.c_str());
+  }
 #endif
 return false;
 }
@@ -2711,22 +2711,22 @@ return false;
 //
 bool CDT::Equal(const INT_64  oValue) const
 {
-	switch(eValueType)
-	{
-		case UNDEF:
-		case INT_VAL:
-		case REAL_VAL:
-		case POINTER_VAL:
-		case STRING_INT_VAL:
-		case STRING_REAL_VAL:
-		case STRING_VAL:
-			return GetFloat() == oValue;
+  switch(eValueType)
+  {
+    case UNDEF:
+    case INT_VAL:
+    case REAL_VAL:
+    case POINTER_VAL:
+    case STRING_INT_VAL:
+    case STRING_REAL_VAL:
+    case STRING_VAL:
+      return GetFloat() == oValue;
 
-		case ARRAY_VAL:
-		case HASH_VAL:
-		default:
-			return false;
-	}
+    case ARRAY_VAL:
+    case HASH_VAL:
+    default:
+      return false;
+  }
 
 return false;
 }
@@ -2751,22 +2751,22 @@ bool CDT::Equal(const UINT_32  oValue) const { return Equal(UINT_64(oValue)); }
 //
 bool CDT::Equal(const W_FLOAT  oValue) const
 {
-	switch(eValueType)
-	{
-		case UNDEF:
-		case INT_VAL:
-		case REAL_VAL:
-		case POINTER_VAL:
-		case STRING_INT_VAL:
-		case STRING_REAL_VAL:
-		case STRING_VAL:
-			return GetFloat() == oValue;
+  switch(eValueType)
+  {
+    case UNDEF:
+    case INT_VAL:
+    case REAL_VAL:
+    case POINTER_VAL:
+    case STRING_INT_VAL:
+    case STRING_REAL_VAL:
+    case STRING_VAL:
+      return GetFloat() == oValue;
 
-		case ARRAY_VAL:
-		case HASH_VAL:
-		default:
-			return false;
-	}
+    case ARRAY_VAL:
+    case HASH_VAL:
+    default:
+      return false;
+  }
 
 return false;
 }
@@ -2786,45 +2786,45 @@ bool CDT::Equal(const STLW::string & oValue) const { return GetString() == oValu
 //
 bool CDT::Equal(const CDT & oCDT) const
 {
-	switch(eValueType)
-	{
-		case UNDEF:
-		case INT_VAL:
-		case REAL_VAL:
-		case POINTER_VAL:
-		case STRING_INT_VAL:
-		case STRING_REAL_VAL:
-			{
-				switch(oCDT.eValueType)
-				{
-					case UNDEF:
-					case INT_VAL:
-					case REAL_VAL:
-					case POINTER_VAL:
-					case STRING_INT_VAL:
-					case STRING_REAL_VAL:
-						return GetFloat() == oCDT.GetFloat();
+  switch(eValueType)
+  {
+    case UNDEF:
+    case INT_VAL:
+    case REAL_VAL:
+    case POINTER_VAL:
+    case STRING_INT_VAL:
+    case STRING_REAL_VAL:
+      {
+        switch(oCDT.eValueType)
+        {
+          case UNDEF:
+          case INT_VAL:
+          case REAL_VAL:
+          case POINTER_VAL:
+          case STRING_INT_VAL:
+          case STRING_REAL_VAL:
+            return GetFloat() == oCDT.GetFloat();
 
-					case STRING_VAL:
-						return GetString() == oCDT.GetString();
-					/*
-					case ARRAY_VAL:
-					case HASH_VAL:
-					*/
-					default:
-						return false;
-				}
-				return false;
-			}
-		case STRING_VAL:
-			return GetString() == oCDT.GetString();
-		/*
-		case ARRAY_VAL:
-		case HASH_VAL:
-		*/
-		default:
-			return false;
-	}
+          case STRING_VAL:
+            return GetString() == oCDT.GetString();
+          /*
+          case ARRAY_VAL:
+          case HASH_VAL:
+          */
+          default:
+            return false;
+        }
+        return false;
+      }
+    case STRING_VAL:
+      return GetString() == oCDT.GetString();
+    /*
+    case ARRAY_VAL:
+    case HASH_VAL:
+    */
+    default:
+      return false;
+  }
 
 return false;
 }
@@ -2877,22 +2877,22 @@ bool CDT::NotEqual(const CDT & oCDT) const { return ! Equal(oCDT); }
 //
 bool CDT::Greater(const INT_64  oValue) const
 {
-	switch(eValueType)
-	{
-		case UNDEF:
-		case INT_VAL:
-		case REAL_VAL:
-		case POINTER_VAL:
-		case STRING_INT_VAL:
-		case STRING_REAL_VAL:
-		case STRING_VAL:
-			return GetFloat() > oValue;
+  switch(eValueType)
+  {
+    case UNDEF:
+    case INT_VAL:
+    case REAL_VAL:
+    case POINTER_VAL:
+    case STRING_INT_VAL:
+    case STRING_REAL_VAL:
+    case STRING_VAL:
+      return GetFloat() > oValue;
 
-		case ARRAY_VAL:
-		case HASH_VAL:
-		default:
-			return false;
-	}
+    case ARRAY_VAL:
+    case HASH_VAL:
+    default:
+      return false;
+  }
 
 return false;
 }
@@ -2917,22 +2917,22 @@ bool CDT::Greater(const UINT_32  oValue) const { return Greater(UINT_64(oValue))
 //
 bool CDT::Greater(const W_FLOAT  oValue) const
 {
-	switch(eValueType)
-	{
-		case UNDEF:
-		case INT_VAL:
-		case REAL_VAL:
-		case POINTER_VAL:
-		case STRING_INT_VAL:
-		case STRING_REAL_VAL:
-		case STRING_VAL:
-			return GetFloat() > oValue;
+  switch(eValueType)
+  {
+    case UNDEF:
+    case INT_VAL:
+    case REAL_VAL:
+    case POINTER_VAL:
+    case STRING_INT_VAL:
+    case STRING_REAL_VAL:
+    case STRING_VAL:
+      return GetFloat() > oValue;
 
-		case ARRAY_VAL:
-		case HASH_VAL:
-		default:
-			return false;
-	}
+    case ARRAY_VAL:
+    case HASH_VAL:
+    default:
+      return false;
+  }
 
 return false;
 }
@@ -2952,46 +2952,46 @@ bool CDT::Greater(const STLW::string & oValue) const { return GetString() > oVal
 //
 bool CDT::Greater(const CDT & oCDT) const
 {
-	switch(eValueType)
-	{
-		case UNDEF:
-		case INT_VAL:
-		case REAL_VAL:
-		case POINTER_VAL:
-		case STRING_INT_VAL:
-		case STRING_REAL_VAL:
-			{
-				switch(oCDT.eValueType)
-				{
-					case UNDEF:
-					case INT_VAL:
-					case REAL_VAL:
-					case POINTER_VAL:
-					case STRING_INT_VAL:
-					case STRING_REAL_VAL:
-						return GetFloat() > oCDT.GetFloat();
+  switch(eValueType)
+  {
+    case UNDEF:
+    case INT_VAL:
+    case REAL_VAL:
+    case POINTER_VAL:
+    case STRING_INT_VAL:
+    case STRING_REAL_VAL:
+      {
+        switch(oCDT.eValueType)
+        {
+          case UNDEF:
+          case INT_VAL:
+          case REAL_VAL:
+          case POINTER_VAL:
+          case STRING_INT_VAL:
+          case STRING_REAL_VAL:
+            return GetFloat() > oCDT.GetFloat();
 
-					case STRING_VAL:
-						return GetString() > oCDT.GetString();
-					/*
-					case ARRAY_VAL:
-					case HASH_VAL:
-					*/
-					default:
-						return false;
-				}
-				return false;
-			}
-		case STRING_VAL:
-			return GetString() > oCDT.GetString();
+          case STRING_VAL:
+            return GetString() > oCDT.GetString();
+          /*
+          case ARRAY_VAL:
+          case HASH_VAL:
+          */
+          default:
+            return false;
+        }
+        return false;
+      }
+    case STRING_VAL:
+      return GetString() > oCDT.GetString();
 
-		/*
-		case ARRAY_VAL:
-		case HASH_VAL:
-		*/
-		default:
-			return false;
-	}
+    /*
+    case ARRAY_VAL:
+    case HASH_VAL:
+    */
+    default:
+      return false;
+  }
 
 return false;
 }
@@ -3003,22 +3003,22 @@ return false;
 //
 bool CDT::Less(const INT_64  oValue) const
 {
-	switch(eValueType)
-	{
-		case UNDEF:
-		case INT_VAL:
-		case REAL_VAL:
-		case POINTER_VAL:
-		case STRING_INT_VAL:
-		case STRING_REAL_VAL:
-		case STRING_VAL:
-			return GetFloat() < oValue;
+  switch(eValueType)
+  {
+    case UNDEF:
+    case INT_VAL:
+    case REAL_VAL:
+    case POINTER_VAL:
+    case STRING_INT_VAL:
+    case STRING_REAL_VAL:
+    case STRING_VAL:
+      return GetFloat() < oValue;
 
-		case ARRAY_VAL:
-		case HASH_VAL:
-		default:
-			return false;
-	}
+    case ARRAY_VAL:
+    case HASH_VAL:
+    default:
+      return false;
+  }
 
 return false;
 }
@@ -3043,22 +3043,22 @@ bool CDT::Less(const UINT_32  oValue) const  { return Less(UINT_64(oValue)); }
 //
 bool CDT::Less(const W_FLOAT  oValue) const
 {
-	switch(eValueType)
-	{
-		case UNDEF:
-		case INT_VAL:
-		case REAL_VAL:
-		case POINTER_VAL:
-		case STRING_INT_VAL:
-		case STRING_REAL_VAL:
-		case STRING_VAL:
-			return GetFloat() < oValue;
+  switch(eValueType)
+  {
+    case UNDEF:
+    case INT_VAL:
+    case REAL_VAL:
+    case POINTER_VAL:
+    case STRING_INT_VAL:
+    case STRING_REAL_VAL:
+    case STRING_VAL:
+      return GetFloat() < oValue;
 
-		case ARRAY_VAL:
-		case HASH_VAL:
-		default:
-			return false;
-	}
+    case ARRAY_VAL:
+    case HASH_VAL:
+    default:
+      return false;
+  }
 
 return false;
 }
@@ -3078,46 +3078,46 @@ bool CDT::Less(const STLW::string & oValue) const { return GetString() < oValue;
 //
 bool CDT::Less(const CDT & oCDT) const
 {
-	switch(eValueType)
-	{
-		case UNDEF:
-		case INT_VAL:
-		case REAL_VAL:
-		case POINTER_VAL:
-		case STRING_INT_VAL:
-		case STRING_REAL_VAL:
-			{
-				switch(oCDT.eValueType)
-				{
-					case UNDEF:
-					case INT_VAL:
-					case REAL_VAL:
-					case POINTER_VAL:
-					case STRING_INT_VAL:
-					case STRING_REAL_VAL:
-						return GetFloat() < oCDT.GetFloat();
+  switch(eValueType)
+  {
+    case UNDEF:
+    case INT_VAL:
+    case REAL_VAL:
+    case POINTER_VAL:
+    case STRING_INT_VAL:
+    case STRING_REAL_VAL:
+      {
+        switch(oCDT.eValueType)
+        {
+          case UNDEF:
+          case INT_VAL:
+          case REAL_VAL:
+          case POINTER_VAL:
+          case STRING_INT_VAL:
+          case STRING_REAL_VAL:
+            return GetFloat() < oCDT.GetFloat();
 
-					case STRING_VAL:
-						return GetString() < oCDT.GetString();
-					/*
-					case ARRAY_VAL:
-					case HASH_VAL:
-					*/
-					default:
-						return false;
-				}
-				return false;
-			}
-		case STRING_VAL:
-			return GetString() < oCDT.GetString();
+          case STRING_VAL:
+            return GetString() < oCDT.GetString();
+          /*
+          case ARRAY_VAL:
+          case HASH_VAL:
+          */
+          default:
+            return false;
+        }
+        return false;
+      }
+    case STRING_VAL:
+      return GetString() < oCDT.GetString();
 
-		/*
-		case ARRAY_VAL:
-		case HASH_VAL:
-		*/
-		default:
-			return false;
-	}
+    /*
+    case ARRAY_VAL:
+    case HASH_VAL:
+    */
+    default:
+      return false;
+  }
 
 return false;
 }
@@ -3211,46 +3211,46 @@ bool CDT::LessOrEqual(const CDT & oCDT) const { return ! Greater(oCDT); }
 //
 CDT & CDT::operator++()
 {
-	switch (eValueType)
-	{
-		case UNDEF:
-			break;
+  switch (eValueType)
+  {
+    case UNDEF:
+      break;
 
-		case INT_VAL:
-			++u.i_data;
-			break;
+    case INT_VAL:
+      ++u.i_data;
+      break;
 
-		case REAL_VAL:
-			++u.d_data;
-			break;
+    case REAL_VAL:
+      ++u.d_data;
+      break;
 
-		case STRING_VAL:
-			{
-				INT_64   iData1;
-				W_FLOAT  dData1;
-				if (CastToNumber(iData1, dData1) == INT_VAL) { (*this) = CDT(++iData1); }
-				else                                         { (*this) = CDT(++dData1); }
+    case STRING_VAL:
+      {
+        INT_64   iData1;
+        W_FLOAT  dData1;
+        if (CastToNumber(iData1, dData1) == INT_VAL) { (*this) = CDT(++iData1); }
+        else                                         { (*this) = CDT(++dData1); }
 
-			}
-			break;
+      }
+      break;
 
-		case STRING_INT_VAL:
-			{
-				INT_64   iData1 = u.p_data -> uc.i_data;
-				(*this) = CDT(++iData1);
-			}
-			break;
+    case STRING_INT_VAL:
+      {
+        INT_64   iData1 = u.p_data -> uc.i_data;
+        (*this) = CDT(++iData1);
+      }
+      break;
 
-		case STRING_REAL_VAL:
-			{
-				W_FLOAT  dData1 = u.p_data -> uc.d_data;
-				(*this) = CDT(++dData1);
-			}
-			break;
+    case STRING_REAL_VAL:
+      {
+        W_FLOAT  dData1 = u.p_data -> uc.d_data;
+        (*this) = CDT(++dData1);
+      }
+      break;
 
-		default:
-			throw CDTTypeCastException("pre-increment operator ++");
-	}
+    default:
+      throw CDTTypeCastException("pre-increment operator ++");
+  }
 
 return *this;
 }
@@ -3260,47 +3260,47 @@ return *this;
 //
 CDT CDT::operator++(int)
 {
-	CDT oTMP(*this);
+  CDT oTMP(*this);
 
-	switch (eValueType)
-	{
-		case UNDEF:
-			break;
+  switch (eValueType)
+  {
+    case UNDEF:
+      break;
 
-		case INT_VAL:
-			++u.i_data;
-			break;
+    case INT_VAL:
+      ++u.i_data;
+      break;
 
-		case REAL_VAL:
-			++u.d_data;
-			break;
+    case REAL_VAL:
+      ++u.d_data;
+      break;
 
-		case STRING_VAL:
-			{
-				INT_64   iData1;
-				W_FLOAT  dData1;
-				if (CastToNumber(iData1, dData1) == INT_VAL) { (*this) = CDT(++iData1); }
-				else                                         { (*this) = CDT(++dData1); }
-			}
-			break;
+    case STRING_VAL:
+      {
+        INT_64   iData1;
+        W_FLOAT  dData1;
+        if (CastToNumber(iData1, dData1) == INT_VAL) { (*this) = CDT(++iData1); }
+        else                                         { (*this) = CDT(++dData1); }
+      }
+      break;
 
-		case STRING_INT_VAL:
-			{
-				INT_64   iData1 = u.p_data -> uc.i_data;
-			 	(*this) = CDT(++iData1);
-			}
-			break;
+    case STRING_INT_VAL:
+      {
+        INT_64   iData1 = u.p_data -> uc.i_data;
+        (*this) = CDT(++iData1);
+      }
+      break;
 
-		case STRING_REAL_VAL:
-			{
-				W_FLOAT  dData1 = u.p_data -> uc.d_data;
-				(*this) = CDT(++dData1);
-			}
-			break;
+    case STRING_REAL_VAL:
+      {
+        W_FLOAT  dData1 = u.p_data -> uc.d_data;
+        (*this) = CDT(++dData1);
+      }
+      break;
 
-		default:
-			throw CDTTypeCastException("post-increment operator ++");
-	}
+    default:
+      throw CDTTypeCastException("post-increment operator ++");
+  }
 
 return oTMP;
 }
@@ -3310,46 +3310,46 @@ return oTMP;
 //
 CDT & CDT::operator--()
 {
-	switch (eValueType)
-	{
-		case UNDEF:
-			break;
+  switch (eValueType)
+  {
+    case UNDEF:
+      break;
 
-		case INT_VAL:
-			--u.i_data;
-			break;
+    case INT_VAL:
+      --u.i_data;
+      break;
 
-		case REAL_VAL:
-			--u.d_data;
-			break;
+    case REAL_VAL:
+      --u.d_data;
+      break;
 
-		case STRING_VAL:
-			{
-				INT_64   iData1;
-				W_FLOAT  dData1;
-				if (CastToNumber(iData1, dData1) == INT_VAL) { (*this) = CDT(--iData1); }
-				else                                         { (*this) = CDT(--dData1); }
+    case STRING_VAL:
+      {
+        INT_64   iData1;
+        W_FLOAT  dData1;
+        if (CastToNumber(iData1, dData1) == INT_VAL) { (*this) = CDT(--iData1); }
+        else                                         { (*this) = CDT(--dData1); }
 
-			}
-			break;
+      }
+      break;
 
-		case STRING_INT_VAL:
-			{
-				INT_64   iData1 = u.p_data -> uc.i_data;
-			 	(*this) = CDT(--iData1);
-			}
-			break;
+    case STRING_INT_VAL:
+      {
+        INT_64   iData1 = u.p_data -> uc.i_data;
+        (*this) = CDT(--iData1);
+      }
+      break;
 
-		case STRING_REAL_VAL:
-			{
-				W_FLOAT  dData1 = u.p_data -> uc.d_data;
-				(*this) = CDT(--dData1);
-			}
-			break;
+    case STRING_REAL_VAL:
+      {
+        W_FLOAT  dData1 = u.p_data -> uc.d_data;
+        (*this) = CDT(--dData1);
+      }
+      break;
 
-		default:
-			throw CDTTypeCastException("pre-decrement operator --");
-	}
+    default:
+      throw CDTTypeCastException("pre-decrement operator --");
+  }
 return *this;
 }
 
@@ -3358,47 +3358,47 @@ return *this;
 //
 CDT CDT::operator--(int)
 {
-	CDT oTMP(*this);
+  CDT oTMP(*this);
 
-	switch (eValueType)
-	{
-		case UNDEF:
-			break;
+  switch (eValueType)
+  {
+    case UNDEF:
+      break;
 
-		case INT_VAL:
-			--u.i_data;
-			break;
+    case INT_VAL:
+      --u.i_data;
+      break;
 
-		case REAL_VAL:
-			--u.d_data;
-			break;
+    case REAL_VAL:
+      --u.d_data;
+      break;
 
-		case STRING_VAL:
-			{
-				INT_64   iData1;
-				W_FLOAT  dData1;
-				if (CastToNumber(iData1, dData1) == INT_VAL) { (*this) = CDT(--iData1); }
-				else                                         { (*this) = CDT(--dData1); }
-			}
-			break;
+    case STRING_VAL:
+      {
+        INT_64   iData1;
+        W_FLOAT  dData1;
+        if (CastToNumber(iData1, dData1) == INT_VAL) { (*this) = CDT(--iData1); }
+        else                                         { (*this) = CDT(--dData1); }
+      }
+      break;
 
-		case STRING_INT_VAL:
-			{
-				INT_64   iData1 = u.p_data -> uc.i_data;
-			 	(*this) = CDT(--iData1);
-			}
-			break;
+    case STRING_INT_VAL:
+      {
+        INT_64   iData1 = u.p_data -> uc.i_data;
+        (*this) = CDT(--iData1);
+      }
+      break;
 
-		case STRING_REAL_VAL:
-			{
-				W_FLOAT  dData1 = u.p_data -> uc.d_data;
-				(*this) = CDT(--dData1);
-			}
-			break;
+    case STRING_REAL_VAL:
+      {
+        W_FLOAT  dData1 = u.p_data -> uc.d_data;
+        (*this) = CDT(--dData1);
+      }
+      break;
 
-		default:
-			throw CDTTypeCastException("post-decrement operator --");
-	}
+    default:
+      throw CDTTypeCastException("post-decrement operator --");
+  }
 
 return oTMP;
 }
@@ -3408,24 +3408,24 @@ return oTMP;
 //
 CDT & CDT::Concat(const STLW::string & oValue)
 {
-	if (eValueType == UNDEF)
-	{
-		(*this) = CDT(STLW::string(oValue));
-	}
-	else if (eValueType == INT_VAL ||
-	         eValueType == REAL_VAL)
-	{
-		STLW::string sTMP(GetString() + oValue);
-		(*this) = CDT(sTMP);
-	}
-	else if (eValueType == STRING_VAL     ||
-	         eValueType == STRING_INT_VAL ||
-	         eValueType == STRING_REAL_VAL)
-	{
-		Unshare();
-		u.p_data -> u.s_data -> append(oValue);
-	}
-	else { throw CDTTypeCastException("Concat"); }
+  if (eValueType == UNDEF)
+  {
+    (*this) = CDT(STLW::string(oValue));
+  }
+  else if (eValueType == INT_VAL ||
+           eValueType == REAL_VAL)
+  {
+    STLW::string sTMP(GetString() + oValue);
+    (*this) = CDT(sTMP);
+  }
+  else if (eValueType == STRING_VAL     ||
+           eValueType == STRING_INT_VAL ||
+           eValueType == STRING_REAL_VAL)
+  {
+    Unshare();
+    u.p_data -> u.s_data -> append(oValue);
+  }
+  else { throw CDTTypeCastException("Concat"); }
 
 return *this;
 }
@@ -3435,7 +3435,7 @@ return *this;
 //
 CDT & CDT::Concat(CCHAR_P szData, const INT_32 iDataLength)
 {
-	if (iDataLength == -1) { return Concat(STLW::string(szData)); }
+  if (iDataLength == -1) { return Concat(STLW::string(szData)); }
 
 return Concat(STLW::string(szData, iDataLength));
 }
@@ -3455,29 +3455,29 @@ CDT & CDT::Append(CCHAR_P szData, const INT_32 iDataLength)  { return Concat(szD
 //
 CDT & CDT::Append(const INT_64  oValue)
 {
-	CHAR_8 szBuf[C_MAX_SPRINTF_LENGTH + 1];
-	UINT_32 iLen = snprintf(szBuf, C_MAX_SPRINTF_LENGTH, "%lli", (long long) (oValue));
+  CHAR_8 szBuf[C_MAX_SPRINTF_LENGTH + 1];
+  UINT_32 iLen = snprintf(szBuf, C_MAX_SPRINTF_LENGTH, "%lli", (long long) (oValue));
 
-	if (eValueType == UNDEF)
-	{
-		(*this) = CDT(STLW::string(szBuf, iLen));
-	}
-	else if (eValueType == INT_VAL ||
-	         eValueType == REAL_VAL)
-	{
-		STLW::string sTMP(GetString());
-		sTMP.append(szBuf, iLen);
+  if (eValueType == UNDEF)
+  {
+    (*this) = CDT(STLW::string(szBuf, iLen));
+  }
+  else if (eValueType == INT_VAL ||
+           eValueType == REAL_VAL)
+  {
+    STLW::string sTMP(GetString());
+    sTMP.append(szBuf, iLen);
 
-		(*this) = CDT(sTMP);
-	}
-	else if (eValueType == STRING_VAL     ||
-	         eValueType == STRING_INT_VAL ||
-	         eValueType == STRING_REAL_VAL)
-	{
-		Unshare();
-		u.p_data -> u.s_data -> append(szBuf, iLen);
-	}
-	else { throw CDTTypeCastException("Append"); }
+    (*this) = CDT(sTMP);
+  }
+  else if (eValueType == STRING_VAL     ||
+           eValueType == STRING_INT_VAL ||
+           eValueType == STRING_REAL_VAL)
+  {
+    Unshare();
+    u.p_data -> u.s_data -> append(szBuf, iLen);
+  }
+  else { throw CDTTypeCastException("Append"); }
 
 return *this;
 }
@@ -3502,29 +3502,29 @@ CDT & CDT::Append(const UINT_32  oValue) { return Append(INT_64(oValue)); }
 //
 CDT & CDT::Append(const W_FLOAT  oValue)
 {
-	CHAR_8 szBuf[C_MAX_SPRINTF_LENGTH + 1];
-	UINT_32 iLen = snprintf(szBuf, C_MAX_SPRINTF_LENGTH, "%.*G", CTPP_FLOAT_PRECISION, oValue);
+  CHAR_8 szBuf[C_MAX_SPRINTF_LENGTH + 1];
+  UINT_32 iLen = snprintf(szBuf, C_MAX_SPRINTF_LENGTH, "%.*G", CTPP_FLOAT_PRECISION, oValue);
 
-	if (eValueType == UNDEF)
-	{
-		(*this) = CDT(STLW::string(szBuf, iLen));
-	}
-	else if (eValueType == INT_VAL ||
-	         eValueType == REAL_VAL)
-	{
-		STLW::string sTMP(GetString());
-		sTMP.append(szBuf, iLen);
+  if (eValueType == UNDEF)
+  {
+    (*this) = CDT(STLW::string(szBuf, iLen));
+  }
+  else if (eValueType == INT_VAL ||
+           eValueType == REAL_VAL)
+  {
+    STLW::string sTMP(GetString());
+    sTMP.append(szBuf, iLen);
 
-		(*this) = CDT(sTMP);
-	}
-	else if (eValueType == STRING_VAL     ||
-	         eValueType == STRING_INT_VAL ||
-	         eValueType == STRING_REAL_VAL)
-	{
-		Unshare();
-		u.p_data -> u.s_data -> append(szBuf, iLen);
-	}
-	else { throw CDTTypeCastException("Append"); }
+    (*this) = CDT(sTMP);
+  }
+  else if (eValueType == STRING_VAL     ||
+           eValueType == STRING_INT_VAL ||
+           eValueType == STRING_REAL_VAL)
+  {
+    Unshare();
+    u.p_data -> u.s_data -> append(szBuf, iLen);
+  }
+  else { throw CDTTypeCastException("Append"); }
 
 return *this;
 }
@@ -3534,24 +3534,24 @@ return *this;
 //
 CDT & CDT::Append(const CDT & oCDT)
 {
-	if (eValueType == UNDEF)
-	{
-		(*this) = CDT(STLW::string(oCDT.GetString()));
-	}
-	else if (eValueType == INT_VAL ||
-	         eValueType == REAL_VAL)
-	{
-		STLW::string sTMP(GetString() + oCDT.GetString());
-		(*this) = CDT(sTMP);
-	}
-	else if (eValueType == STRING_VAL     ||
-	         eValueType == STRING_INT_VAL ||
-	         eValueType == STRING_REAL_VAL)
-	{
-		Unshare();
-		u.p_data -> u.s_data -> append(oCDT.GetString());
-	}
-	else { throw CDTTypeCastException("Append"); }
+  if (eValueType == UNDEF)
+  {
+    (*this) = CDT(STLW::string(oCDT.GetString()));
+  }
+  else if (eValueType == INT_VAL ||
+           eValueType == REAL_VAL)
+  {
+    STLW::string sTMP(GetString() + oCDT.GetString());
+    (*this) = CDT(sTMP);
+  }
+  else if (eValueType == STRING_VAL     ||
+           eValueType == STRING_INT_VAL ||
+           eValueType == STRING_REAL_VAL)
+  {
+    Unshare();
+    u.p_data -> u.s_data -> append(oCDT.GetString());
+  }
+  else { throw CDTTypeCastException("Append"); }
 
 return *this;
 }
@@ -3561,7 +3561,7 @@ return *this;
 //
 CDT & CDT::Prepend(CCHAR_P szData, const INT_32 iDataLength)
 {
-	if (iDataLength == -1) { return Prepend(STLW::string(szData)); }
+  if (iDataLength == -1) { return Prepend(STLW::string(szData)); }
 
 return Prepend(STLW::string(szData, iDataLength));
 }
@@ -3571,26 +3571,26 @@ return Prepend(STLW::string(szData, iDataLength));
 //
 CDT & CDT::Prepend(const STLW::string & oValue)
 {
-	if (eValueType == UNDEF)
-	{
-		(*this) = CDT(STLW::string(oValue));
-	}
-	else if (eValueType == INT_VAL ||
-	         eValueType == REAL_VAL)
-	{
-		STLW::string sTMP(oValue + GetString());
-		(*this) = CDT(sTMP);
-	}
-	else if (eValueType == STRING_VAL     ||
-	         eValueType == STRING_INT_VAL ||
-	         eValueType == STRING_REAL_VAL)
-	{
-		Unshare();
-		STLW::string sTMP = oValue;
-		sTMP.append(*(u.p_data -> u.s_data));
-		u.p_data -> u.s_data -> assign(sTMP);
-	}
-	else { throw CDTTypeCastException("Prepend"); }
+  if (eValueType == UNDEF)
+  {
+    (*this) = CDT(STLW::string(oValue));
+  }
+  else if (eValueType == INT_VAL ||
+           eValueType == REAL_VAL)
+  {
+    STLW::string sTMP(oValue + GetString());
+    (*this) = CDT(sTMP);
+  }
+  else if (eValueType == STRING_VAL     ||
+           eValueType == STRING_INT_VAL ||
+           eValueType == STRING_REAL_VAL)
+  {
+    Unshare();
+    STLW::string sTMP = oValue;
+    sTMP.append(*(u.p_data -> u.s_data));
+    u.p_data -> u.s_data -> assign(sTMP);
+  }
+  else { throw CDTTypeCastException("Prepend"); }
 
 return *this;
 }
@@ -3600,29 +3600,29 @@ return *this;
 //
 CDT & CDT::Prepend(const INT_64  oValue)
 {
-	CHAR_8 szBuf[C_MAX_SPRINTF_LENGTH + 1];
-	UINT_32 iLen = snprintf(szBuf, C_MAX_SPRINTF_LENGTH, "%lli", (long long) (oValue));
+  CHAR_8 szBuf[C_MAX_SPRINTF_LENGTH + 1];
+  UINT_32 iLen = snprintf(szBuf, C_MAX_SPRINTF_LENGTH, "%lli", (long long) (oValue));
 
-	if (eValueType == UNDEF)
-	{
-		(*this) = CDT(STLW::string(szBuf, iLen));
-	}
-	else if (eValueType == INT_VAL ||
-	         eValueType == REAL_VAL)
-	{
-		STLW::string sTMP(STLW::string(szBuf, iLen).append(GetString()));
-		(*this) = CDT(sTMP);
-	}
-	else if (eValueType == STRING_VAL     ||
-	         eValueType == STRING_INT_VAL ||
-	         eValueType == STRING_REAL_VAL)
-	{
-		Unshare();
-		STLW::string sTMP(szBuf, iLen);
-		sTMP.append(*(u.p_data -> u.s_data));
-		u.p_data -> u.s_data -> assign(sTMP);
-	}
-	else { throw CDTTypeCastException("Prepend"); }
+  if (eValueType == UNDEF)
+  {
+    (*this) = CDT(STLW::string(szBuf, iLen));
+  }
+  else if (eValueType == INT_VAL ||
+           eValueType == REAL_VAL)
+  {
+    STLW::string sTMP(STLW::string(szBuf, iLen).append(GetString()));
+    (*this) = CDT(sTMP);
+  }
+  else if (eValueType == STRING_VAL     ||
+           eValueType == STRING_INT_VAL ||
+           eValueType == STRING_REAL_VAL)
+  {
+    Unshare();
+    STLW::string sTMP(szBuf, iLen);
+    sTMP.append(*(u.p_data -> u.s_data));
+    u.p_data -> u.s_data -> assign(sTMP);
+  }
+  else { throw CDTTypeCastException("Prepend"); }
 
 return *this;
 }
@@ -3646,29 +3646,29 @@ CDT & CDT::Prepend(const UINT_32  oValue) { return Prepend(UINT_64(oValue)); }
 //
 CDT & CDT::Prepend(const W_FLOAT  oValue)
 {
-	CHAR_8 szBuf[C_MAX_SPRINTF_LENGTH + 1];
-	UINT_32 iLen = snprintf(szBuf, C_MAX_SPRINTF_LENGTH, "%.*G", CTPP_FLOAT_PRECISION, oValue);
+  CHAR_8 szBuf[C_MAX_SPRINTF_LENGTH + 1];
+  UINT_32 iLen = snprintf(szBuf, C_MAX_SPRINTF_LENGTH, "%.*G", CTPP_FLOAT_PRECISION, oValue);
 
-	if (eValueType == UNDEF)
-	{
-		(*this) = CDT(STLW::string(szBuf, iLen));
-	}
-	else if (eValueType == INT_VAL ||
-	         eValueType == REAL_VAL)
-	{
-		STLW::string sTMP(STLW::string(szBuf, iLen).append(GetString()));
-		(*this) = CDT(sTMP);
-	}
-	else if (eValueType == STRING_VAL     ||
-	         eValueType == STRING_INT_VAL ||
-	         eValueType == STRING_REAL_VAL)
-	{
-		Unshare();
-		STLW::string sTMP(szBuf, iLen);
-		sTMP.append(*(u.p_data -> u.s_data));
-		u.p_data -> u.s_data -> assign(sTMP);
-	}
-	else { throw CDTTypeCastException("Prepend"); }
+  if (eValueType == UNDEF)
+  {
+    (*this) = CDT(STLW::string(szBuf, iLen));
+  }
+  else if (eValueType == INT_VAL ||
+           eValueType == REAL_VAL)
+  {
+    STLW::string sTMP(STLW::string(szBuf, iLen).append(GetString()));
+    (*this) = CDT(sTMP);
+  }
+  else if (eValueType == STRING_VAL     ||
+           eValueType == STRING_INT_VAL ||
+           eValueType == STRING_REAL_VAL)
+  {
+    Unshare();
+    STLW::string sTMP(szBuf, iLen);
+    sTMP.append(*(u.p_data -> u.s_data));
+    u.p_data -> u.s_data -> assign(sTMP);
+  }
+  else { throw CDTTypeCastException("Prepend"); }
 
 return *this;
 }
@@ -3678,26 +3678,26 @@ return *this;
 //
 CDT & CDT::Prepend(const CDT & oCDT)
 {
-	if (eValueType == UNDEF)
-	{
-		(*this) = CDT(oCDT.GetString());
-	}
-	else if (eValueType == INT_VAL ||
-	         eValueType == REAL_VAL)
-	{
-		STLW::string sTMP(oCDT.GetString() + GetString());
-		(*this) = CDT(sTMP);
-	}
-	else if (eValueType == STRING_VAL     ||
-	         eValueType == STRING_INT_VAL ||
-	         eValueType == STRING_REAL_VAL)
-	{
-		Unshare();
-		STLW::string sTMP = oCDT.GetString();
-		sTMP.append(*(u.p_data -> u.s_data));
-		u.p_data -> u.s_data -> assign(sTMP);
-	}
-	else { throw CDTTypeCastException("Prepend"); }
+  if (eValueType == UNDEF)
+  {
+    (*this) = CDT(oCDT.GetString());
+  }
+  else if (eValueType == INT_VAL ||
+           eValueType == REAL_VAL)
+  {
+    STLW::string sTMP(oCDT.GetString() + GetString());
+    (*this) = CDT(sTMP);
+  }
+  else if (eValueType == STRING_VAL     ||
+           eValueType == STRING_INT_VAL ||
+           eValueType == STRING_REAL_VAL)
+  {
+    Unshare();
+    STLW::string sTMP = oCDT.GetString();
+    sTMP.append(*(u.p_data -> u.s_data));
+    u.p_data -> u.s_data -> assign(sTMP);
+  }
+  else { throw CDTTypeCastException("Prepend"); }
 
 return *this;
 }
@@ -3707,35 +3707,35 @@ return *this;
 //
 W_FLOAT CDT::GetFloat() const
 {
-	switch (eValueType)
-	{
-		case INT_VAL:
-			return W_FLOAT(u.i_data);
+  switch (eValueType)
+  {
+    case INT_VAL:
+      return W_FLOAT(u.i_data);
 
-		case REAL_VAL:
-			return u.d_data;
+    case REAL_VAL:
+      return u.d_data;
 
-		case STRING_VAL:
-			{
-				INT_64   iData1;
-				W_FLOAT  dData1;
-				if (CastToNumber(iData1, dData1) == REAL_VAL) { return dData1; }
+    case STRING_VAL:
+      {
+        INT_64   iData1;
+        W_FLOAT  dData1;
+        if (CastToNumber(iData1, dData1) == REAL_VAL) { return dData1; }
 
-				return W_FLOAT(iData1);
-			}
+        return W_FLOAT(iData1);
+      }
 
-		case STRING_INT_VAL:
-			return W_FLOAT(u.p_data -> uc.i_data);
+    case STRING_INT_VAL:
+      return W_FLOAT(u.p_data -> uc.i_data);
 
-		case STRING_REAL_VAL:
-			return u.p_data -> uc.d_data;
+    case STRING_REAL_VAL:
+      return u.p_data -> uc.d_data;
 
-		case POINTER_VAL:
-			return W_FLOAT((INT_64)(u.pp_data));
+    case POINTER_VAL:
+      return W_FLOAT((INT_64)(u.pp_data));
 
-		default:
-			return 0.0;
-	}
+    default:
+      return 0.0;
+  }
 }
 
 //
@@ -3743,35 +3743,35 @@ W_FLOAT CDT::GetFloat() const
 //
 INT_64 CDT::GetInt() const
 {
-	switch (eValueType)
-	{
-		case INT_VAL:
-			return u.i_data;
+  switch (eValueType)
+  {
+    case INT_VAL:
+      return u.i_data;
 
-		case REAL_VAL:
-			return INT_64(u.d_data);
+    case REAL_VAL:
+      return INT_64(u.d_data);
 
-		case STRING_VAL:
-			{
-				INT_64   iData1;
-				W_FLOAT  dData1;
-				if (CastToNumber(iData1, dData1) == REAL_VAL) { return INT_64(dData1); }
+    case STRING_VAL:
+      {
+        INT_64   iData1;
+        W_FLOAT  dData1;
+        if (CastToNumber(iData1, dData1) == REAL_VAL) { return INT_64(dData1); }
 
-				return iData1;
-			}
+        return iData1;
+      }
 
-		case STRING_INT_VAL:
-			return u.p_data -> uc.i_data;
+    case STRING_INT_VAL:
+      return u.p_data -> uc.i_data;
 
-		case STRING_REAL_VAL:
-			return INT_64(u.p_data -> uc.d_data);
+    case STRING_REAL_VAL:
+      return INT_64(u.p_data -> uc.d_data);
 
-		case POINTER_VAL:
-			return (INT_64)(u.pp_data);
+    case POINTER_VAL:
+      return (INT_64)(u.pp_data);
 
-		default:
-			return 0;
-	}
+    default:
+      return 0;
+  }
 }
 
 //
@@ -3779,32 +3779,32 @@ INT_64 CDT::GetInt() const
 //
 UINT_64 CDT::GetUInt() const
 {
-	switch (eValueType)
-	{
-		case INT_VAL:
-			return u.i_data;
+  switch (eValueType)
+  {
+    case INT_VAL:
+      return u.i_data;
 
-		case REAL_VAL:
-			return INT_64(u.d_data);
+    case REAL_VAL:
+      return INT_64(u.d_data);
 
-		case STRING_VAL:
-			{
-				INT_64   iData1;
-				W_FLOAT  dData1;
-				if (CastToNumber(iData1, dData1) == REAL_VAL) { return UINT_64(dData1); }
+    case STRING_VAL:
+      {
+        INT_64   iData1;
+        W_FLOAT  dData1;
+        if (CastToNumber(iData1, dData1) == REAL_VAL) { return UINT_64(dData1); }
 
-				return iData1;
-			}
+        return iData1;
+      }
 
-		case STRING_INT_VAL:
-			return u.p_data -> uc.i_data;
+    case STRING_INT_VAL:
+      return u.p_data -> uc.i_data;
 
-		case STRING_REAL_VAL:
-			return UINT_64(u.p_data -> uc.d_data);
+    case STRING_REAL_VAL:
+      return UINT_64(u.p_data -> uc.d_data);
 
-		default:
-			return 0;
-	}
+    default:
+      return 0;
+  }
 }
 
 //
@@ -3812,9 +3812,9 @@ UINT_64 CDT::GetUInt() const
 //
 W_FLOAT CDT::ToFloat()
 {
-	W_FLOAT dTMP = GetFloat();
-	(*this) = CDT(dTMP);
-	
+  W_FLOAT dTMP = GetFloat();
+  (*this) = CDT(dTMP);
+  
 return dTMP;
 }
 
@@ -3823,9 +3823,9 @@ return dTMP;
 //
 INT_64 CDT::ToInt()
 {
-	const INT_64 iTMP = GetInt();
-	(*this) = CDT(iTMP);
-	
+  const INT_64 iTMP = GetInt();
+  (*this) = CDT(iTMP);
+  
 return iTMP;
 }
 
@@ -3834,9 +3834,9 @@ return iTMP;
 //
 STLW::string CDT::ToString(CCHAR_P szFormat)
 {
-	const STLW::string sTMP = GetString(szFormat);
-	(*this) = CDT(sTMP);
-	
+  const STLW::string sTMP = GetString(szFormat);
+  (*this) = CDT(sTMP);
+  
 return sTMP;
 }
 
@@ -3845,74 +3845,74 @@ return sTMP;
 //
 STLW::string CDT::GetString(CCHAR_P szFormat) const
 {
-	switch (eValueType)
-	{
-		case INT_VAL:
-			{
-				CHAR_8 szBuf[C_MAX_SPRINTF_LENGTH + 1];
-				if (szFormat != NULL && *szFormat != '\0')
-				{
-					snprintf(szBuf, C_MAX_SPRINTF_LENGTH, szFormat, (long long) (u.i_data));
-				}
-				else
-				{
-					snprintf(szBuf, C_MAX_SPRINTF_LENGTH, "%lli", (long long) (u.i_data));
-				}
+  switch (eValueType)
+  {
+    case INT_VAL:
+      {
+        CHAR_8 szBuf[C_MAX_SPRINTF_LENGTH + 1];
+        if (szFormat != NULL && *szFormat != '\0')
+        {
+          snprintf(szBuf, C_MAX_SPRINTF_LENGTH, szFormat, (long long) (u.i_data));
+        }
+        else
+        {
+          snprintf(szBuf, C_MAX_SPRINTF_LENGTH, "%lli", (long long) (u.i_data));
+        }
 
-			return szBuf;
-			}
+      return szBuf;
+      }
 
-		case REAL_VAL:
-			{
-				CHAR_8 szBuf[C_MAX_SPRINTF_LENGTH + 1];
-				if (szFormat != NULL && *szFormat != '\0')
-				{
-					snprintf(szBuf, C_MAX_SPRINTF_LENGTH, szFormat, u.d_data);
-				}
-				else
-				{
-					snprintf(szBuf, C_MAX_SPRINTF_LENGTH, "%.*G", CTPP_FLOAT_PRECISION, u.d_data);
-				}
-			return szBuf;
-			}
+    case REAL_VAL:
+      {
+        CHAR_8 szBuf[C_MAX_SPRINTF_LENGTH + 1];
+        if (szFormat != NULL && *szFormat != '\0')
+        {
+          snprintf(szBuf, C_MAX_SPRINTF_LENGTH, szFormat, u.d_data);
+        }
+        else
+        {
+          snprintf(szBuf, C_MAX_SPRINTF_LENGTH, "%.*G", CTPP_FLOAT_PRECISION, u.d_data);
+        }
+      return szBuf;
+      }
 
-		case POINTER_VAL:
-			{
-				CHAR_8 szBuf[C_MAX_SPRINTF_LENGTH + 1];
-				if (szFormat != NULL && *szFormat != '\0')
-				{
-					snprintf(szBuf, C_MAX_SPRINTF_LENGTH, szFormat, u.pp_data);
-				}
-				else
-				{
-					snprintf(szBuf, C_MAX_SPRINTF_LENGTH, "%p", u.pp_data);
-				}
-			return szBuf;
-			}
+    case POINTER_VAL:
+      {
+        CHAR_8 szBuf[C_MAX_SPRINTF_LENGTH + 1];
+        if (szFormat != NULL && *szFormat != '\0')
+        {
+          snprintf(szBuf, C_MAX_SPRINTF_LENGTH, szFormat, u.pp_data);
+        }
+        else
+        {
+          snprintf(szBuf, C_MAX_SPRINTF_LENGTH, "%p", u.pp_data);
+        }
+      return szBuf;
+      }
 
 
-		case STRING_VAL:
-		case STRING_INT_VAL:
-		case STRING_REAL_VAL:
-			return *(u.p_data -> u.s_data);
+    case STRING_VAL:
+    case STRING_INT_VAL:
+    case STRING_REAL_VAL:
+      return *(u.p_data -> u.s_data);
 
-		case ARRAY_VAL:
-			{
-				CHAR_8 szBuf[C_MAX_SPRINTF_LENGTH + 1];
-				snprintf(szBuf, C_MAX_SPRINTF_LENGTH, "ARRAY (%p)", (void *)(u.p_data -> u.s_data));
-				return szBuf;
-			}
+    case ARRAY_VAL:
+      {
+        CHAR_8 szBuf[C_MAX_SPRINTF_LENGTH + 1];
+        snprintf(szBuf, C_MAX_SPRINTF_LENGTH, "ARRAY (%p)", (void *)(u.p_data -> u.s_data));
+        return szBuf;
+      }
 
-		case HASH_VAL:
-			{
-				CHAR_8 szBuf[C_MAX_SPRINTF_LENGTH + 1];
-				snprintf(szBuf, C_MAX_SPRINTF_LENGTH, "HASH (%p)", (void *)(u.p_data -> u.s_data));
-				return szBuf;
-			}
+    case HASH_VAL:
+      {
+        CHAR_8 szBuf[C_MAX_SPRINTF_LENGTH + 1];
+        snprintf(szBuf, C_MAX_SPRINTF_LENGTH, "HASH (%p)", (void *)(u.p_data -> u.s_data));
+        return szBuf;
+      }
 
-		default:
-			return "";
-	}
+    default:
+      return "";
+  }
 }
 
 //
@@ -3920,7 +3920,7 @@ STLW::string CDT::GetString(CCHAR_P szFormat) const
 //
 const void * CDT::GetPointer() const
 {
-	if (eValueType != POINTER_VAL) { return NULL; }
+  if (eValueType != POINTER_VAL) { return NULL; }
 
 return u.pp_data;
 }
@@ -3930,7 +3930,7 @@ return u.pp_data;
 //
 void * CDT::GetPointer()
 {
-	if (eValueType != POINTER_VAL) { return NULL; }
+  if (eValueType != POINTER_VAL) { return NULL; }
 
 return u.pp_data;
 }
@@ -3940,9 +3940,9 @@ return u.pp_data;
 //
 STLW::string CDT::Dump(UINT_32 iLevel, bool bGlobalFmt) const
 {
-	STLW::string sResult;
-	DumpData(iLevel, 0, *this, sResult, bGlobalFmt);
-	return sResult;
+  STLW::string sResult;
+  DumpData(iLevel, 0, *this, sResult, bGlobalFmt);
+  return sResult;
 }
 
 //
@@ -3950,7 +3950,7 @@ STLW::string CDT::Dump(UINT_32 iLevel, bool bGlobalFmt) const
 //
 STLW::string CDT::RecursiveDump(UINT_32 iLevel) const
 {
-	return Dump(iLevel);
+  return Dump(iLevel);
 }
 
 //
@@ -3958,93 +3958,93 @@ STLW::string CDT::RecursiveDump(UINT_32 iLevel) const
 //
 void CDT::DumpData(UINT_32 iLevel, UINT_32 iOffset, const CDT & oData, STLW::string &sResult, bool bGlobalFmt)
 {
-	bool bGlobalScope = bGlobalFmt && iLevel == 0;
-	++iLevel;
-	switch (oData.GetType())
-	{
-		case UNDEF:
-		case INT_VAL:
-		case REAL_VAL:
-		case STRING_INT_VAL:
-		case STRING_REAL_VAL:
-		case POINTER_VAL:
-			sResult += oData.GetString();
-			break;
-		case STRING_VAL:
-			sResult += "\"";
-			sResult += EscapeJSONString(oData.GetString(), true, false);
-			sResult += "\"";
-			break;
+  bool bGlobalScope = bGlobalFmt && iLevel == 0;
+  ++iLevel;
+  switch (oData.GetType())
+  {
+    case UNDEF:
+    case INT_VAL:
+    case REAL_VAL:
+    case STRING_INT_VAL:
+    case STRING_REAL_VAL:
+    case POINTER_VAL:
+      sResult += oData.GetString();
+      break;
+    case STRING_VAL:
+      sResult += "\"";
+      sResult += EscapeJSONString(oData.GetString(), true, false);
+      sResult += "\"";
+      break;
 
-		case ARRAY_VAL:
-			{
-				if (oData.Size() == 0) { sResult += "[ ]"; }
-				else
-				{
-					sResult += "[\n";
-					UINT_32 iI = 0;
-					for (;;)
-					{
-						sResult.append(iOffset + iLevel * 2, ' ');
+    case ARRAY_VAL:
+      {
+        if (oData.Size() == 0) { sResult += "[ ]"; }
+        else
+        {
+          sResult += "[\n";
+          UINT_32 iI = 0;
+          for (;;)
+          {
+            sResult.append(iOffset + iLevel * 2, ' ');
 
-						DumpData(iLevel, iOffset, oData.GetCDT(iI), sResult);
+            DumpData(iLevel, iOffset, oData.GetCDT(iI), sResult);
 
-						++iI;
+            ++iI;
 
-						if (iI == oData.Size()) { break; }
-						if (!bGlobalScope) { sResult += ",\n"; }
-						else               { sResult += ";\n"; }
-					}
-					sResult.append("\n");
-					sResult.append(iOffset + (iLevel - 1) * 2, ' ');
-					sResult += "]";
-				}
-			}
-			break;
+            if (iI == oData.Size()) { break; }
+            if (!bGlobalScope) { sResult += ",\n"; }
+            else               { sResult += ";\n"; }
+          }
+          sResult.append("\n");
+          sResult.append(iOffset + (iLevel - 1) * 2, ' ');
+          sResult += "]";
+        }
+      }
+      break;
 
-		case HASH_VAL:
-			{
-				ConstIterator itHash = oData.Begin();
-				if (itHash == oData.End())
-				{
-					if (!bGlobalScope) { sResult += "{ }"; }
-				}
-				else
-				{
-					if (!bGlobalScope) { sResult += "{"; }
-					sResult += "\n";
-					for(;;)
-					{
-						sResult.append(iOffset + iLevel * 2, ' ');
-						if (!bGlobalScope) { sResult += "'"; }
-						else               { sResult += " "; }
-						sResult += EscapeJSONString(itHash -> first, true, false);
-						INT_32 iExtraOffset = 0;
-						if (!bGlobalScope) { sResult += "' : "; }
-						else
-						{
-							sResult += " = ";
-							iExtraOffset = 1;
-						}
-						DumpData(iLevel, iOffset + itHash -> first.size() + 5 - iExtraOffset, itHash -> second, sResult);
+    case HASH_VAL:
+      {
+        ConstIterator itHash = oData.Begin();
+        if (itHash == oData.End())
+        {
+          if (!bGlobalScope) { sResult += "{ }"; }
+        }
+        else
+        {
+          if (!bGlobalScope) { sResult += "{"; }
+          sResult += "\n";
+          for(;;)
+          {
+            sResult.append(iOffset + iLevel * 2, ' ');
+            if (!bGlobalScope) { sResult += "'"; }
+            else               { sResult += " "; }
+            sResult += EscapeJSONString(itHash -> first, true, false);
+            INT_32 iExtraOffset = 0;
+            if (!bGlobalScope) { sResult += "' : "; }
+            else
+            {
+              sResult += " = ";
+              iExtraOffset = 1;
+            }
+            DumpData(iLevel, iOffset + itHash -> first.size() + 5 - iExtraOffset, itHash -> second, sResult);
 
-						++itHash;
+            ++itHash;
 
-						if (itHash == oData.End()) { break; }
-						if (!bGlobalScope) { sResult += ",\n"; }
-						else               { sResult += ";\n"; }
-					}
-					sResult.append("\n");
-					sResult.append(iOffset + (iLevel - 1) * 2, ' ');
-					if (!bGlobalScope) { sResult += "}"; }
-					else               { sResult += " "; }
-				}
-			}
-			break;
+            if (itHash == oData.End()) { break; }
+            if (!bGlobalScope) { sResult += ",\n"; }
+            else               { sResult += ";\n"; }
+          }
+          sResult.append("\n");
+          sResult.append(iOffset + (iLevel - 1) * 2, ' ');
+          if (!bGlobalScope) { sResult += "}"; }
+          else               { sResult += " "; }
+        }
+      }
+      break;
 
-		default:
-			sResult += "Invalid type";
-	}
+    default:
+      sResult += "Invalid type";
+  }
 }
 
 //
@@ -4062,20 +4062,20 @@ CCHAR_P CDT::PrintableType() const { return PrintableType(eValueType); }
 //
 CCHAR_P CDT::PrintableType(eValType eType)
 {
-	switch(eType)
-	{
-		case UNDEF:           return "*UNDEF*";
-		case INT_VAL:         return "INTEGER";
-		case REAL_VAL:        return "REAL";
-		case STRING_VAL:      return "STRING";
-		case STRING_INT_VAL:  return "STRING+INT";
-		case STRING_REAL_VAL: return "STRING+REAL";
-		case ARRAY_VAL:       return "ARRAY";
-		case HASH_VAL:        return "HASH";
-		case POINTER_VAL:     return "POINTER";
-		default:              return "???????";
-	}
-	// This should *NOT* happened;
+  switch(eType)
+  {
+    case UNDEF:           return "*UNDEF*";
+    case INT_VAL:         return "INTEGER";
+    case REAL_VAL:        return "REAL";
+    case STRING_VAL:      return "STRING";
+    case STRING_INT_VAL:  return "STRING+INT";
+    case STRING_REAL_VAL: return "STRING+REAL";
+    case ARRAY_VAL:       return "ARRAY";
+    case HASH_VAL:        return "HASH";
+    case POINTER_VAL:     return "POINTER";
+    default:              return "???????";
+  }
+  // This should *NOT* happened;
 return NULL;
 }
 
@@ -4084,27 +4084,27 @@ return NULL;
 //
 UINT_32 CDT::Size() const
 {
-	switch (eValueType)
-	{
-		case UNDEF:
-		case INT_VAL:
-		case REAL_VAL:
-		case POINTER_VAL:
-			return 0;
-		case STRING_VAL:
-		case STRING_INT_VAL:
-		case STRING_REAL_VAL:
-			return u.p_data -> u.s_data -> size();
+  switch (eValueType)
+  {
+    case UNDEF:
+    case INT_VAL:
+    case REAL_VAL:
+    case POINTER_VAL:
+      return 0;
+    case STRING_VAL:
+    case STRING_INT_VAL:
+    case STRING_REAL_VAL:
+      return u.p_data -> u.s_data -> size();
 
-		case ARRAY_VAL:
-			return u.p_data -> u.v_data -> size();
+    case ARRAY_VAL:
+      return u.p_data -> u.v_data -> size();
 
-		case HASH_VAL:
-			return u.p_data -> u.m_data -> size();
+    case HASH_VAL:
+      return u.p_data -> u.m_data -> size();
 
-		default:
-			return 0;
-	}
+    default:
+      return 0;
+  }
 
 return 0;
 }
@@ -4114,11 +4114,11 @@ return 0;
 //
 CDT & CDT::Swap(CDT & oCDT)
 {
-	const CDT oTMP = oCDT;
+  const CDT oTMP = oCDT;
 
-	oCDT = *this;
+  oCDT = *this;
 
-	*this = oTMP;
+  *this = oTMP;
 
 return *this;
 }
@@ -4128,22 +4128,22 @@ return *this;
 //
 STLW::string CDT::JoinArrayElements(const STLW::string  & sDelimiter) const
 {
-	STLW::string sResult;
+  STLW::string sResult;
 
-	if (eValueType != ARRAY_VAL) { throw CDTAccessException(); }
+  if (eValueType != ARRAY_VAL) { throw CDTAccessException(); }
 
-	Vector::const_iterator itvArray = u.p_data -> u.v_data -> begin();
-	const Vector::const_iterator itvEnd = u.p_data -> u.v_data -> end();
+  Vector::const_iterator itvArray = u.p_data -> u.v_data -> begin();
+  const Vector::const_iterator itvEnd = u.p_data -> u.v_data -> end();
 
-	if (itvArray == itvEnd) { return sResult; }
+  if (itvArray == itvEnd) { return sResult; }
 
-	for(;;)
-	{
-		sResult.append(itvArray -> GetString());
-		++itvArray;
-		if (itvArray == itvEnd) { break; }
-		sResult.append(sDelimiter);
-	}
+  for(;;)
+  {
+    sResult.append(itvArray -> GetString());
+    ++itvArray;
+    if (itvArray == itvEnd) { break; }
+    sResult.append(sDelimiter);
+  }
 
 return sResult;
 }
@@ -4153,22 +4153,22 @@ return sResult;
 //
 STLW::string CDT::JoinHashKeys(const STLW::string  & sDelimiter) const
 {
-	STLW::string sResult;
+  STLW::string sResult;
 
-	if (eValueType != HASH_VAL) { throw CDTAccessException(); }
+  if (eValueType != HASH_VAL) { throw CDTAccessException(); }
 
-	Map::const_iterator itmHash = u.p_data -> u.m_data -> begin();
-	const Map::const_iterator itmEnd = u.p_data -> u.m_data -> end();
+  Map::const_iterator itmHash = u.p_data -> u.m_data -> begin();
+  const Map::const_iterator itmEnd = u.p_data -> u.m_data -> end();
 
-	if (itmHash == itmEnd) { return sResult; }
+  if (itmHash == itmEnd) { return sResult; }
 
-	for(;;)
-	{
-		sResult.append(itmHash -> first);
-		++itmHash;
-		if (itmHash == itmEnd) { break; }
-		sResult.append(sDelimiter);
-	}
+  for(;;)
+  {
+    sResult.append(itmHash -> first);
+    ++itmHash;
+    if (itmHash == itmEnd) { break; }
+    sResult.append(sDelimiter);
+  }
 
 return sResult;
 }
@@ -4178,22 +4178,22 @@ return sResult;
 //
 STLW::string CDT::JoinHashValues(const STLW::string  & sDelimiter) const
 {
-	STLW::string sResult;
+  STLW::string sResult;
 
-	if (eValueType != HASH_VAL) { throw CDTAccessException(); }
+  if (eValueType != HASH_VAL) { throw CDTAccessException(); }
 
-	Map::const_iterator itmHash = u.p_data -> u.m_data -> begin();
-	const Map::const_iterator itmEnd = u.p_data -> u.m_data -> end();
+  Map::const_iterator itmHash = u.p_data -> u.m_data -> begin();
+  const Map::const_iterator itmEnd = u.p_data -> u.m_data -> end();
 
-	if (itmHash == itmEnd) { return sResult; }
+  if (itmHash == itmEnd) { return sResult; }
 
-	for(;;)
-	{
-		sResult.append(itmHash -> second.GetString());
-		++itmHash;
-		if (itmHash == itmEnd) { break; }
-		sResult.append(sDelimiter);
-	}
+  for(;;)
+  {
+    sResult.append(itmHash -> second.GetString());
+    ++itmHash;
+    if (itmHash == itmEnd) { break; }
+    sResult.append(sDelimiter);
+  }
 
 return sResult;
 }
@@ -4203,18 +4203,18 @@ return sResult;
 //
 CDT CDT::GetHashKeys() const
 {
-	CDT oResult(CDT::ARRAY_VAL);
+  CDT oResult(CDT::ARRAY_VAL);
 
-	if (eValueType != HASH_VAL) { throw CDTAccessException(); }
+  if (eValueType != HASH_VAL) { throw CDTAccessException(); }
 
-	Map::const_iterator itmHash = u.p_data -> u.m_data -> begin();
-	const Map::const_iterator itmEnd = u.p_data -> u.m_data -> end();
+  Map::const_iterator itmHash = u.p_data -> u.m_data -> begin();
+  const Map::const_iterator itmEnd = u.p_data -> u.m_data -> end();
 
-	while(itmHash != itmEnd)
-	{
-		oResult.PushBack(itmHash -> first);
-		++itmHash;
-	}
+  while(itmHash != itmEnd)
+  {
+    oResult.PushBack(itmHash -> first);
+    ++itmHash;
+  }
 
 return oResult;
 }
@@ -4224,18 +4224,18 @@ return oResult;
 //
 CDT CDT::GetHashValues() const
 {
-	CDT oResult(CDT::ARRAY_VAL);
+  CDT oResult(CDT::ARRAY_VAL);
 
-	if (eValueType != HASH_VAL) { throw CDTAccessException(); }
+  if (eValueType != HASH_VAL) { throw CDTAccessException(); }
 
-	Map::const_iterator itmHash = u.p_data -> u.m_data -> begin();
-	const Map::const_iterator itmEnd = u.p_data -> u.m_data -> end();
+  Map::const_iterator itmHash = u.p_data -> u.m_data -> begin();
+  const Map::const_iterator itmEnd = u.p_data -> u.m_data -> end();
 
-	while(itmHash != itmEnd)
-	{
-		oResult.PushBack(itmHash -> second);
-		++itmHash;
-	}
+  while(itmHash != itmEnd)
+  {
+    oResult.PushBack(itmHash -> second);
+    ++itmHash;
+  }
 
 return oResult;
 }
@@ -4245,7 +4245,7 @@ return oResult;
 //
 void CDT::MergeCDT(const CDT & oSource, const eMergeStrategy & eStrategy)
 {
-	MergeCDT(*this, oSource, eStrategy);
+  MergeCDT(*this, oSource, eStrategy);
 }
 
 //
@@ -4253,140 +4253,140 @@ void CDT::MergeCDT(const CDT & oSource, const eMergeStrategy & eStrategy)
 //
 void CDT::MergeCDT(CDT & oDestination, const CDT & oSource, const eMergeStrategy & eStrategy)
 {
-	if (oDestination.eValueType == UNDEF)
-	{
-		oDestination = oSource;
-	}
-	else if (oDestination.eValueType == ARRAY_VAL)
-	{
-		// Unshare complex type
-		oDestination.Unshare();
+  if (oDestination.eValueType == UNDEF)
+  {
+    oDestination = oSource;
+  }
+  else if (oDestination.eValueType == ARRAY_VAL)
+  {
+    // Unshare complex type
+    oDestination.Unshare();
 
-		// Special case for undef
-		if (oSource.eValueType == UNDEF) { return; }
-		// Array-to-array
-		else if (oSource.eValueType == ARRAY_VAL)
-		{
-			Vector::const_iterator itvArray = oSource.u.p_data -> u.v_data -> begin();
-			const Vector::const_iterator itvEnd = oSource.u.p_data -> u.v_data -> end();
+    // Special case for undef
+    if (oSource.eValueType == UNDEF) { return; }
+    // Array-to-array
+    else if (oSource.eValueType == ARRAY_VAL)
+    {
+      Vector::const_iterator itvArray = oSource.u.p_data -> u.v_data -> begin();
+      const Vector::const_iterator itvEnd = oSource.u.p_data -> u.v_data -> end();
 
-			while(itvArray != itvEnd)
-			{
-				oDestination.u.p_data -> u.v_data -> push_back(*itvArray);
-				++itvArray;
-			}
-		}
-		// Hash-to-array
-		else if (oSource.eValueType == HASH_VAL)
-		{
-			Map::const_iterator itmHash = oSource.u.p_data -> u.m_data -> begin();
-			const Map::const_iterator itmEnd = oSource.u.p_data -> u.m_data -> end();
+      while(itvArray != itvEnd)
+      {
+        oDestination.u.p_data -> u.v_data -> push_back(*itvArray);
+        ++itvArray;
+      }
+    }
+    // Hash-to-array
+    else if (oSource.eValueType == HASH_VAL)
+    {
+      Map::const_iterator itmHash = oSource.u.p_data -> u.m_data -> begin();
+      const Map::const_iterator itmEnd = oSource.u.p_data -> u.m_data -> end();
 
-			while(itmHash != itmEnd)
-			{
-				oDestination.u.p_data -> u.v_data -> push_back(itmHash -> first);
-				oDestination.u.p_data -> u.v_data -> push_back(itmHash -> second);
-				++itmHash;
-			}
-		}
-		else { throw CDTAccessException(); }
-	}
-	else if (oDestination.eValueType == HASH_VAL)
-	{
-		// Unshare complex type
-		oDestination.Unshare();
+      while(itmHash != itmEnd)
+      {
+        oDestination.u.p_data -> u.v_data -> push_back(itmHash -> first);
+        oDestination.u.p_data -> u.v_data -> push_back(itmHash -> second);
+        ++itmHash;
+      }
+    }
+    else { throw CDTAccessException(); }
+  }
+  else if (oDestination.eValueType == HASH_VAL)
+  {
+    // Unshare complex type
+    oDestination.Unshare();
 
-		if (eStrategy == FAST_MERGE)
-		{
-			// Special case for undef
-			if (oSource.eValueType == UNDEF) { return; }
-			// Array-to-hash
-			else if (oSource.eValueType == ARRAY_VAL)
-			{
-				Vector::const_iterator itvArray = oSource.u.p_data -> u.v_data -> begin();
-				const Vector::const_iterator itvEnd = oSource.u.p_data -> u.v_data -> end();
+    if (eStrategy == FAST_MERGE)
+    {
+      // Special case for undef
+      if (oSource.eValueType == UNDEF) { return; }
+      // Array-to-hash
+      else if (oSource.eValueType == ARRAY_VAL)
+      {
+        Vector::const_iterator itvArray = oSource.u.p_data -> u.v_data -> begin();
+        const Vector::const_iterator itvEnd = oSource.u.p_data -> u.v_data -> end();
 
-				for (;;)
-				{
-					Vector::const_iterator itvKey = itvArray;
-					++itvArray;
-					if (itvArray == itvEnd)
-					{
-						oDestination.u.p_data -> u.m_data -> insert(STLW::pair<const String, CDT>(itvKey -> GetString(), CDT()));
-						break;
-					}
+        for (;;)
+        {
+          Vector::const_iterator itvKey = itvArray;
+          ++itvArray;
+          if (itvArray == itvEnd)
+          {
+            oDestination.u.p_data -> u.m_data -> insert(STLW::pair<const String, CDT>(itvKey -> GetString(), CDT()));
+            break;
+          }
 
-					oDestination.u.p_data -> u.m_data -> insert(STLW::pair<const String, CDT>(itvKey -> GetString(), *itvArray));
+          oDestination.u.p_data -> u.m_data -> insert(STLW::pair<const String, CDT>(itvKey -> GetString(), *itvArray));
 
-					++itvArray;
-					if (itvArray == itvEnd) { break; }
-				}
-			}
-			// Hash-to-hash
-			else if (oSource.eValueType == HASH_VAL)
-			{
-				Map::const_iterator itmHash = oSource.u.p_data -> u.m_data -> begin();
-				const Map::const_iterator itmEnd = oSource.u.p_data -> u.m_data -> end();
+          ++itvArray;
+          if (itvArray == itvEnd) { break; }
+        }
+      }
+      // Hash-to-hash
+      else if (oSource.eValueType == HASH_VAL)
+      {
+        Map::const_iterator itmHash = oSource.u.p_data -> u.m_data -> begin();
+        const Map::const_iterator itmEnd = oSource.u.p_data -> u.m_data -> end();
 
-				while(itmHash != itmEnd)
-				{
-					oDestination.u.p_data -> u.m_data -> insert(STLW::pair<const String, CDT>(itmHash -> first, itmHash -> second));
-					++itmHash;
-				}
-			}
-			else { throw CDTAccessException(); }
+        while(itmHash != itmEnd)
+        {
+          oDestination.u.p_data -> u.m_data -> insert(STLW::pair<const String, CDT>(itmHash -> first, itmHash -> second));
+          ++itmHash;
+        }
+      }
+      else { throw CDTAccessException(); }
 
-			return;
-		}
-		// DEEP_MERGE
+      return;
+    }
+    // DEEP_MERGE
 
-		// Special case for undef
-		if (oSource.eValueType == UNDEF) { return; }
-		// Array-to-hash
-		else if (oSource.eValueType == ARRAY_VAL)
-		{
-			Vector::const_iterator itvArray = oSource.u.p_data -> u.v_data -> begin();
-			const Vector::const_iterator itvEnd = oSource.u.p_data -> u.v_data -> end();
+    // Special case for undef
+    if (oSource.eValueType == UNDEF) { return; }
+    // Array-to-hash
+    else if (oSource.eValueType == ARRAY_VAL)
+    {
+      Vector::const_iterator itvArray = oSource.u.p_data -> u.v_data -> begin();
+      const Vector::const_iterator itvEnd = oSource.u.p_data -> u.v_data -> end();
 
-			for (;;)
-			{
-				Vector::const_iterator itvKey = itvArray;
-				++itvArray;
-				if (itvArray == itvEnd)
-				{
-					oDestination.u.p_data -> u.m_data -> insert(STLW::pair<const String, CDT>(itvKey -> GetString(), CDT()));
-					break;
-				}
+      for (;;)
+      {
+        Vector::const_iterator itvKey = itvArray;
+        ++itvArray;
+        if (itvArray == itvEnd)
+        {
+          oDestination.u.p_data -> u.m_data -> insert(STLW::pair<const String, CDT>(itvKey -> GetString(), CDT()));
+          break;
+        }
 
-				oDestination.u.p_data -> u.m_data -> insert(STLW::pair<const String, CDT>(itvKey -> GetString(), *itvArray));
+        oDestination.u.p_data -> u.m_data -> insert(STLW::pair<const String, CDT>(itvKey -> GetString(), *itvArray));
 
-				++itvArray;
-				if (itvArray == itvEnd) { break; }
-			}
-		}
-		// Hash-to-hash
-		else if (oSource.eValueType == HASH_VAL)
-		{
-			Map::const_iterator itmHash = oSource.u.p_data -> u.m_data -> begin();
-			const Map::const_iterator itmEnd = oSource.u.p_data -> u.m_data -> end();
+        ++itvArray;
+        if (itvArray == itvEnd) { break; }
+      }
+    }
+    // Hash-to-hash
+    else if (oSource.eValueType == HASH_VAL)
+    {
+      Map::const_iterator itmHash = oSource.u.p_data -> u.m_data -> begin();
+      const Map::const_iterator itmEnd = oSource.u.p_data -> u.m_data -> end();
 
-			while(itmHash != itmEnd)
-			{
-				Map::iterator itmElement = oDestination.u.p_data -> u.m_data -> find(itmHash -> first);
-				if (itmElement == oDestination.u.p_data -> u.m_data -> end())
-				{
-					oDestination.u.p_data -> u.m_data -> insert(STLW::pair<const String, CDT>(itmHash -> first, itmHash -> second));
-				}
-				else
-				{
-					MergeCDT(itmElement -> second, itmHash -> second, eStrategy);
-				}
-				++itmHash;
-			}
-		}
-		else { throw CDTAccessException(); }
-	}
-	else { throw CDTAccessException(); }
+      while(itmHash != itmEnd)
+      {
+        Map::iterator itmElement = oDestination.u.p_data -> u.m_data -> find(itmHash -> first);
+        if (itmElement == oDestination.u.p_data -> u.m_data -> end())
+        {
+          oDestination.u.p_data -> u.m_data -> insert(STLW::pair<const String, CDT>(itmHash -> first, itmHash -> second));
+        }
+        else
+        {
+          MergeCDT(itmElement -> second, itmHash -> second, eStrategy);
+        }
+        ++itmHash;
+      }
+    }
+    else { throw CDTAccessException(); }
+  }
+  else { throw CDTAccessException(); }
 }
 
 //
@@ -4394,9 +4394,9 @@ void CDT::MergeCDT(CDT & oDestination, const CDT & oSource, const eMergeStrategy
 //
 void CDT::SortArray(const CDT::SortingComparator  & oSortingComparator)
 {
-	if (eValueType != ARRAY_VAL || u.p_data -> u.v_data -> size() <= 1) { return; }
+  if (eValueType != ARRAY_VAL || u.p_data -> u.v_data -> size() <= 1) { return; }
 
-	STLW::sort(u.p_data -> u.v_data -> begin(), u.p_data -> u.v_data -> end(), SortHelper(oSortingComparator));
+  STLW::sort(u.p_data -> u.v_data -> begin(), u.p_data -> u.v_data -> end(), SortHelper(oSortingComparator));
 }
 
 // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -4416,49 +4416,49 @@ CDT::~CDT() throw() { Destroy(); }
 //
 void CDT::Destroy() throw()
 {
-	switch (eValueType)
-	{
-		// POD types
-		case UNDEF:
-		case INT_VAL:
-		case REAL_VAL:
-		case POINTER_VAL:
-			;; // Nothing to do
-			break;
+  switch (eValueType)
+  {
+    // POD types
+    case UNDEF:
+    case INT_VAL:
+    case REAL_VAL:
+    case POINTER_VAL:
+      ;; // Nothing to do
+      break;
 
-		case STRING_INT_VAL:
-		case STRING_REAL_VAL:
-		case STRING_VAL:
-			-- (u.p_data -> refcount);
-			if (u.p_data -> refcount == 0)
-			{
-				delete u.p_data -> u.s_data;
-				delete u.p_data;
-			}
-			break;
+    case STRING_INT_VAL:
+    case STRING_REAL_VAL:
+    case STRING_VAL:
+      -- (u.p_data -> refcount);
+      if (u.p_data -> refcount == 0)
+      {
+        delete u.p_data -> u.s_data;
+        delete u.p_data;
+      }
+      break;
 
-		case ARRAY_VAL:
-			-- (u.p_data -> refcount);
-			if (u.p_data -> refcount == 0)
-			{
-				delete u.p_data -> u.v_data;
-				delete u.p_data;
-			}
-			break;
+    case ARRAY_VAL:
+      -- (u.p_data -> refcount);
+      if (u.p_data -> refcount == 0)
+      {
+        delete u.p_data -> u.v_data;
+        delete u.p_data;
+      }
+      break;
 
-		case HASH_VAL:
-			-- (u.p_data -> refcount);
-			if (u.p_data -> refcount == 0)
-			{
-				delete u.p_data -> u.m_data;
-				delete u.p_data;
-			}
-			break;
+    case HASH_VAL:
+      -- (u.p_data -> refcount);
+      if (u.p_data -> refcount == 0)
+      {
+        delete u.p_data -> u.m_data;
+        delete u.p_data;
+      }
+      break;
 
-		default:
-			// R.I.P.
-			{ int * pI = NULL; *pI = 0xDeadBeef; }
-	}
+    default:
+      // R.I.P.
+      { int * pI = NULL; *pI = 0xDeadBeef; }
+  }
 }
 
 //
@@ -4466,27 +4466,27 @@ void CDT::Destroy() throw()
 //
 void CDT::Unshare()
 {
-	if (u.p_data -> refcount != 1)
-	{
-		_CDT * pTMP = new _CDT();
+  if (u.p_data -> refcount != 1)
+  {
+    _CDT * pTMP = new _CDT();
 
-		if      (eValueType == STRING_VAL)     { pTMP -> u.s_data = new String(*(u.p_data -> u.s_data)); }
-		else if (eValueType == STRING_INT_VAL)
-		{
-			pTMP -> u.s_data = new String(*(u.p_data -> u.s_data));
-			pTMP -> uc.i_data = u.p_data -> uc.i_data;
-		}
-		else if (eValueType == STRING_REAL_VAL)
-		{
-			pTMP -> u.s_data = new String(*(u.p_data -> u.s_data));
-			pTMP -> uc.d_data = u.p_data -> uc.d_data;
-		}
-		else if (eValueType == ARRAY_VAL)  { pTMP -> u.v_data = new Vector(*(u.p_data -> u.v_data)); }
-		else if (eValueType == HASH_VAL)   { pTMP -> u.m_data = new Map(*(u.p_data -> u.m_data));    }
+    if      (eValueType == STRING_VAL)     { pTMP -> u.s_data = new String(*(u.p_data -> u.s_data)); }
+    else if (eValueType == STRING_INT_VAL)
+    {
+      pTMP -> u.s_data = new String(*(u.p_data -> u.s_data));
+      pTMP -> uc.i_data = u.p_data -> uc.i_data;
+    }
+    else if (eValueType == STRING_REAL_VAL)
+    {
+      pTMP -> u.s_data = new String(*(u.p_data -> u.s_data));
+      pTMP -> uc.d_data = u.p_data -> uc.d_data;
+    }
+    else if (eValueType == ARRAY_VAL)  { pTMP -> u.v_data = new Vector(*(u.p_data -> u.v_data)); }
+    else if (eValueType == HASH_VAL)   { pTMP -> u.m_data = new Map(*(u.p_data -> u.m_data));    }
 
-		-- u.p_data -> refcount;
-		u.p_data = pTMP;
-	}
+    -- u.p_data -> refcount;
+    u.p_data = pTMP;
+  }
 }
 
 //
@@ -4494,166 +4494,166 @@ void CDT::Unshare()
 //
 CDT::eValType CDT::CastToNumber(INT_64 & iData, W_FLOAT & dData) const
 {
-	iData = 0;
-	dData = 0.0;
+  iData = 0;
+  dData = 0.0;
 
-	switch (eValueType)
-	{
-		case UNDEF:
-			return INT_VAL;
+  switch (eValueType)
+  {
+    case UNDEF:
+      return INT_VAL;
 
-		case INT_VAL:
-			iData = u.i_data;
-			return INT_VAL;
+    case INT_VAL:
+      iData = u.i_data;
+      return INT_VAL;
 
-		case REAL_VAL:
-			dData = u.d_data;
-			return REAL_VAL;
+    case REAL_VAL:
+      dData = u.d_data;
+      return REAL_VAL;
 
-		case STRING_VAL:
-			{
-				CheckComplexDataType();
-				if (eValueType != STRING_VAL) { return CastToNumber(iData, dData); }
+    case STRING_VAL:
+      {
+        CheckComplexDataType();
+        if (eValueType != STRING_VAL) { return CastToNumber(iData, dData); }
 
-				// Check integer only
-				String::const_iterator        itStart = u.p_data -> u.s_data -> begin();
-				const String::const_iterator  itEnd   = u.p_data -> u.s_data -> end();
-				if (itStart == itEnd)
-				{
-					u.p_data -> uc.i_data = iData;
-					eValueType = STRING_INT_VAL;
-					u.p_data -> value_type = INT_VAL;
-					return INT_VAL;
-				}
+        // Check integer only
+        String::const_iterator        itStart = u.p_data -> u.s_data -> begin();
+        const String::const_iterator  itEnd   = u.p_data -> u.s_data -> end();
+        if (itStart == itEnd)
+        {
+          u.p_data -> uc.i_data = iData;
+          eValueType = STRING_INT_VAL;
+          u.p_data -> value_type = INT_VAL;
+          return INT_VAL;
+        }
 
-				// [-+]?[0-9]
+        // [-+]?[0-9]
 
-				// Check sign
-				if (*itStart == '-' || *itStart == '+') { ++itStart; }
+        // Check sign
+        if (*itStart == '-' || *itStart == '+') { ++itStart; }
 
-				// Check numbers
-				while (itStart != itEnd)
-				{
-					if (!(*itStart >= '0' && *itStart <= '9')) { break; }
-					++itStart;
-				}
+        // Check numbers
+        while (itStart != itEnd)
+        {
+          if (!(*itStart >= '0' && *itStart <= '9')) { break; }
+          ++itStart;
+        }
 
-				// Okay, it's integer
-				if (itStart == itEnd)
-				{
-					iData = strtoll(u.p_data -> u.s_data -> data(), NULL, 10);
+        // Okay, it's integer
+        if (itStart == itEnd)
+        {
+          iData = strtoll(u.p_data -> u.s_data -> data(), NULL, 10);
 
-					u.p_data -> uc.i_data = iData;
-					eValueType = STRING_INT_VAL;
-					u.p_data -> value_type = INT_VAL;
-					return INT_VAL;
-				}
+          u.p_data -> uc.i_data = iData;
+          eValueType = STRING_INT_VAL;
+          u.p_data -> value_type = INT_VAL;
+          return INT_VAL;
+        }
 
-				// [-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?
+        // [-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?
 
-				// Check IEEE 754
-				if (*itStart == '.')
-				{
-					++itStart;
-					if (itStart == itEnd)
-					{
-						u.p_data -> uc.d_data = dData;
-						eValueType = STRING_REAL_VAL;
-						u.p_data -> value_type = REAL_VAL;
-						return REAL_VAL;
-					}
+        // Check IEEE 754
+        if (*itStart == '.')
+        {
+          ++itStart;
+          if (itStart == itEnd)
+          {
+            u.p_data -> uc.d_data = dData;
+            eValueType = STRING_REAL_VAL;
+            u.p_data -> value_type = REAL_VAL;
+            return REAL_VAL;
+          }
 
-					while (itStart != itEnd)
-					{
-						if (!(*itStart >= '0' && *itStart <= '9')) { break; }
-						++itStart;
-					}
-				}
-				// Okay, it's real without exponent
-				if (itStart == itEnd)
-				{
-					dData = strtod(u.p_data -> u.s_data -> data(), NULL);
+          while (itStart != itEnd)
+          {
+            if (!(*itStart >= '0' && *itStart <= '9')) { break; }
+            ++itStart;
+          }
+        }
+        // Okay, it's real without exponent
+        if (itStart == itEnd)
+        {
+          dData = strtod(u.p_data -> u.s_data -> data(), NULL);
 
-					u.p_data -> uc.d_data = dData;
-					eValueType = STRING_REAL_VAL;
-					u.p_data -> value_type = REAL_VAL;
-					return REAL_VAL;
-				}
+          u.p_data -> uc.d_data = dData;
+          eValueType = STRING_REAL_VAL;
+          u.p_data -> value_type = REAL_VAL;
+          return REAL_VAL;
+        }
 
-				// Check exponent
-				if (*itStart != 'e' && *itStart != 'E')
-				{
-					u.p_data -> uc.d_data = dData;
-					eValueType = STRING_REAL_VAL;
-					u.p_data -> value_type = REAL_VAL;
-					return REAL_VAL;
-				}
-				++itStart;
+        // Check exponent
+        if (*itStart != 'e' && *itStart != 'E')
+        {
+          u.p_data -> uc.d_data = dData;
+          eValueType = STRING_REAL_VAL;
+          u.p_data -> value_type = REAL_VAL;
+          return REAL_VAL;
+        }
+        ++itStart;
 
-				// Check exponent sign
-				if (itStart == itEnd)
-				{
-					u.p_data -> uc.d_data = dData;
-					eValueType = STRING_REAL_VAL;
-					u.p_data -> value_type = REAL_VAL;
-					return REAL_VAL;
-				}
+        // Check exponent sign
+        if (itStart == itEnd)
+        {
+          u.p_data -> uc.d_data = dData;
+          eValueType = STRING_REAL_VAL;
+          u.p_data -> value_type = REAL_VAL;
+          return REAL_VAL;
+        }
 
-				if (*itStart == '-' || *itStart == '+')
-				{
-					++itStart;
-					if (itStart == itEnd)
-					{
-						u.p_data -> uc.d_data = dData;
-						eValueType = STRING_REAL_VAL;
-						u.p_data -> value_type = REAL_VAL;
-						return REAL_VAL;
-					}
-				}
+        if (*itStart == '-' || *itStart == '+')
+        {
+          ++itStart;
+          if (itStart == itEnd)
+          {
+            u.p_data -> uc.d_data = dData;
+            eValueType = STRING_REAL_VAL;
+            u.p_data -> value_type = REAL_VAL;
+            return REAL_VAL;
+          }
+        }
 
-				while (itStart != itEnd)
-				{
-					if (!(*itStart >= '0' && *itStart <= '9')) { break; }
-					++itStart;
-				}
+        while (itStart != itEnd)
+        {
+          if (!(*itStart >= '0' && *itStart <= '9')) { break; }
+          ++itStart;
+        }
 
-				// Okay, it's real with exponent
-				if (itStart == itEnd)
-				{
-					dData = strtod(u.p_data -> u.s_data -> data(), NULL);
+        // Okay, it's real with exponent
+        if (itStart == itEnd)
+        {
+          dData = strtod(u.p_data -> u.s_data -> data(), NULL);
 
-					u.p_data -> uc.d_data = dData;
-					eValueType = STRING_REAL_VAL;
-					u.p_data -> value_type = REAL_VAL;
-					return REAL_VAL;
-				}
+          u.p_data -> uc.d_data = dData;
+          eValueType = STRING_REAL_VAL;
+          u.p_data -> value_type = REAL_VAL;
+          return REAL_VAL;
+        }
 
-			return REAL_VAL;
-			}
+      return REAL_VAL;
+      }
 
-		case STRING_INT_VAL:
-			iData = u.p_data -> uc.i_data;
-			return INT_VAL;
+    case STRING_INT_VAL:
+      iData = u.p_data -> uc.i_data;
+      return INT_VAL;
 
-		case STRING_REAL_VAL:
-			dData = u.p_data -> uc.d_data;
-			return REAL_VAL;
+    case STRING_REAL_VAL:
+      dData = u.p_data -> uc.d_data;
+      return REAL_VAL;
 
-		case ARRAY_VAL:
-			iData = u.p_data -> u.v_data -> size();
-			return INT_VAL;
+    case ARRAY_VAL:
+      iData = u.p_data -> u.v_data -> size();
+      return INT_VAL;
 
-		case HASH_VAL:
-			iData = u.p_data -> u.m_data -> size();
-			return INT_VAL;
+    case HASH_VAL:
+      iData = u.p_data -> u.m_data -> size();
+      return INT_VAL;
 
-		case POINTER_VAL:
-			iData = UINT_64(u.pp_data);
-			return INT_VAL;
+    case POINTER_VAL:
+      iData = UINT_64(u.pp_data);
+      return INT_VAL;
 
-		default:
-			throw CDTTypeCastException("No such type");
-	}
+    default:
+      throw CDTTypeCastException("No such type");
+  }
 // Make compiler happy
 return INT_VAL;
 }
@@ -4663,8 +4663,8 @@ return INT_VAL;
 //
 void CDT::CheckComplexDataType() const
 {
-	if      (u.p_data -> value_type == INT_VAL)  { eValueType = STRING_INT_VAL;  }
-	else if (u.p_data -> value_type == REAL_VAL) { eValueType = STRING_REAL_VAL; }
+  if      (u.p_data -> value_type == INT_VAL)  { eValueType = STRING_INT_VAL;  }
+  else if (u.p_data -> value_type == REAL_VAL) { eValueType = STRING_REAL_VAL; }
 }
 
 // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

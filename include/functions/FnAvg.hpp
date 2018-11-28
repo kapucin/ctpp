@@ -52,52 +52,52 @@ class Logger;
 class FnAvg:
   public SyscallHandler
 {
-	/**
-	  @brief A destructor
-	*/
-	~FnAvg() throw();
+  /**
+    @brief A destructor
+  */
+  ~FnAvg() throw();
 
 private:
-	friend class STDLibInitializer;
+  friend class STDLibInitializer;
 
 
-	/** Ouput data collector  */
-	OutputCollector * pCollector;
+  /** Ouput data collector  */
+  OutputCollector * pCollector;
 
-	// ///////////////////////////////////////////////////////////////
+  // ///////////////////////////////////////////////////////////////
 
-	/**
-	  @brief Constructor
-	*/
-	FnAvg();
+  /**
+    @brief Constructor
+  */
+  FnAvg();
 
-	/**
-	  @brief Copy constructor
-	  @param oRhs - object to copy
-	*/
-	FnAvg(const FnAvg & oRhs);
+  /**
+    @brief Copy constructor
+    @param oRhs - object to copy
+  */
+  FnAvg(const FnAvg & oRhs);
 
-	/**
-	  @brief Copy operator =
-	  @param oRhs - object to copy
-	*/
-	FnAvg & operator =(const FnAvg & oRhs);
+  /**
+    @brief Copy operator =
+    @param oRhs - object to copy
+  */
+  FnAvg & operator =(const FnAvg & oRhs);
 
-	/**
-	  @brief Handler
-	  @param aArguments - list of arguments
-	  @param iArgNum - number of arguments
-	  @param oCDTRetVal - return value
-	*/
-	INT_32 Handler(CDT            * aArguments,
-	               const UINT_32    iArgNum,
-	               CDT            & oCDTRetVal,
-	               Logger         & oLogger);
+  /**
+    @brief Handler
+    @param aArguments - list of arguments
+    @param iArgNum - number of arguments
+    @param oCDTRetVal - return value
+  */
+  INT_32 Handler(CDT            * aArguments,
+                 const UINT_32    iArgNum,
+                 CDT            & oCDTRetVal,
+                 Logger         & oLogger);
 
-	/**
-	  @brief Get function name
-	*/
-	CCHAR_P GetName() const;
+  /**
+    @brief Get function name
+  */
+  CCHAR_P GetName() const;
 };
 
 } // namespace CTPP

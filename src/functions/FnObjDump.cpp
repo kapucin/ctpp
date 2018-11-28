@@ -44,7 +44,7 @@ namespace CTPP // C++ Template Engine
 //
 FnObjDump::FnObjDump(): pCDT(NULL)
 {
-	;;
+  ;;
 }
 
 //
@@ -57,7 +57,7 @@ INT_32 FnObjDump::PreExecuteSetup(OutputCollector          & oCollector,
                                   const ReducedStaticText  & oStaticText,
                                   Logger                   & oLogger)
 {
-	pCDT = &oCDT;
+  pCDT = &oCDT;
 
 return 0;
 }
@@ -70,25 +70,25 @@ INT_32 FnObjDump::Handler(CDT            * aArguments,
                           CDT            & oCDTRetVal,
                           Logger         & oLogger)
 {
-	if (iArgNum == 0)
-	{
-		oCDTRetVal = "Global data object:\n";
-		oCDTRetVal.Append(pCDT -> Dump(0, true));
-	}
-	else
-	{
-		oCDTRetVal = "";
-		// Temp
-		CHAR_8 szBuffer[CTPP_ESCAPE_BUFFER_LEN + 1];
+  if (iArgNum == 0)
+  {
+    oCDTRetVal = "Global data object:\n";
+    oCDTRetVal.Append(pCDT -> Dump(0, true));
+  }
+  else
+  {
+    oCDTRetVal = "";
+    // Temp
+    CHAR_8 szBuffer[CTPP_ESCAPE_BUFFER_LEN + 1];
 
-		INT_32 iI = iArgNum - 1;
-		for (; iI >= 0; --iI)
-		{
-			snprintf(szBuffer, CTPP_ESCAPE_BUFFER_LEN, "Argument %d:\n", iArgNum - iI);
-			oCDTRetVal.Append(szBuffer);
-			oCDTRetVal.Append(aArguments[iI].Dump());
-		}
-	}
+    INT_32 iI = iArgNum - 1;
+    for (; iI >= 0; --iI)
+    {
+      snprintf(szBuffer, CTPP_ESCAPE_BUFFER_LEN, "Argument %d:\n", iArgNum - iI);
+      oCDTRetVal.Append(szBuffer);
+      oCDTRetVal.Append(aArguments[iI].Dump());
+    }
+  }
 return 0;
 }
 

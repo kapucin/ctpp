@@ -53,54 +53,54 @@ class FnObjDump:
   public SyscallHandler
 {
 private:
-	friend class STDLibInitializer;
+  friend class STDLibInitializer;
 
-	/**
-	  @brief Constructor
-	*/
- 	FnObjDump();
+  /**
+    @brief Constructor
+  */
+  FnObjDump();
 
-	/**
-	  @brief A destructor
-	*/
-	~FnObjDump() throw();
+  /**
+    @brief A destructor
+  */
+  ~FnObjDump() throw();
 
-	/**
-	  @brief Pre-execution handler setup
-	  @param oCollector - output data collector
-	  @param oCDT - CTPP2 parameters
-	  @param oSyscalls - Syscalls segment
-	  @param oStaticData - Static data segment
-	  @param oStaticText - Static text segment
-	  @return 0 - if success, -1 - if any error occured
-	*/
-	INT_32 PreExecuteSetup(OutputCollector          & oCollector,
-	                       CDT                      & oCDT,
-	                       const ReducedStaticText  & oSyscalls,
-	                       const ReducedStaticData  & oStaticData,
-	                       const ReducedStaticText  & oStaticText,
-	                       Logger                   & oLogger);
+  /**
+    @brief Pre-execution handler setup
+    @param oCollector - output data collector
+    @param oCDT - CTPP2 parameters
+    @param oSyscalls - Syscalls segment
+    @param oStaticData - Static data segment
+    @param oStaticText - Static text segment
+    @return 0 - if success, -1 - if any error occured
+  */
+  INT_32 PreExecuteSetup(OutputCollector          & oCollector,
+                         CDT                      & oCDT,
+                         const ReducedStaticText  & oSyscalls,
+                         const ReducedStaticData  & oStaticData,
+                         const ReducedStaticText  & oStaticText,
+                         Logger                   & oLogger);
 
-	/**
-	  @brief Handler
-	  @param aArguments - list of arguments
-	  @param iArgNum - number of arguments
-	  @param oCDTRetVal - return value
-	  @param oLogger - logger
-	  @return 0 - if success, -1 - otherwise
-	*/
-	INT_32 Handler(CDT            * aArguments,
-	               const UINT_32    iArgNum,
-	               CDT            & oCDTRetVal,
-	               Logger         & oLogger);
+  /**
+    @brief Handler
+    @param aArguments - list of arguments
+    @param iArgNum - number of arguments
+    @param oCDTRetVal - return value
+    @param oLogger - logger
+    @return 0 - if success, -1 - otherwise
+  */
+  INT_32 Handler(CDT            * aArguments,
+                 const UINT_32    iArgNum,
+                 CDT            & oCDTRetVal,
+                 Logger         & oLogger);
 
-	/**
-	  @brief Get function name
-	*/
-	CCHAR_P GetName() const;
+  /**
+    @brief Get function name
+  */
+  CCHAR_P GetName() const;
 
-	/** Global data object */
-	CDT   * pCDT;
+  /** Global data object */
+  CDT   * pCDT;
 };
 
 } // namespace CTPP

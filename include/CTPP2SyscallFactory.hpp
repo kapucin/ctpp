@@ -60,74 +60,74 @@ namespace CTPP // C++ Template Engine
 class CTPP2DECL SyscallFactory
 {
 public:
-	/**
-	  @brief Constructor
-	  @param iIMaxHandlers - max. number of handlers
-	*/
-	SyscallFactory(const UINT_32  iIMaxHandlers);
+  /**
+    @brief Constructor
+    @param iIMaxHandlers - max. number of handlers
+  */
+  SyscallFactory(const UINT_32  iIMaxHandlers);
 
-	/**
-	  @brief Get Handler by ID
-	  @param iHandlerId - handler ID
-	  @return pointer to handler or NULL if handler does not exist
-	*/
-	SyscallHandler * GetHandlerById(const UINT_32  iHandlerId) const;
+  /**
+    @brief Get Handler by ID
+    @param iHandlerId - handler ID
+    @return pointer to handler or NULL if handler does not exist
+  */
+  SyscallHandler * GetHandlerById(const UINT_32  iHandlerId) const;
 
-	/**
-	  @brief Get Handler by name
-	  @param szHandlerName - handler name
-	  @return pointer to handler or NULL if handler does not exist
-	*/
-	SyscallHandler * GetHandlerByName(CCHAR_P szHandlerName) const;
+  /**
+    @brief Get Handler by name
+    @param szHandlerName - handler name
+    @return pointer to handler or NULL if handler does not exist
+  */
+  SyscallHandler * GetHandlerByName(CCHAR_P szHandlerName) const;
 
-	/**
-	  @brief Remove handler from factory
-	  @param szHandlerName - handler name
-	  @return 0 - if success, -1 - otherwise
-	*/
-	INT_32 RemoveHandler(CCHAR_P szHandlerName);
+  /**
+    @brief Remove handler from factory
+    @param szHandlerName - handler name
+    @return 0 - if success, -1 - otherwise
+  */
+  INT_32 RemoveHandler(CCHAR_P szHandlerName);
 
-	/**
-	  @brief Register handler
-	  @param pHandler - handler to register in factory
-	  @return Handler ID
-	*/
-	INT_32 RegisterHandler(SyscallHandler * pHandler);
+  /**
+    @brief Register handler
+    @param pHandler - handler to register in factory
+    @return Handler ID
+  */
+  INT_32 RegisterHandler(SyscallHandler * pHandler);
 
-	/**
-	  @brief A destructor
-	*/
-	~SyscallFactory() throw();
+  /**
+    @brief A destructor
+  */
+  ~SyscallFactory() throw();
 
 private:
-	/**
-	  @struct HandlerRefsSort SyscallFactory.hpp <SyscallFactory.hpp>
-	  @brief Case-insensitive sorting functor
-	*/
-	struct HandlerRefsSort:
-	  public STLW::binary_function<STLW::string, STLW::string, bool>
-	{
-		/**
-		  @brief comparison operator
-		  @param x - first argument
-		  @param y - first argument
-		  @return true if x > y
-		*/
-		inline bool operator() (const STLW::string  & x,
-		                        const STLW::string  & y) const
-		{
-			return (strcasecmp(x.c_str(), y.c_str()) > 0);
-		}
-	};
+  /**
+    @struct HandlerRefsSort SyscallFactory.hpp <SyscallFactory.hpp>
+    @brief Case-insensitive sorting functor
+  */
+  struct HandlerRefsSort:
+    public STLW::binary_function<STLW::string, STLW::string, bool>
+  {
+    /**
+      @brief comparison operator
+      @param x - first argument
+      @param y - first argument
+      @return true if x > y
+    */
+    inline bool operator() (const STLW::string  & x,
+                            const STLW::string  & y) const
+    {
+      return (strcasecmp(x.c_str(), y.c_str()) > 0);
+    }
+  };
 
-	/** Max. allowed number of handlers            */
-	const UINT_32                      iMaxHandlers;
-	/** Max. used handler ID                       */
-	UINT_32                            iCurrHandlers;
-	/** List of handlers                           */
-	SyscallHandler                  ** aHandlers;
-	/** Handler name-to-handler ID translation map */
-	STLW::map<STLW::string, UINT_32, HandlerRefsSort>     mHandlerRefs;
+  /** Max. allowed number of handlers            */
+  const UINT_32                      iMaxHandlers;
+  /** Max. used handler ID                       */
+  UINT_32                            iCurrHandlers;
+  /** List of handlers                           */
+  SyscallHandler                  ** aHandlers;
+  /** Handler name-to-handler ID translation map */
+  STLW::map<STLW::string, UINT_32, HandlerRefsSort>     mHandlerRefs;
 };
 
 } // namespace CTPP

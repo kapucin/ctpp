@@ -45,7 +45,7 @@ namespace CTPP // C++ Template Engine
 //
 FnContext::FnContext(): pCDT(NULL)
 {
-	;;
+  ;;
 }
 
 //
@@ -58,7 +58,7 @@ INT_32 FnContext::PreExecuteSetup(OutputCollector          & oCollector,
                                   const ReducedStaticText  & oStaticText,
                                   Logger                   & oLogger)
 {
-	pCDT = &oCDT;
+  pCDT = &oCDT;
 
 return 0;
 }
@@ -73,7 +73,7 @@ INT_32 FnContext::Handler(CDT            * aArguments,
 {
     if (iArgNum != 0)
     {
-		oLogger.Emerg("Usage: CONTEXT()");
+    oLogger.Emerg("Usage: CONTEXT()");
         return -1;
     }
     oCDTRetVal = *pCDT;

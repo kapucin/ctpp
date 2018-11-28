@@ -58,136 +58,140 @@ using namespace CTPP;
 
 int main(int argc, char ** argv)
 {
-	INT_32 iRetCode = EX_SOFTWARE;
+  INT_32 iRetCode = EX_SOFTWARE;
 
-	if (argc != 2 && argc != 3 && argc != 4 && argc != 5)
-	{
-		fprintf(stdout, "CTPP2 interpreter v" CTPP_VERSION " (" CTPP_IDENT "). Copyright (c) 2004-2011 CTPP Dev. Team.\n\n");
-		fprintf(stderr, "usage: %s file.name [data.json] [translation.mo | 0] [limit of steps]\n", argv[0]);
-		return EX_USAGE;
-	}
+  if (argc < 3) {
+    fprintf(stdout, "CTPP2 interpreter v" CTPP_VERSION " (" CTPP_IDENT "). "
+        "Copyright (c) 2004-2011 CTPP Dev. Team.\n\n");
+    fprintf(stderr, "usage: %s file.name [data.json] [translation.mo | 0] [limit of steps]\n",
+        argv[0]);
+    return EX_USAGE;
+  }
 
-	// Output
-	FileOutputCollector oOutputCollector(stdout);
+  // Output
+  FileOutputCollector oOutputCollector(stdout);
 
-	// Initialize Standard CTPP library
-	SyscallFactory oSyscallFactory(100);
-	// Load standard library
-	STDLibInitializer::InitLibrary(oSyscallFactory);
+  // Initialize Standard CTPP library
+  SyscallFactory oSyscallFactory(100);
+  // Load standard library
+  STDLibInitializer::InitLibrary(oSyscallFactory);
 
-	CTPP2GetText oGetText;
-	if (argc >= 4 && strncmp(argv[3], "0", sizeof(argv[3])) != 0) { oGetText.AddTranslation(argv[3], "test", "unknown"); }
-	oGetText.InitSTDLibFunction(oSyscallFactory);
-	oGetText.SetLanguage(oSyscallFactory, "unknown");
-	oGetText.SetDefaultDomain("test");
+  CTPP2GetText oGetText;
 
-	UINT_32 iStepsLimit = 10240;
-	if(argc == 5) { iStepsLimit = atoi(argv[4]); }
-	else
-	{
-		fprintf(stderr, "WARNING: [limit of steps] not set, use default value of %d\n", iStepsLimit);
-	}
+  if (argc >= 4 && strncmp(argv[3], "0", strlen(argv[3])) != 0) {
+    oGetText.AddTranslation(argv[3], "test", "unknown");
+  }
 
-	try
-	{
+  oGetText.InitSTDLibFunction(oSyscallFactory);
+  oGetText.SetLanguage(oSyscallFactory, "unknown");
+  oGetText.SetDefaultDomain("test");
 
-		VMOpcodeCollector  oVMOpcodeCollector;
-		StaticText         oSyscalls;
-		StaticData         oStaticData;
-		StaticText         oStaticText;
-		HashTable          oHashTable;
-		CTPP2Compiler oCompiler(oVMOpcodeCollector, oSyscalls, oStaticData, oStaticText, oHashTable);
+  UINT_32 iStepsLimit = 10240;
 
-		// Load template
-		CTPP2FileSourceLoader oSourceLoader;
-		oSourceLoader.LoadTemplate(argv[1]);
+  if (argc == 5) {
+    iStepsLimit = atoi(argv[4]);
+  } else {
+    fprintf(stderr, "WARNING: [limit of steps] not set, use default value of %d\n", iStepsLimit);
+  }
 
-		// Create template parser
-		CTPP2Parser oCTPP2Parser(&oSourceLoader, &oCompiler, argv[1]);
+  try {
+    VMOpcodeCollector  oVMOpcodeCollector;
+    StaticText         oSyscalls;
+    StaticData         oStaticData;
+    StaticText         oStaticText;
+    HashTable          oHashTable;
+    CTPP2Compiler oCompiler(oVMOpcodeCollector, oSyscalls, oStaticData, oStaticText, oHashTable);
 
-		// Compile template
-		oCTPP2Parser.Compile();
+    // Load template
+    CTPP2FileSourceLoader oSourceLoader;
+    oSourceLoader.LoadTemplate(argv[1]);
 
-		// Get program core
-		UINT_32 iCodeSize = 0;
-		const VMInstruction * oVMInstruction = oVMOpcodeCollector.GetCode(iCodeSize);
-		// Dump program
-		VMDumper oDumper(iCodeSize, oVMInstruction, oSyscalls, oStaticData, oStaticText, oHashTable);
-		UINT_32 iSize = 0;
-		const VMExecutable * aProgramCore = oDumper.GetExecutable(iSize);
+    // Create template parser
+    CTPP2Parser oCTPP2Parser(&oSourceLoader, &oCompiler, argv[1]);
 
-		// Get program core
-		const VMMemoryCore oVMMemoryCore(aProgramCore);
+    // Compile template
+    oCTPP2Parser.Compile();
 
-		CDT oHash(CDT::HASH_VAL);
+    // Get program core
+    UINT_32 iCodeSize = 0;
+    const VMInstruction * oVMInstruction = oVMOpcodeCollector.GetCode(iCodeSize);
+    // Dump program
+    VMDumper oDumper(iCodeSize, oVMInstruction, oSyscalls, oStaticData, oStaticText, oHashTable);
+    UINT_32 iSize = 0;
+    const VMExecutable * aProgramCore = oDumper.GetExecutable(iSize);
 
-		// Load JSON data
-		if(argc >= 3)
-		{
-			// Our data
-			CTPP2JSONFileParser oJSONFileParser(oHash);
-			oJSONFileParser.Parse(argv[2]);
-		}
-		else
-		{
-			fprintf(stderr, "WARNING: [data.json] not given\n");
-		}
+    // Get program core
+    const VMMemoryCore oVMMemoryCore(aProgramCore);
 
-		// Logger
-		FileLogger oLogger(stderr);
+    CDT oHash(CDT::HASH_VAL);
 
-		// Run program
-		VM oVM(&oSyscallFactory, 10240, 10240, iStepsLimit);
-		UINT_32 iIP = 0;
+    // Load JSON data
+    if(argc >= 3)
+    {
+      // Our data
+      CTPP2JSONFileParser oJSONFileParser(oHash);
+      oJSONFileParser.Parse(argv[2]);
+    }
+    else
+    {
+      fprintf(stderr, "WARNING: [data.json] not given\n");
+    }
 
-		oVM.Init(&oVMMemoryCore, &oOutputCollector, &oLogger);
-		oVM.Run(&oVMMemoryCore, &oOutputCollector, iIP, oHash, &oLogger);
+    // Logger
+    FileLogger oLogger(stderr);
 
-		iRetCode = EX_OK;
-	}
-	catch(CTPPParserSyntaxError       & e) { fprintf(stderr, "ERROR: At line %d, pos. %d: %s\n", e.GetLine(), e.GetLinePos(), e.what()); }
-	catch(CTPPParserOperatorsMismatch & e) { fprintf(stderr, "ERROR: At line %d, pos. %d: expected %s, but found </%s>\n", e.GetLine(), e.GetLinePos(), e.Expected(), e.Found()); }
+    // Run program
+    VM oVM(&oSyscallFactory, 10240, 10240, iStepsLimit);
+    UINT_32 iIP = 0;
 
-	// CDT
-	catch(CDTTypeCastException  & e) { fprintf(stderr, "ERROR: Type Cast %s\n", e.what());                                    }
-	catch(CDTAccessException    & e) { fprintf(stderr, "ERROR: Array index out of bounds: %s\n", e.what());                   }
+    oVM.Init(&oVMMemoryCore, &oOutputCollector, &oLogger);
+    oVM.Run(&oVMMemoryCore, &oOutputCollector, iIP, oHash, &oLogger);
 
-	// Virtual machine
-	catch(IllegalOpcode         & e) { fprintf(stderr, "ERROR: Illegal opcode 0x%08X at 0x%08X\n", e.GetOpcode(), e.GetIP()); }
-	catch(InvalidSyscall        & e)
-	{
-		if (e.GetIP() != 0)
-		{
-			VMDebugInfo oVMDebugInfo(e.GetDebugInfo());
-			fprintf(stderr, "ERROR: %s at 0x%08X (Template file \"%s\", Line %d, Pos: %d)\n", e.what(), e.GetIP(), e.GetSourceName(), oVMDebugInfo.GetLine(), oVMDebugInfo.GetLinePos());
-		}
-		else
-		{
-			fprintf(stderr, "Unsupported syscall: \"%s\"\n", e.what());
-		}
-	}
-	catch(CodeSegmentOverrun    & e) { fprintf(stderr, "ERROR: %s at 0x%08X\n", e.what(),  e.GetIP());                        }
-	catch(StackOverflow         & e) { fprintf(stderr, "ERROR: Stack overflow at 0x%08X\n", e.GetIP());                       }
-	catch(StackUnderflow        & e) { fprintf(stderr, "ERROR: Stack underflow at 0x%08X\n", e.GetIP());                      }
-	catch(ExecutionLimitReached & e) { fprintf(stderr, "ERROR: Execution limit of %d step(s) reached at 0x%08X\n", iStepsLimit, e.GetIP()); }
-	catch(VMException           & e) { fprintf(stderr, "ERROR: VM generic exception: %s at 0x%08X\n", e.what(), e.GetIP()); }
+    iRetCode = EX_OK;
+  }
+  catch(CTPPParserSyntaxError       & e) { fprintf(stderr, "ERROR: At line %d, pos. %d: %s\n", e.GetLine(), e.GetLinePos(), e.what()); }
+  catch(CTPPParserOperatorsMismatch & e) { fprintf(stderr, "ERROR: At line %d, pos. %d: expected %s, but found </%s>\n", e.GetLine(), e.GetLinePos(), e.Expected(), e.Found()); }
 
-	// CTPP
-	catch(CTPPLogicError        & e) { fprintf(stderr, "ERROR: %s\n", e.what());                                              }
-	catch(CTPPUnixException     & e) { fprintf(stderr, "ERROR: I/O in %s: %s\n", e.what(), strerror(e.ErrNo()));              }
-	catch(CTPPException         & e) { fprintf(stderr, "ERROR: CTPP Generic exception: %s\n", e.what());                      }
+  // CDT
+  catch(CDTTypeCastException  & e) { fprintf(stderr, "ERROR: Type Cast %s\n", e.what());                                    }
+  catch(CDTAccessException    & e) { fprintf(stderr, "ERROR: Array index out of bounds: %s\n", e.what());                   }
 
-	catch(...)                             { fprintf(stderr, "ERROR: Bad thing happened.\n"); }
+  // Virtual machine
+  catch(IllegalOpcode         & e) { fprintf(stderr, "ERROR: Illegal opcode 0x%08X at 0x%08X\n", e.GetOpcode(), e.GetIP()); }
+  catch(InvalidSyscall        & e)
+  {
+    if (e.GetIP() != 0)
+    {
+      VMDebugInfo oVMDebugInfo(e.GetDebugInfo());
+      fprintf(stderr, "ERROR: %s at 0x%08X (Template file \"%s\", Line %d, Pos: %d)\n", e.what(), e.GetIP(), e.GetSourceName(), oVMDebugInfo.GetLine(), oVMDebugInfo.GetLinePos());
+    }
+    else
+    {
+      fprintf(stderr, "Unsupported syscall: \"%s\"\n", e.what());
+    }
+  }
+  catch(CodeSegmentOverrun    & e) { fprintf(stderr, "ERROR: %s at 0x%08X\n", e.what(),  e.GetIP());                        }
+  catch(StackOverflow         & e) { fprintf(stderr, "ERROR: Stack overflow at 0x%08X\n", e.GetIP());                       }
+  catch(StackUnderflow        & e) { fprintf(stderr, "ERROR: Stack underflow at 0x%08X\n", e.GetIP());                      }
+  catch(ExecutionLimitReached & e) { fprintf(stderr, "ERROR: Execution limit of %d step(s) reached at 0x%08X\n", iStepsLimit, e.GetIP()); }
+  catch(VMException           & e) { fprintf(stderr, "ERROR: VM generic exception: %s at 0x%08X\n", e.what(), e.GetIP()); }
 
-	// Destroy standard library
-	STDLibInitializer::DestroyLibrary(oSyscallFactory);
+  // CTPP
+  catch(CTPPLogicError        & e) { fprintf(stderr, "ERROR: %s\n", e.what());                                              }
+  catch(CTPPUnixException     & e) { fprintf(stderr, "ERROR: I/O in %s: %s\n", e.what(), strerror(e.ErrNo()));              }
+  catch(CTPPException         & e) { fprintf(stderr, "ERROR: CTPP Generic exception: %s\n", e.what());                      }
 
-	// make valgrind happy
-	fclose(stdin);
-	fclose(stdout);
-	fclose(stderr);
+  catch(...)                             { fprintf(stderr, "ERROR: Bad thing happened.\n"); }
 
-return iRetCode;
+  // Destroy standard library
+  STDLibInitializer::DestroyLibrary(oSyscallFactory);
+
+  // make valgrind happy
+  fclose(stdin);
+  fclose(stdout);
+  fclose(stderr);
+
+  return iRetCode;
 }
 // End.
 

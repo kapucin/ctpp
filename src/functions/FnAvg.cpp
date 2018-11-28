@@ -44,7 +44,7 @@ namespace CTPP // C++ Template Engine
 //
 FnAvg::FnAvg()
 {
-	;;
+  ;;
 }
 
 //
@@ -55,83 +55,83 @@ INT_32 FnAvg::Handler(CDT            * aArguments,
                       CDT            & oCDTRetVal,
                       Logger         & oLogger)
 {
-	// Need at least 2 args
-	if (iArgNum < 2)
-	{
-		oLogger.Emerg("Usage: AVG(flag, a[, b, ...])");
-		return -1;
-	}
+  // Need at least 2 args
+  if (iArgNum < 2)
+  {
+    oLogger.Emerg("Usage: AVG(flag, a[, b, ...])");
+    return -1;
+  }
 
-	// First Arg 1: destination type
-	const STLW::string & sWhat = aArguments[iArgNum - 1].GetString();
-	if (sWhat.length() == 0)
-	{
-		oLogger.Error("The first argument should be 'a', 'A', 'g', 'G', 'h', 'H', 'q' or 'Q', but is `%s`", sWhat.c_str());
-		return -1;
-	}
+  // First Arg 1: destination type
+  const STLW::string & sWhat = aArguments[iArgNum - 1].GetString();
+  if (sWhat.length() == 0)
+  {
+    oLogger.Error("The first argument should be 'a', 'A', 'g', 'G', 'h', 'H', 'q' or 'Q', but is `%s`", sWhat.c_str());
+    return -1;
+  }
 
-	// http://en.wikipedia.org/wiki/Average
-	switch (sWhat[0])
-	{
-		// Arithmetic
-		case 'A':
-		case 'a':
-			{
-				W_FLOAT  dSum = 0.0;
-				for(INT_32 iPos = iArgNum - 2; iPos >= 0 ; --iPos)
-				{
-					dSum += aArguments[iPos].GetFloat();
-				}
-				oCDTRetVal = dSum / (iArgNum - 1);
-			}
-			break;
+  // http://en.wikipedia.org/wiki/Average
+  switch (sWhat[0])
+  {
+    // Arithmetic
+    case 'A':
+    case 'a':
+      {
+        W_FLOAT  dSum = 0.0;
+        for(INT_32 iPos = iArgNum - 2; iPos >= 0 ; --iPos)
+        {
+          dSum += aArguments[iPos].GetFloat();
+        }
+        oCDTRetVal = dSum / (iArgNum - 1);
+      }
+      break;
 
-		// Geometric
-		case 'G':
-		case 'g':
-			{
-				W_FLOAT  dSum = 1.0;
-				for(INT_32 iPos = iArgNum - 2; iPos >= 0 ; --iPos)
-				{
-					dSum *= aArguments[iPos].GetFloat();
-				}
-				oCDTRetVal = pow(dSum, 1.0 / (iArgNum - 1));
-			}
-			break;
+    // Geometric
+    case 'G':
+    case 'g':
+      {
+        W_FLOAT  dSum = 1.0;
+        for(INT_32 iPos = iArgNum - 2; iPos >= 0 ; --iPos)
+        {
+          dSum *= aArguments[iPos].GetFloat();
+        }
+        oCDTRetVal = pow(dSum, 1.0 / (iArgNum - 1));
+      }
+      break;
 
-		// Harmonic
-		case 'H':
-		case 'h':
-			{
-				W_FLOAT  dSum = 0.0;
-				for(INT_32 iPos = iArgNum - 2; iPos >= 0 ; --iPos)
-				{
-					const W_FLOAT dTMP = aArguments[iPos].GetFloat();
-					if (dTMP == 0.0) { dSum = 0; break; }
-					dSum += 1.0 / dTMP;
-				}
-				oCDTRetVal = 1.0 * (iArgNum - 1) / dSum;
-			}
-			break;
+    // Harmonic
+    case 'H':
+    case 'h':
+      {
+        W_FLOAT  dSum = 0.0;
+        for(INT_32 iPos = iArgNum - 2; iPos >= 0 ; --iPos)
+        {
+          const W_FLOAT dTMP = aArguments[iPos].GetFloat();
+          if (dTMP == 0.0) { dSum = 0; break; }
+          dSum += 1.0 / dTMP;
+        }
+        oCDTRetVal = 1.0 * (iArgNum - 1) / dSum;
+      }
+      break;
 
-		// Quadratic
-		case 'Q':
-		case 'q':
-			{
-				W_FLOAT  dSum = 0.0;
-				for(INT_32 iPos = iArgNum - 1; iPos >= 0 ; --iPos)
-				{
-					const W_FLOAT dTMP = aArguments[iPos].GetFloat();
-					dSum += dTMP * dTMP;
-				}
-				oCDTRetVal = sqrt(dSum / (iArgNum - 1));
-			}
-			break;
+    // Quadratic
+    case 'Q':
+    case 'q':
+      {
+        W_FLOAT  dSum = 0.0;
+        for(INT_32 iPos = iArgNum - 1; iPos >= 0 ; --iPos)
+        {
+          const W_FLOAT dTMP = aArguments[iPos].GetFloat();
+          dSum += dTMP * dTMP;
+        }
+        oCDTRetVal = sqrt(dSum / (iArgNum - 1));
+      }
+      break;
 
-		default:
-			oLogger.Error("The first argument should be 'a', 'A', 'g', 'G', 'h', 'H', 'q' or 'Q', but is `%s`", sWhat.c_str());
-			return -1;
-	}
+    default:
+      oLogger.Error("The first argument should be 'a', 'A', 'g', 'G', 'h', 'H', 'q' or 'Q', but is `%s`", sWhat.c_str());
+      return -1;
+  }
 
 return 0;
 }
