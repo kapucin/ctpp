@@ -38,41 +38,42 @@
 #include <sysexits.h>
 #endif
 
-
 using namespace CTPP;
 
 int main(void)
 {
-	StaticText oStaticText;
+  StaticText oStaticText;
 
-	oStaticText.StoreData("Test",     4);
-	oStaticText.StoreData("really",   6);
-	oStaticText.StoreData(" passed?", 8);
-	oStaticText.StoreData("1234",     4);
+  oStaticText.StoreData("Test",     4);
+  oStaticText.StoreData("really",   6);
+  oStaticText.StoreData(" passed?", 8);
+  oStaticText.StoreData("1234",     4);
 
-	fprintf(stderr, "Stored text: ");
-	UINT_32 iDataSize = 0;
-	CCHAR_P sData = oStaticText.GetData(0, iDataSize);
-	fwrite(sData, iDataSize, 1, stderr);
+  fprintf(stderr, "Stored text: ");
+  UINT_32 iDataSize = 0;
+  CCHAR_P sData = oStaticText.GetData(0, iDataSize);
+  fwrite(sData, iDataSize, 1, stderr);
 
-	sData = oStaticText.GetData(2, iDataSize);
-	fwrite(sData, iDataSize, 1, stderr);
+  sData = oStaticText.GetData(2, iDataSize);
+  fwrite(sData, iDataSize, 1, stderr);
 
-	sData = oStaticText.GetData(6, iDataSize);
-	if (sData == NULL) { fprintf(stderr, "\nNon-existent text segment: OK\nYet another stored text: "); }
-	else               { return EX_SOFTWARE; }
+  sData = oStaticText.GetData(6, iDataSize);
 
-	sData = oStaticText.GetData(1, iDataSize);
-	fwrite(sData, iDataSize, 1, stderr);
+  if (sData == NULL) {
+    fprintf(stderr, "\nNon-existent text segment: OK\nYet another stored text: ");
+  } else {
+    return EX_SOFTWARE;
+  }
 
-	fprintf(stderr, "\n");
+  sData = oStaticText.GetData(1, iDataSize);
+  fwrite(sData, iDataSize, 1, stderr);
 
-	// make valgrind happy
-	fclose(stdin);
-	fclose(stdout);
-	fclose(stderr);
+  fprintf(stderr, "\n");
 
-return EX_OK;
+  // make valgrind happy
+  fclose(stdin);
+  fclose(stdout);
+  fclose(stderr);
+
+  return EX_OK;
 }
-// End.
-

@@ -113,8 +113,7 @@ public:
 	  @param iIMaxDataSize - initial text segment size
 	  @param iIMaxDataOffsetsSize - initial index size
 	*/
-	StaticText(const UINT_32  iIMaxDataSize = 0,
-	           const UINT_32  iIMaxDataOffsetsSize = 0);
+	StaticText(const UINT_32 iIMaxDataSize = 0, const UINT_32 iIMaxDataOffsetsSize = 0);
 
 	/**
 	  @brief Constructor
@@ -123,10 +122,11 @@ public:
 	  @param iMaxDataSize - max. data size
 	  @param iMaxDataOffsetsSize - max size of data offsets array
 	*/
-	StaticText(CCHAR_P                sData,
-	           const TextDataIndex  * aDataOffsets,
-	           const UINT_32          iMaxDataSize,
-	           const UINT_32          iMaxDataOffsetsSize);
+	StaticText(
+      CCHAR_P sData,
+      const TextDataIndex* aDataOffsets,
+      const UINT_32 iMaxDataSize,
+	    const UINT_32 iMaxDataOffsetsSize);
 
 	/**
 	  @brief Store data
@@ -156,6 +156,7 @@ public:
 	  @brief A destructor
 	*/
 	~StaticText() throw();
+
 private:
 	friend class VMDumper;
 

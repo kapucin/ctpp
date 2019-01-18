@@ -41,37 +41,43 @@ namespace CTPP // C++ Template Engine
 //
 // Constructor
 //
-ReducedStaticText::ReducedStaticText(CCHAR_P                sIData,
-                                     const UINT_32          iIUsedDataOffsetsSize,
-                                     const TextDataIndex  * aIDataOffsets): sData(sIData),
-                                                                            iUsedDataOffsetsSize(iIUsedDataOffsetsSize),
-                                                                            aDataOffsets(aIDataOffsets)
+ReducedStaticText::ReducedStaticText(
+    CCHAR_P sIData,
+    const UINT_32 iIUsedDataOffsetsSize,
+    const TextDataIndex* aIDataOffsets)
+  :
+    sData(sIData),
+    iUsedDataOffsetsSize(iIUsedDataOffsetsSize),
+    aDataOffsets(aIDataOffsets)
 {
-	;;
 }
 
 //
 // GetData by ID
 //
-CCHAR_P ReducedStaticText::GetData(const UINT_32    iDataId,
-                                   UINT_32        & iDataSize) const
+CCHAR_P ReducedStaticText::GetData(const UINT_32 iDataId, UINT_32& iDataSize) const
 {
-	if (iDataId >= iUsedDataOffsetsSize) { return NULL; }
-
-	iDataSize = aDataOffsets[iDataId].length;
-
-return &sData[aDataOffsets[iDataId].offset];
+  if (iDataId >= iUsedDataOffsetsSize) {
+    return NULL;
+  }
+  iDataSize = aDataOffsets[iDataId].length;
+  return &sData[aDataOffsets[iDataId].offset];
 }
 
 //
 // Get number of stored records
 //
-UINT_32 ReducedStaticText::GetRecordsNum() const { return iUsedDataOffsetsSize; }
+UINT_32 ReducedStaticText::GetRecordsNum() const
+{
+  return iUsedDataOffsetsSize;
+}
 
 //
 // A destructor
 //
-ReducedStaticText::~ReducedStaticText() throw() { ;; }
+ReducedStaticText::~ReducedStaticText() throw()
+{
+}
 
 // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -81,36 +87,48 @@ ReducedStaticText::~ReducedStaticText() throw() { ;; }
 //
 // Constructor
 //
-StaticText::StaticText(const UINT_32  iIMaxDataSize,
-                       const UINT_32  iIMaxDataOffsetsSize): iMaxDataSize(iIMaxDataSize),
-                                                             iMaxDataOffsetsSize(iIMaxDataOffsetsSize),
-                                                             iUsedDataSize(0),
-                                                             iUsedDataOffsetsSize(0),
-                                                             sData(NULL),
-                                                             aDataOffsets(NULL)
+StaticText::StaticText(const UINT_32 iIMaxDataSize, const UINT_32 iIMaxDataOffsetsSize)
+  :
+    iMaxDataSize(iIMaxDataSize),
+    iMaxDataOffsetsSize(iIMaxDataOffsetsSize),
+    iUsedDataSize(0),
+    iUsedDataOffsetsSize(0),
+    sData(NULL),
+    aDataOffsets(NULL)
 {
-	if (iMaxDataSize != 0)        { sData        = (CHAR_P)malloc(iMaxDataSize);                 }
-	if (iMaxDataOffsetsSize != 0) { aDataOffsets = (TextDataIndex *)malloc(iMaxDataOffsetsSize); }
+  if (iMaxDataSize != 0) {
+    sData = (CHAR_P) malloc(iMaxDataSize);
+  }
+  if (iMaxDataOffsetsSize != 0) {
+    aDataOffsets = (TextDataIndex *) malloc(iMaxDataOffsetsSize);
+  }
 }
 
 //
 // Constructor
 //
-StaticText::StaticText(CCHAR_P                sIData,
-                       const TextDataIndex  * aIDataOffsets,
-                       const UINT_32          iIMaxDataSize,
-                       const UINT_32          iIMaxDataOffsetsSize): iMaxDataSize(iIMaxDataSize),
-                                                                     iMaxDataOffsetsSize(iIMaxDataOffsetsSize),
-                                                                     iUsedDataSize(iIMaxDataSize),
-                                                                     iUsedDataOffsetsSize(iIMaxDataOffsetsSize),
-                                                                     sData(NULL),
-                                                                     aDataOffsets(NULL)
+StaticText::StaticText(
+    CCHAR_P sIData,
+    const TextDataIndex* aIDataOffsets,
+    const UINT_32 iIMaxDataSize,
+    const UINT_32 iIMaxDataOffsetsSize)
+  :
+    iMaxDataSize(iIMaxDataSize),
+    iMaxDataOffsetsSize(iIMaxDataOffsetsSize),
+    iUsedDataSize(iIMaxDataSize),
+    iUsedDataOffsetsSize(iIMaxDataOffsetsSize),
+    sData(NULL),
+    aDataOffsets(NULL)
 {
-	if (iMaxDataSize != 0)        { sData        = (CHAR_P)malloc(iMaxDataSize); }
-	if (iMaxDataOffsetsSize != 0) { aDataOffsets = (TextDataIndex *)malloc(iMaxDataOffsetsSize * sizeof(TextDataIndex)); }
+  if (iMaxDataSize != 0) {
+    sData = (CHAR_P) malloc(iMaxDataSize);
+  }
+  if (iMaxDataOffsetsSize != 0) {
+    aDataOffsets = (TextDataIndex *) malloc(iMaxDataOffsetsSize * sizeof(TextDataIndex));
+  }
 
-	memcpy(sData, sIData, iMaxDataSize);
-	memcpy(aDataOffsets, aIDataOffsets, iMaxDataOffsetsSize * sizeof(TextDataIndex));
+  memcpy(sData, sIData, iMaxDataSize);
+  memcpy(aDataOffsets, aIDataOffsets, iMaxDataOffsetsSize * sizeof(TextDataIndex));
 }
 
 //
@@ -118,58 +136,55 @@ StaticText::StaticText(CCHAR_P                sIData,
 //
 UINT_32 StaticText::StoreData(CCHAR_P sStoreData, const UINT_32  iDataLength)
 {
-	// New data offset
-	UINT_32 iDataOffset = iUsedDataSize + iDataLength;
+  // New data offset
+  UINT_32 iDataOffset = iUsedDataSize + iDataLength;
 
-	// Resize data storage
-	if (iDataOffset >= iMaxDataSize)
-	{
-		iMaxDataSize = iDataOffset * 2 + 1;
-		CHAR_P sTMP = (CHAR_P)malloc(iMaxDataSize);
+  // Resize data storage
+  if (iDataOffset >= iMaxDataSize) {
+    iMaxDataSize = iDataOffset * 2 + 1;
+    CHAR_P sTMP = (CHAR_P) malloc(iMaxDataSize);
 
-		if (sData != NULL)
-		{
-			memcpy(sTMP, sData, iUsedDataSize);
-			free(sData);
-		}
-		sData = sTMP;
-	}
+    if (sData != NULL) {
+      memcpy(sTMP, sData, iUsedDataSize);
+      free(sData);
+    }
+    sData = sTMP;
+  }
 
-	// Copy data
-	memcpy(sData + iUsedDataSize, sStoreData, iDataLength);
-	sData[iDataOffset] = '\0';
+  // Copy data
+  memcpy(sData + iUsedDataSize, sStoreData, iDataLength);
+  sData[iDataOffset] = '\0';
 
-	if (iUsedDataOffsetsSize == iMaxDataOffsetsSize)
-	{
-		iMaxDataOffsetsSize = iMaxDataOffsetsSize * 2 + 1;
-		TextDataIndex * aTMP = (TextDataIndex *)malloc(iMaxDataOffsetsSize * sizeof(TextDataIndex));
-		if (aDataOffsets != NULL)
-		{
-			memcpy(aTMP, aDataOffsets, iUsedDataOffsetsSize * sizeof(TextDataIndex));
-			free(aDataOffsets);
-		}
-		aDataOffsets = aTMP;
-	}
+  if (iUsedDataOffsetsSize == iMaxDataOffsetsSize) {
+    iMaxDataOffsetsSize = iMaxDataOffsetsSize * 2 + 1;
+    TextDataIndex * aTMP = (TextDataIndex *) malloc(iMaxDataOffsetsSize * sizeof(TextDataIndex));
 
-	aDataOffsets[iUsedDataOffsetsSize].offset = iUsedDataSize;
-	aDataOffsets[iUsedDataOffsetsSize].length = iDataLength;
+    if (aDataOffsets != NULL) {
+      memcpy(aTMP, aDataOffsets, iUsedDataOffsetsSize * sizeof(TextDataIndex));
+      free(aDataOffsets);
+    }
+    aDataOffsets = aTMP;
+  }
 
-	iUsedDataSize = iDataOffset + 1;
+  aDataOffsets[iUsedDataOffsetsSize].offset = iUsedDataSize;
+  aDataOffsets[iUsedDataOffsetsSize].length = iDataLength;
 
-return iUsedDataOffsetsSize++;
+  iUsedDataSize = iDataOffset + 1;
+
+  return iUsedDataOffsetsSize++;
 }
 
 //
 // GetData by ID
 //
-CCHAR_P StaticText::GetData(const UINT_32    iDataId,
-                            UINT_32        & iDataSize) const
+CCHAR_P StaticText::GetData(const UINT_32 iDataId, UINT_32& iDataSize) const
 {
-	if (iDataId >= iUsedDataOffsetsSize) { return NULL; }
+  if (iDataId >= iUsedDataOffsetsSize) {
+    return NULL;
+  }
 
-	iDataSize = aDataOffsets[iDataId].length;
-
-return &sData[aDataOffsets[iDataId].offset];
+  iDataSize = aDataOffsets[iDataId].length;
+  return &sData[aDataOffsets[iDataId].offset];
 }
 
 //
@@ -182,8 +197,8 @@ UINT_32 StaticText::GetRecordsNum() const { return iUsedDataOffsetsSize; }
 //
 StaticText::~StaticText() throw()
 {
-	free(sData);
-	free(aDataOffsets);
+  free(sData);
+  free(aDataOffsets);
 }
 
 } // namespace CTPP
