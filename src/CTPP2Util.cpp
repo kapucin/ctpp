@@ -36,6 +36,8 @@
 
 #include <stdio.h>
 
+#pragma GCC diagnostic ignored "-Wformat-truncation"
+
 namespace CTPP // C++ Template Engine
 {
 

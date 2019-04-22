@@ -74,7 +74,7 @@ int main(int argc, char ** argv)
   // Load standard library
   STDLibInitializer::InitLibrary(oSyscallFactory);
   // Output
-  std::auto_ptr<FileOutputCollector> pOutputCollector(new FileOutputCollector(stdout));
+  std::unique_ptr<FileOutputCollector> pOutputCollector(new FileOutputCollector(stdout));
 
   if (argc >= 4 && strncmp(argv[3], "0", strlen(argv[3])) != 0) {
     pOutputCollector.reset(new FileOutputCollector(argv[3], "w+"));

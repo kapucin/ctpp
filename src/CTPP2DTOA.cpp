@@ -1319,6 +1319,7 @@ char * ctpp_dtoa(AllocatedBlock ** aBlocks, Bigint ** freelist, double dd, int m
     case 2:
       leftright = 0;
       /* no break */
+      __attribute__ ((fallthrough));
     case 4:
       if (ndigits <= 0)
         ndigits = 1;
@@ -1327,6 +1328,7 @@ char * ctpp_dtoa(AllocatedBlock ** aBlocks, Bigint ** freelist, double dd, int m
     case 3:
       leftright = 0;
       /* no break */
+      __attribute__ ((fallthrough));
     case 5:
       i = ndigits + k + 1;
       ilim = i;
