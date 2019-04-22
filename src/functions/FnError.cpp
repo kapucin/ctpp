@@ -37,35 +37,35 @@
 namespace CTPP // C++ Template Engine
 {
 
-//
 // Constructor
 //
 FnError::FnError()
 {
-	;;
 }
 
-//
 // Handler
 //
-INT_32 FnError::Handler(CDT            * aArguments,
-                        const UINT_32    iArgNum,
-                        CDT            & oCDTRetVal,
-                        Logger         & oLogger)
+INT_32 FnError::Handler(
+    CDT            * aArguments,
+    const UINT_32    iArgNum,
+    CDT            & oCDTRetVal,
+    Logger         & oLogger)
 {
-	oLogger.Emerg("Function ERROR() always produces runtime error");
-return -1;
+  (void) aArguments; (void) iArgNum; (void) oCDTRetVal;
+
+  oLogger.Emerg("Function ERROR() always produces runtime error");
+  return -1;
 }
 
-//
 // Get function name
 //
-CCHAR_P FnError::GetName() const { return "error"; }
+CCHAR_P FnError::GetName() const
+{
+  return "error";
+}
 
-//
-// A destructor
-//
-FnError::~FnError() throw() { ;; }
+FnError::~FnError() throw()
+{
+}
 
 } // namespace CTPP
-// End.

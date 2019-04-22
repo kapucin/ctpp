@@ -38,51 +38,52 @@
 namespace CTPP // C++ Template Engine
 {
 
-//
 // Constructor
 //
-FnEmitter::FnEmitter(): pCDT(NULL)
+FnEmitter::FnEmitter()
+  :
+    pCDT(NULL)
 {
-	;;
 }
 
-//
 // Pre-execution handler setup
 //
-INT_32 FnEmitter::PreExecuteSetup(OutputCollector          & oCollector,
-                                  CDT                      & oCDT,
-                                  const ReducedStaticText  & oSyscalls,
-                                  const ReducedStaticData  & oStaticData,
-                                  const ReducedStaticText  & oStaticText,
-                                  Logger                   & oLogger)
+INT_32 FnEmitter::PreExecuteSetup(
+    OutputCollector          & oCollector,
+    CDT                      & oCDT,
+    const ReducedStaticText  & oSyscalls,
+    const ReducedStaticData  & oStaticData,
+    const ReducedStaticText  & oStaticText,
+    Logger                   & oLogger)
 {
+  (void) oCollector; (void) oSyscalls; (void) oStaticData; (void) oStaticText; (void) oLogger;
 	pCDT = &oCDT;
-
-return 0;
+  return 0;
 }
 
 //
 // Handler
 //
-INT_32 FnEmitter::Handler(CDT            * aArguments,
-                          const UINT_32    iArgNum,
-                          CDT            & oCDTRetVal,
-                          Logger         & oLogger)
+INT_32 FnEmitter::Handler(
+    CDT            * aArguments,
+    const UINT_32    iArgNum,
+    CDT            & oCDTRetVal,
+    Logger         & oLogger)
 {
+  (void) aArguments; (void) iArgNum; (void) oLogger;
 	oCDTRetVal = *pCDT;
-
-return 0;
+  return 0;
 }
 
-//
 // Get function name
 //
-CCHAR_P FnEmitter::GetName() const { return CTPP2_INT_HANDLER_PREFIX "_emitter"; }
+CCHAR_P FnEmitter::GetName() const
+{
+  return CTPP2_INT_HANDLER_PREFIX "_emitter";
+}
 
-//
-// A destructor
-//
-FnEmitter::~FnEmitter() throw() { ;; }
+FnEmitter::~FnEmitter() throw()
+{
+}
 
 } // namespace CTPP
-// End.

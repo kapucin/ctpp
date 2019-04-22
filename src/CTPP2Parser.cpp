@@ -242,26 +242,31 @@ CTPP2Parser::CTPP2Keyword CTPP2Parser::aKeywords [] =
 	{ NULL,             0, UNDEF }
 };
 
-//
 // Constructor
 //
-CTPP2Parser::CTPP2Parser(CTPP2SourceLoader   * pISourceLoader,
-                         CTPP2Compiler       * pICTPP2Compiler,
-                         const::STLW::string  & sISourceName,
-                         const bool          & bIInForeach,
-                         const INT_32          iIRecursionLevel): pSourceLoader(pISourceLoader),
-                                                                  pCTPP2Compiler(pICTPP2Compiler),
-                                                                  oSyscalls(pCTPP2Compiler -> oSyscalls),
-                                                                  oStaticData(pCTPP2Compiler -> oStaticData),
-                                                                  oStaticText(pCTPP2Compiler -> oStaticText),
-                                                                  sSourceName(sISourceName),
-                                                                  bInForeach(bIInForeach),
-                                                                  iRecursionLevel(iIRecursionLevel),
-                                                                  bInsideComplexVariable(false),
-                                                                  bVerboseMode(false),
-                                                                  bInBlock(false)
+CTPP2Parser::CTPP2Parser(
+    CTPP2SourceLoader* pISourceLoader,
+    CTPP2Compiler* pICTPP2Compiler,
+    const::STLW::string& sISourceName,
+    const bool& bIInForeach,
+    const INT_32 iIRecursionLevel)
+  :
+    pSourceLoader(pISourceLoader),
+    pCTPP2Compiler(pICTPP2Compiler),
+    oSyscalls(pCTPP2Compiler->oSyscalls),
+    oStaticData(pCTPP2Compiler->oStaticData),
+    oStaticText(pCTPP2Compiler->oStaticText),
+    sSourceName(sISourceName),
+    bInForeach(bIInForeach),
+    iRecursionLevel(iIRecursionLevel),
+    bInsideComplexVariable(false),
+    bVerboseMode(false),
+    bInBlock(false)
 {
-	iSourceNameId = pCTPP2Compiler -> StoreSourceName(sSourceName.c_str(), sSourceName.size());
+  iSourceNameId = pCTPP2Compiler -> StoreSourceName(sSourceName.c_str(), sSourceName.size());
+  (void) oSyscalls;
+  (void) oStaticData;
+  (void) oStaticText;
 }
 
 //

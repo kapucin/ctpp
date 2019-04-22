@@ -34,35 +34,43 @@
 namespace CTPP // C++ Template Engine
 {
 
-//
 // Pre-execution handler setup
 //
-INT_32 SyscallHandler::PreExecuteSetup(OutputCollector          & oCollector,
-                                       CDT                      & oCDT,
-                                       const ReducedStaticText  & oSyscalls,
-                                       const ReducedStaticData  & oStaticData,
-                                       const ReducedStaticText  & oStaticText,
-                                       Logger                   & oLogger) { return 0; }
+INT_32 SyscallHandler::PreExecuteSetup(
+    OutputCollector          & oCollector,
+    CDT                      & oCDT,
+    const ReducedStaticText  & oSyscalls,
+    const ReducedStaticData  & oStaticData,
+    const ReducedStaticText  & oStaticText,
+    Logger                   & oLogger)
+{
+  (void) oCollector; (void) oCDT; (void) oSyscalls; (void) oStaticData; (void) oStaticText; (void) oLogger;
+  return 0;
+}
 
-//
 // Global Handler initialization
 //
-INT_32 SyscallHandler::InitHandler(CDT & oCDT) { return 0; }
+INT_32 SyscallHandler::InitHandler(CDT & oCDT)
+{
+  (void) oCDT;
+  return 0;
+}
 
-//
 // Get API version
 //
 INT_32 SyscallHandler::GetVersion() const { return 0; }
 
-//
 // Handler resources destructor
 //
-INT_32 SyscallHandler::DestroyHandler(CDT & oCDT) throw() { return 0; }
+INT_32 SyscallHandler::DestroyHandler(CDT & oCDT) throw()
+{
+  (void) oCDT;
+  return 0;
+}
 
-//
-// A destructor
-//
-SyscallHandler::~SyscallHandler() throw() { ;; }
+SyscallHandler::~SyscallHandler() throw() 
+{
+}
 
 } // namespace CTPP
 // End.

@@ -459,7 +459,7 @@ return oVMOpcodeCollector.Insert(CreateInstruction(RET, iDepth, iDebugInfo));
 void CTPP2Compiler::PrepareCallBlock(const VMDebugInfo & oDebugInfo)
 {
 	COMPILER_REPORTER("PrepareCallBlock");
-
+  (void) oDebugInfo;
 	vSavedStackDepths.push_back(iStackDepth);
 }
 
@@ -575,6 +575,7 @@ INT_32 CTPP2Compiler::StoreScopedVariable(CCHAR_P              szNS,
 {
 	COMPILER_REPORTER("StoreScopedVariable");
 
+  (void) oDebugInfo;
 	STLW::string sNamespace = STLW::string(CTPP2_FOREACH_ITER_PREFIX) + STLW::string(szNS, iNSLength);
 	INT_32 iSymbolId = oSymbolTable.AddSymbol(sNamespace.c_str(), sNamespace.size(), SymbolTableRec(iStackDepth, iScopeNumber));
 
@@ -592,6 +593,8 @@ INT_32 CTPP2Compiler::PushScopedVariable(CCHAR_P              szName,
 {
 	COMPILER_REPORTER("PushScopedVariable");
 
+  (void) szName;
+  (void) iNameLength;
 	// Check symbol table
 	STLW::string sNamespace = STLW::string(CTPP2_FOREACH_ITER_PREFIX) + STLW::string(szFullVariable, iFullVariableLength);
 	const SymbolTable<SymbolTableRec>::SymbolRecord<SymbolTableRec> * pRecord = oSymbolTable.GetSymbol(sNamespace.c_str(), sNamespace.size());

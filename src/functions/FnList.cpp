@@ -54,14 +54,20 @@ FnList::FnList()
 //
 // Handler
 //
-INT_32 FnList::Handler(CDT            * aArguments,
-                        const UINT_32    iArgNum,
-                        CDT            & oCDTRetVal,
-                        Logger         & oLogger)
+INT_32 FnList::Handler(
+    CDT* aArguments,
+    const UINT_32 iArgNum,
+    CDT& oCDTRetVal,
+    Logger& oLogger)
 {
-    oCDTRetVal = CDT(CDT::ARRAY_VAL);
-    for (INT_32 iI = iArgNum - 1; iI >= 0; --iI) { oCDTRetVal.PushBack(aArguments[iI]); }
-return 0;
+  (void) oLogger;
+
+  oCDTRetVal = CDT(CDT::ARRAY_VAL);
+
+  for (INT_32 iI = iArgNum - 1; iI >= 0; --iI) {
+    oCDTRetVal.PushBack(aArguments[iI]);
+  }
+  return 0;
 }
 
 //

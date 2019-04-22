@@ -329,15 +329,18 @@ static void FmtInt(StringBuffer        & oBuffer,
 //
 // Scientific
 //
-static void FmtSci(StringBuffer       & oBuffer,
-                   const CDT          & oCurrentArgument,
-                   const UINT_32        iFmtFlags,
-                   const eFmtLengths  & oFmtLengths,
-                   const CHAR_8         chExponentSymbol,
-                   INT_32               iWidth,
-                   INT_32               iPrecision,
-                   CHAR_8               chPadSymbol)
+static void FmtSci(
+    StringBuffer& oBuffer,
+    const CDT& oCurrentArgument,
+    const UINT_32 iFmtFlags,
+    const eFmtLengths& oFmtLengths,
+    const CHAR_8 chExponentSymbol,
+    INT_32 iWidth,
+    INT_32 iPrecision,
+    CHAR_8 chPadSymbol)
 {
+  (void) oFmtLengths;
+  (void) chPadSymbol;
 	using namespace CTPP;
 
 	/*

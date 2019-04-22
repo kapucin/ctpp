@@ -36,42 +36,39 @@
 namespace CTPP // C++ Template Engine
 {
 
-//
-// Constructor
-//
-FnVersion::FnVersion() { ;; }
-
-//
-// Handler
-//
-INT_32 FnVersion::Handler(CDT            * aArguments,
-                          const UINT_32    iArgNum,
-                          CDT            & oCDTRetVal,
-                          Logger         & oLogger)
+FnVersion::FnVersion()
 {
-	if (iArgNum == 1 && strcasecmp("full", aArguments[0].GetString().c_str()) == 0)
-	{
-		oCDTRetVal = "Engine: CTPP2 engine v" CTPP_VERSION " (" CTPP_IDENT "), copyright (c) 2004 - 2012 CTPP Dev. Team;\n"
-		             "RuntimeLibrary: CTPP Standard Library v" CTPP_VERSION " (" CTPP_IDENT "), copyright (c) 2007 - 2012 CTPP Dev. Team;\n"
-		             "License: BSD-like, see " CTPP_MASTER_SITE_URL ";";
-	}
-	else
-	{
-		oCDTRetVal = "CTPP2 engine v" CTPP_VERSION " (" CTPP_IDENT "), copyright (c) 2004 - 2012 CTPP Dev. Team";
-	}
-
-return 0;
 }
 
+// Handler
 //
+INT_32 FnVersion::Handler(
+    CDT* aArguments,
+    const UINT_32 iArgNum,
+    CDT& oCDTRetVal,
+    Logger& oLogger)
+{
+  (void) oLogger;
+
+  if (iArgNum == 1 && strcasecmp("full", aArguments[0].GetString().c_str()) == 0) {
+    oCDTRetVal = "Engine: CTPP2 engine v" CTPP_VERSION " (" CTPP_IDENT "), copyright (c) 2004 - 2012 CTPP Dev. Team;\n"
+      "RuntimeLibrary: CTPP Standard Library v" CTPP_VERSION " (" CTPP_IDENT "), copyright (c) 2007 - 2012 CTPP Dev. Team;\n"
+      "License: BSD-like, see " CTPP_MASTER_SITE_URL ";";
+  } else {
+    oCDTRetVal = "CTPP2 engine v" CTPP_VERSION " (" CTPP_IDENT "), copyright (c) 2004 - 2012 CTPP Dev. Team";
+  }
+  return 0;
+}
+
 // Get function name
 //
-CCHAR_P FnVersion::GetName() const { return "version"; }
+CCHAR_P FnVersion::GetName() const
+{
+  return "version";
+}
 
-//
-// A destructor
-//
-FnVersion::~FnVersion() throw() { ;; }
+FnVersion::~FnVersion() throw()
+{
+}
 
 } // namespace CTPP
-// End.

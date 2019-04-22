@@ -47,38 +47,38 @@
 namespace CTPP // C++ Template Engine
 {
 
-//
 // Constructor
 //
 FnHostname::FnHostname()
 {
-	CHAR_8 szHostname[HOST_NAME_MAX + 1];
+  CHAR_8 szHostname[HOST_NAME_MAX + 1];
 
-	INT_32 iRC = gethostname(szHostname, HOST_NAME_MAX);
+  INT_32 iRC = gethostname(szHostname, HOST_NAME_MAX);
 
-	if (iRC == 0) { sHostName.assign(szHostname); }
-	else          { sHostName.assign("unknown");  }
+  if (iRC == 0) { sHostName.assign(szHostname); }
+  else          { sHostName.assign("unknown");  }
 }
 
 //
 // Handler
 //
-INT_32 FnHostname::Handler(CDT            * aArguments,
-                          const UINT_32    iArgNum,
-                          CDT            & oCDTRetVal,
-                          Logger         & oLogger)
+INT_32 FnHostname::Handler(
+    CDT            * aArguments,
+    const UINT_32    iArgNum,
+    CDT            & oCDTRetVal,
+    Logger         & oLogger)
 {
-	// At least one argument need
-	if (iArgNum != 0)
-	{
-		oLogger.Emerg("Usage: HOSTNAME()");
-		return -1;
-	}
+  (void) aArguments;
 
-	// Set default value from second argument, if need
-	oCDTRetVal = sHostName;
+  // At least one argument need
+  if (iArgNum != 0) {
+    oLogger.Emerg("Usage: HOSTNAME()");
+    return -1;
+  }
 
-return 0;
+  // Set default value from second argument, if need
+  oCDTRetVal = sHostName;
+  return 0;
 }
 
 //

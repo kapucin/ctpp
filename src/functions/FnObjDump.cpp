@@ -50,33 +50,34 @@ FnObjDump::FnObjDump(): pCDT(NULL)
 //
 // Pre-execution handler setup
 //
-INT_32 FnObjDump::PreExecuteSetup(OutputCollector          & oCollector,
-                                  CDT                      & oCDT,
-                                  const ReducedStaticText  & oSyscalls,
-                                  const ReducedStaticData  & oStaticData,
-                                  const ReducedStaticText  & oStaticText,
-                                  Logger                   & oLogger)
+INT_32 FnObjDump::PreExecuteSetup(
+    OutputCollector          & oCollector,
+    CDT                      & oCDT,
+    const ReducedStaticText  & oSyscalls,
+    const ReducedStaticData  & oStaticData,
+    const ReducedStaticText  & oStaticText,
+    Logger                   & oLogger)
 {
+  (void) oCollector; (void) oSyscalls; (void) oStaticData; (void) oStaticText; (void) oLogger;
   pCDT = &oCDT;
-
-return 0;
+  return 0;
 }
 
 //
 // Handler
 //
-INT_32 FnObjDump::Handler(CDT            * aArguments,
-                          const UINT_32    iArgNum,
-                          CDT            & oCDTRetVal,
-                          Logger         & oLogger)
+INT_32 FnObjDump::Handler(
+    CDT            * aArguments,
+    const UINT_32    iArgNum,
+    CDT            & oCDTRetVal,
+    Logger         & oLogger)
 {
-  if (iArgNum == 0)
-  {
+  (void) oLogger;
+
+  if (iArgNum == 0) {
     oCDTRetVal = "Global data object:\n";
     oCDTRetVal.Append(pCDT -> Dump(0, true));
-  }
-  else
-  {
+  } else {
     oCDTRetVal = "";
     // Temp
     CHAR_8 szBuffer[CTPP_ESCAPE_BUFFER_LEN + 1];

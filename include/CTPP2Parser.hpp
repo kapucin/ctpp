@@ -1,4 +1,4 @@
-/*-
+/*
  * Copyright (c) 2004 - 2011 CTPP Team
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,9 +37,9 @@
 #include "CDT.hpp"
 
 /**
-  @file CTPP2Parser.hpp
-  @brief CTPP2 syntax parser
-*/
+ * @file CTPP2Parser.hpp
+ * @brief CTPP2 syntax parser
+ */
 
 namespace CTPP // C++ Template Engine
 {
@@ -84,9 +84,10 @@ public:
 	  @brief A destructor
 	*/
 	~CTPP2Parser() throw();
-private:
-	typedef STLW::map<STLW::string, UINT_32> BlockArgMapType;
 
+private:
+
+	typedef STLW::map<STLW::string, UINT_32> BlockArgMapType;
 	typedef STLW::map<STLW::string, UINT_32> BlockArgSizeMapType;
 
 	enum eCTPP2Operator { UNDEF        = 0,
@@ -153,6 +154,7 @@ private:
 		/** keyword corresponding operator */
 		eCTPP2Operator   keyword_operator;
 	};
+
 	/** Keywords table */
 	static CTPP2Keyword aKeywords[];
 
@@ -189,6 +191,7 @@ private:
 	CTPP2SourceLoader  * pSourceLoader;
 	/** Compiler                */
 	CTPP2Compiler      * pCTPP2Compiler;
+
 	/** Syscalls                */
 	StaticText         & oSyscalls;
 	/** Static data segment     */
@@ -218,7 +221,7 @@ private:
 	/** JMP points for TMPL_break */
 	STLW::vector<STLW::vector<INT_32> > vBreakJMPPoints;
 
-	// Simple tokens: open and close tags, operators, variables, strings and numbers //////////////////////////////////////////////////////////////////////////////////
+	// Simple tokens: open and close tags, operators, variables, strings and numbers 
 
 	/**
 	  @brief Open tag ([Tt][Mm][Pp][Ll])

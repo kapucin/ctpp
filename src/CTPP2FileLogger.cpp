@@ -33,36 +33,27 @@
 
 #include <stdlib.h>
 
-namespace CTPP // C++ Template Engine
+namespace CTPP
 {
 
-//
-// Constructor
-//
-FileLogger::FileLogger(FILE           * IF,
-                       const UINT_32    iIBasePriority): Logger(iIBasePriority), F(IF)
+FileLogger::FileLogger(
+    FILE* IF, const UINT_32 iIBasePriority)
+  :
+    Logger(iIBasePriority),
+    F(IF)
 {
-	;;
 }
 
-//
-// Write message to log file
-//
-INT_32 FileLogger::WriteLog(const UINT_32  iPriority,
-                            CCHAR_P        szString,
-                            const UINT_32  iStringLen)
+INT_32 FileLogger::WriteLog(
+    const UINT_32  iPriority, CCHAR_P szString, const UINT_32 iStringLen)
 {
+  (void) iPriority;
 	fwrite(szString, iStringLen, 1, F);
-return 0;
+  return 0;
 }
 
-//
-// A destructor
-//
 FileLogger::~FileLogger() throw()
 {
-	;;
 }
 
 } // namespace CTPP
-// End.

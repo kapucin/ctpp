@@ -47,11 +47,14 @@ FnConcat::FnConcat()
 //
 // Handler
 //
-INT_32 FnConcat::Handler(CDT            * aArguments,
-                         const UINT_32    iArgNum,
-                         CDT            & oCDTRetVal,
-                         Logger         & oLogger)
+INT_32 FnConcat::Handler(
+    CDT* aArguments,
+    const UINT_32 iArgNum,
+    CDT& oCDTRetVal,
+    Logger& oLogger)
 {
+  (void) oLogger;
+
 	// Check number of parameters
 	if (iArgNum == 0) { oCDTRetVal = ""; return 0; }
 

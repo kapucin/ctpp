@@ -40,56 +40,55 @@
 namespace CTPP // C++ Template Engine
 {
 
-//
-// Constructor
-//
-FnContext::FnContext(): pCDT(NULL)
+FnContext::FnContext()
+  :
+    pCDT(NULL)
 {
-  ;;
 }
 
-//
 // Pre-execution handler setup
 //
-INT_32 FnContext::PreExecuteSetup(OutputCollector          & oCollector,
-                                  CDT                      & oCDT,
-                                  const ReducedStaticText  & oSyscalls,
-                                  const ReducedStaticData  & oStaticData,
-                                  const ReducedStaticText  & oStaticText,
-                                  Logger                   & oLogger)
+INT_32 FnContext::PreExecuteSetup(
+    OutputCollector          & oCollector,
+    CDT                      & oCDT,
+    const ReducedStaticText  & oSyscalls,
+    const ReducedStaticData  & oStaticData,
+    const ReducedStaticText  & oStaticText,
+    Logger                   & oLogger)
 {
+  (void) oCollector; (void) oSyscalls; (void) oStaticData; (void) oStaticText; (void) oLogger;
   pCDT = &oCDT;
-
-return 0;
+  return 0;
 }
 
-//
 // Handler
 //
-INT_32 FnContext::Handler(CDT            * aArguments,
-                          const UINT_32    iArgNum,
-                          CDT            & oCDTRetVal,
-                          Logger         & oLogger)
+INT_32 FnContext::Handler(
+    CDT* aArguments,
+    const UINT_32 iArgNum,
+    CDT& oCDTRetVal,
+    Logger& oLogger)
 {
-    if (iArgNum != 0)
-    {
-    oLogger.Emerg("Usage: CONTEXT()");
-        return -1;
-    }
-    oCDTRetVal = *pCDT;
+  (void) aArguments;
 
-return 0;
+  if (iArgNum != 0) {
+    oLogger.Emerg("Usage: CONTEXT()");
+    return -1;
+  }
+  oCDTRetVal = *pCDT;
+  return 0;
 }
 
-//
 // Get function name
 //
-CCHAR_P FnContext::GetName() const { return "context"; }
+CCHAR_P FnContext::GetName() const
+{
+  return "context";
+}
 
-//
-// A destructor
-//
-FnContext::~FnContext() throw() { ;; }
+FnContext::~FnContext() throw()
+{
+}
 
 } // namespace CTPP
 // End.
