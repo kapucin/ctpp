@@ -922,51 +922,51 @@ INT_32 utf_charlen(CCHAR_P szString, CCHAR_P szStringEnd)
   if (szString == szStringEnd) { return -3; }
 
   // UTF8-1 0xxxxxxx
-  if ((UCCHAR_8(*szString) & 0x80) == 0) { return 1; }
+  if ((reinterpret_cast<UCCHAR_8&>(*szString) & 0x80) == 0) { return 1; }
 
   // UTF8-2 110xxxxx 10xxxxxx
-  if ((UCCHAR_8(*szString) & 0xE0) == 0xC0)
+  if ((reinterpret_cast<UCCHAR_8&>(*szString) & 0xE0) == 0xC0)
   {
     // Check next byte
     ++szString;
     if (szString == szStringEnd) { return -3; }
-    if ((UCCHAR_8(*szString) & 0xC0) != 0x80) { return -1; }
+    if ((reinterpret_cast<UCCHAR_8&>(*szString) & 0xC0) != 0x80) { return -1; }
 
     // Ok
     return 2;
   }
 
   // UTF8-3 1110xxxx 10xxxxxx 10xxxxxx
-  if ((UCCHAR_8(*szString) & 0xF0) == 0xE0)
+  if ((reinterpret_cast<UCCHAR_8&>(*szString) & 0xF0) == 0xE0)
   {
     // Check next byte
     ++szString;
     if (szString == szStringEnd) { return -3; }
-    if ((UCCHAR_8(*szString) & 0xC0) != 0x80) { return -1; }
+    if ((reinterpret_cast<UCCHAR_8&>(*szString) & 0xC0) != 0x80) { return -1; }
 
     ++szString;
     if (szString == szStringEnd) { return -3; }
-    if ((UCCHAR_8(*szString) & 0xC0) != 0x80) { return -1; }
+    if ((reinterpret_cast<UCCHAR_8&>(*szString) & 0xC0) != 0x80) { return -1; }
 
     // Ok
     return 3;
   }
 
   // UTF8-4 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx
-  if ((UCCHAR_8(*szString) & 0xF8) == 0xF0)
+  if ((reinterpret_cast<UCCHAR_8&>(*szString) & 0xF8) == 0xF0)
   {
     // Check next byte
     ++szString;
     if (szString == szStringEnd) { return -3; }
-    if ((UCCHAR_8(*szString) & 0xC0) != 0x80) { return -1; }
+    if ((reinterpret_cast<UCCHAR_8&>(*szString) & 0xC0) != 0x80) { return -1; }
 
     ++szString;
     if (szString == szStringEnd) { return -3; }
-    if ((UCCHAR_8(*szString) & 0xC0) != 0x80) { return -1; }
+    if ((reinterpret_cast<UCCHAR_8&>(*szString) & 0xC0) != 0x80) { return -1; }
 
     ++szString;
     if (szString == szStringEnd) { return -3; }
-    if ((UCCHAR_8(*szString) & 0xC0) != 0x80) { return -1; }
+    if ((reinterpret_cast<UCCHAR_8&>(*szString) & 0xC0) != 0x80) { return -1; }
 
     // Ok
     return 4;

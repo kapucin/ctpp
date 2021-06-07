@@ -1,0 +1,1207 @@
+.\" Man page generated from reStructuredText.
+.
+.TH THE CT++ TEMPLATE LANGUAGE (2.8 VERSION)  "" "" ""
+.SH NAME
+The CT++ template language (2.8 version) \- 
+.
+.nr rst2man-indent-level 0
+.
+.de1 rstReportMargin
+\\$1 \\n[an-margin]
+level \\n[rst2man-indent-level]
+level margin: \\n[rst2man-indent\\n[rst2man-indent-level]]
+-
+\\n[rst2man-indent0]
+\\n[rst2man-indent1]
+\\n[rst2man-indent2]
+..
+.de1 INDENT
+.\" .rstReportMargin pre:
+. RS \\$1
+. nr rst2man-indent\\n[rst2man-indent-level] \\n[an-margin]
+. nr rst2man-indent-level +1
+.\" .rstReportMargin post:
+..
+.de UNINDENT
+. RE
+.\" indent \\n[an-margin]
+.\" old: \\n[rst2man-indent\\n[rst2man-indent-level]]
+.nr rst2man-indent-level -1
+.\" new: \\n[rst2man-indent\\n[rst2man-indent-level]]
+.in \\n[rst2man-indent\\n[rst2man-indent-level]]u
+..
+.SS Contents
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Templates\fP
+.INDENT 2.0
+.IP \(bu 2
+\fI\%Comments\fP
+.IP \(bu 2
+\fI\%Formatting\fP
+.IP \(bu 2
+\fI\%Including\fP
+.UNINDENT
+.IP \(bu 2
+\fI\%Variables\fP
+.INDENT 2.0
+.IP \(bu 2
+\fI\%Arrays\fP
+.IP \(bu 2
+\fI\%Mappings\fP
+.UNINDENT
+.IP \(bu 2
+\fI\%Control flow\fP
+.INDENT 2.0
+.IP \(bu 2
+\fI\%Choice\fP
+.IP \(bu 2
+\fI\%Loops\fP
+.UNINDENT
+.IP \(bu 2
+\fI\%Functions\fP
+.IP \(bu 2
+\fI\%Blocks\fP
+.IP \(bu 2
+\fI\%Library reference\fP
+.INDENT 2.0
+.IP \(bu 2
+\fI\%_ \fI(msgid[, msgid_plural, n][, domain])\fP\fP
+.IP \(bu 2
+\fI\%AVG \fI(flag, a[, b, ...])\fP\fP
+.IP \(bu 2
+\fI\%BASE64_DECODE \fI(x)\fP\fP
+.IP \(bu 2
+\fI\%BASE64_ENCODE \fI(x)\fP\fP
+.IP \(bu 2
+\fI\%CAST \fI(flag, x)\fP\fP
+.IP \(bu 2
+\fI\%CONCAT \fI(a[, b, ...])\fP\fP
+.IP \(bu 2
+\fI\%CONTEXT \fI()\fP\fP
+.IP \(bu 2
+\fI\%DATE_FORMAT \fI(x, format)\fP\fP
+.IP \(bu 2
+\fI\%DEFAULT \fI(x, y)\fP\fP
+.IP \(bu 2
+\fI\%DEFINED \fI(a[, b, ...])\fP\fP
+.IP \(bu 2
+\fI\%ERROR \fI()\fP\fP
+.IP \(bu 2
+\fI\%FORM_PARAM \fI(x, y)\fP\fP
+.IP \(bu 2
+\fI\%GETTEXT \fI(msgid[, msgid_plural, n][, domain])\fP\fP
+.IP \(bu 2
+\fI\%GET_TYPE \fI(x)\fP\fP
+.IP \(bu 2
+\fI\%HASH_KEYS \fI(x)\fP\fP
+.IP \(bu 2
+\fI\%HMAC_MD5 \fI(x, key)\fP\fP
+.IP \(bu 2
+\fI\%HOSTNAME \fI()\fP\fP
+.IP \(bu 2
+\fI\%HREF_PARAM \fI(x, y)\fP\fP
+.IP \(bu 2
+\fI\%HTMLESCAPE \fI(a[, b, ...])\fP\fP
+.IP \(bu 2
+\fI\%ICONV \fI(x, src, dst[, flags])\fP\fP
+.IP \(bu 2
+\fI\%IN_ARRAY \fI(x, array)\fP\fP
+.IP \(bu 2
+\fI\%IN_SET \fI(x, a[, b, ...])\fP\fP
+.IP \(bu 2
+\fI\%JSONESCAPE \fI(a[, b, ...])\fP\fP
+.IP \(bu 2
+\fI\%JSON \fI(x)\fP\fP
+.IP \(bu 2
+\fI\%LIST_ELEMENT \fI(a[, b, ...], x)\fP\fP
+.IP \(bu 2
+\fI\%LIST \fI([a, b, ...])\fP\fP
+.IP \(bu 2
+\fI\%LOG \fI(x[, base])\fP\fP
+.IP \(bu 2
+\fI\%MAX \fI(a[, b, ...])\fP\fP
+.IP \(bu 2
+\fI\%MB_SIZE \fI(x)\fP\fP
+.IP \(bu 2
+\fI\%MB_SUBSTR \fI(x, offset[, bytes[, y]]])\fP\fP
+.IP \(bu 2
+\fI\%MB_TRUNCATE \fI(x, offest[, addon])\fP\fP
+.IP \(bu 2
+\fI\%MD5 \fI(a[, b, ...])\fP\fP
+.IP \(bu 2
+\fI\%MIN \fI(a[, b, ...])\fP\fP
+.IP \(bu 2
+\fI\%NUM_FORMAT \fI(x, y)\fP\fP
+.IP \(bu 2
+\fI\%OBJ_DUMP \fI([a, b, ...])\fP\fP
+.IP \(bu 2
+\fI\%RANDOM \fI([[min,] max])\fP\fP
+.IP \(bu 2
+\fI\%SIZE \fI(x)\fP\fP
+.IP \(bu 2
+\fI\%SPRINTF \fI(format, a[, b, ...])\fP\fP
+.IP \(bu 2
+\fI\%SUBSTR \fI(x, offset[, bytes[, y]]])\fP\fP
+.IP \(bu 2
+\fI\%TRUNCATE \fI(x, offest[, addon])\fP\fP
+.IP \(bu 2
+\fI\%URIESCAPE \fI(a[, b, ...])\fP\fP
+.IP \(bu 2
+\fI\%URLESCAPE \fI(a[, b, ...])\fP\fP
+.IP \(bu 2
+\fI\%VERSION \fI([x])\fP\fP
+.IP \(bu 2
+\fI\%WMLESCAPE \fI(a[, b, ...])\fP\fP
+.IP \(bu 2
+\fI\%XMLESCAPE \fI(a[, b, ...])\fP\fP
+.UNINDENT
+.UNINDENT
+.SH TEMPLATES
+.INDENT 0.0
+.INDENT 3.5
+A template is a text file, that is marked\-up using the CT++ template
+language. It used to separate content from presentation in web design.
+.sp
+A template can contain CT++ tags. All CT++ tags have HTML\-like syntax and
+they start with TMPL_\&. Names of CT++ tags are case insensetive (for
+example, TMPL_var, tmpl_var, or TmPl_VaR).
+.sp
+CT++ supports the next tags: TMPL_var, TMPL_if,
+TMPL_elsif, TMPL_else, TMPL_unless,
+TMPL_foreach, TMPL_include, TMPL_comment,
+TMPL_block, TMPL_call, and TMPL_verbose\&.
+.sp
+Example of a template:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+<!DOCTYPE html>
+<TMPL_include \(aqincludes/html_lang.tmpl\(aq>
+<TMPL_include \(aqincludes/html_head.tmpl\(aq>
+    <link rel="stylesheet" href="/static/css/m.posts.css">
+</head>
+<body class="posts">
+    <div id="body\-wrapper" class="body\-wrapper">
+        <div id="content\-wrapper" class="content\-wrapper">
+            <TMPL_include \(aqincludes/header.tmpl\(aq>
+            <section role="main" class="content\-column">
+                <h1><TMPL_var _("Welcome to")> <TMPL_var project_name>, <TMPL_verbose>
+                <TMPL_if logged>
+                    <TMPL_var HTMLESCAPE(DEFAULT(user_info.name, user_info.username))>
+                <TMPL_else>
+                    <TMPL_var _("Anonymous")>
+                </TMPL_if></h1>
+                </TMPL_verbose>
+
+                <TMPL_verbose>
+                <TMPL_foreach users as user>
+                    <h3><a class="user\-page\-link" href="/user/<TMPL_var URLESCAPE(user.username)>" title="
+                        <TMPL_var HTMLESCAPE(DEFAULT(user.name, user.username))>">
+                        <TMPL_var HTMLESCAPE(DEFAULT(user.name, user.username))>
+                        </a></h3>
+                </TMPL_foreach>
+                </TMPL_verbose>
+
+            </section>
+            <TMPL_include \(aqincludes/noscript_alert.tmpl\(aq>
+        </div>
+    </div>
+    <TMPL_include \(aqincludes/footer.tmpl\(aq>
+</body>
+</html>
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SS Comments
+.INDENT 0.0
+.INDENT 3.5
+Use the TMPL_comment tag to comment\-out part of a template.
+.sp
+For example:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+<TMPL_comment><h3>Hello, <TMPL_var username>!</h3></TMPL_comment>
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SS Formatting
+.INDENT 0.0
+.INDENT 3.5
+The TMPL_verbose tag removes white\-space characters (space,
+form\-feed, newline, carriage return, horizontal tab, and vertical tab)
+between CT++ tags.
+.sp
+For example:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+<TMPL_verbose>
+    foo: <TMPL_var foo> some text
+    bar: <TMPL_var bar> baz: <TMPL_var baz> <TMPL_var spam>
+</TMPL_verbose>
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+For instance, variables foo, bar, baz, and spam are respectively
+"{FOO}", "{BAR}", "{BAZ}", and
+"{SPAM}"\&. The template would be rendered as:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+foo:{FOO}some text
+    bar:{BAR}baz:{BAZ}{SPAM}
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Also, a dash could be used instead the TMPL_verbose tag:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+foo: <TMPL_var foo\-> some text
+    bar: <\-TMPL_var bar\-> baz: <\-TMPL_var baz\-> <\-TMPL_var spam>
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+There will same output.
+.UNINDENT
+.UNINDENT
+.SS Including
+.INDENT 0.0
+.INDENT 3.5
+The TMPL_include tag loads another template within the template.
+The tag has the one attribute only. The attribute can\(aqt be a variable.
+It\(aqs a filename in quotes:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+<TMPL_include "filename.tmpl">
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+It is impossible to break conditions and loops between templates.
+.UNINDENT
+.UNINDENT
+.SH VARIABLES
+.INDENT 0.0
+.INDENT 3.5
+The CT++ template engine evaluates variable and replaces it with the
+result. The TMPL_var tag is used for evaluating variables.
+.sp
+The types of variables are undefined variable, string, integer,
+floating\-point number, mapping, and array.  For undefined variables result
+is an empty string.
+.sp
+The TMPL_var evaluates expressions: variables, operators, and
+functions. For example:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+<TMPL_var foo>
+<TMPL_var (foo + bar + 1)>
+<TMPL_var HTMLESCAPE(baz)>
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SS Arrays
+.INDENT 0.0
+.INDENT 3.5
+An array is a data type consisting of a collection of elements, each
+identified by one array index.  The first element of the array is indexed
+by subscript of 0.
+.sp
+Examples:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+<TMPL_var foo[0]>   <\- foo must be an array!
+<TMPL_var foo[bar]> <\- bar must be an integer!
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SS Mappings
+.INDENT 0.0
+.INDENT 3.5
+A mapping is a data type composed of a collection of (key,value)
+pairs, such that each possible key appears at most once in the collection.
+.sp
+Examples:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+<TMPL_var foo.key> = <TMPL_var foo["key"]> <\- foo must be a mapping
+<TMPL_var foo.bar.baz> <\- the mapping foo has the key "bar" with mapping value, that has the key "baz"
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Use a dot to access attributes of a variable.
+.UNINDENT
+.UNINDENT
+.SH CONTROL FLOW
+.SS Choice
+.INDENT 0.0
+.INDENT 3.5
+The TMPL_if tag and the TMPL_unless tag evaluate a
+condition.  A condition can be variable, function calls, arithmetic and
+logic expressions.  Arithmetic and logic expressions must be inside of
+parentheses.
+.sp
+Examples:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+<TMPL_if foo>
+    Some text with <TMPL_var foo>
+</TMPL_if>
+
+<TMPL_unless DEFINED(bar)>
+    Some text
+<TMPL_else>
+    Some text with <TMPL_var bar>
+</TMPL_unless>
+
+<TMPL_if (x < 1)>
+    eeny
+<TMPL_elsif (x < 2)>
+    meeny
+<TMPL_elsif (x < 3)>
+    miny
+<TMPL_else>
+    moe
+</TMPL_if>
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+The following table summarizes the operator precedences, from highest
+precedence to lowest precedence:
+.TS
+center;
+|l|l|l|.
+_
+T{
+Operators
+T}	T{
+Assoc
+T}	T{
+Description
+T}
+_
+T{
+(expression)
+T}	T{
+T}	T{
+parentheses used for grouping
+T}
+_
+T{
+()
+T}	T{
+LR
+T}	T{
+parentheses used for a function call
+T}
+_
+T{
+\&.
+T}	T{
+LR
+T}	T{
+member selection
+T}
+_
+T{
+[]
+T}	T{
+LR
+T}	T{
+array/mapping element access
+T}
+_
+T{
+!, +, \-
+T}	T{
+RL
+T}	T{
+logical not, unary plus, unary minus
+T}
+_
+T{
+*, /, mod, div
+T}	T{
+LR
+T}	T{
+multiplication and division
+T}
+_
+T{
++, \-
+T}	T{
+LR
+T}	T{
+addition and subtraction
+T}
+_
+T{
+<, <=, >, >=
+T}	T{
+LR
+T}	T{
+inequality relational
+T}
+_
+T{
+==, !=
+T}	T{
+LR
+T}	T{
+equality relational
+T}
+_
+T{
+&&
+T}	T{
+LR
+T}	T{
+logical and
+T}
+_
+T{
+||
+T}	T{
+LR
+T}	T{
+logical or
+T}
+_
+.TE
+.sp
+CT++ defines keywords to act as aliases for a number of operators: lt (<),
+le (<=), gt (>), ge (>=), eq (==), ne (!=), and (&&), or (||).
+.UNINDENT
+.UNINDENT
+.SS Loops
+.INDENT 0.0
+.INDENT 3.5
+CT++ supports the TMPL_foreach only.   It use an explicit iterator,
+in which the loop variable takes on each of the values in an array or a
+mapping.
+.sp
+An iterator has special attributes:
+.TS
+center;
+|l|l|.
+_
+T{
+Attribute
+T}	T{
+Description
+T}
+_
+T{
+__index__
+T}	T{
+index of array\(aqs element
+T}
+_
+T{
+__key__
+T}	T{
+key in mapping
+T}
+_
+T{
+__first__
+T}	T{
+"true" for first iteration
+T}
+_
+T{
+__last__
+T}	T{
+"true" for last iteration
+T}
+_
+T{
+__inner__
+T}	T{
+"true" if not first and not last iteration
+T}
+_
+T{
+__even__
+T}	T{
+"true" for even iteration
+T}
+_
+T{
+__odd__
+T}	T{
+"true" for odd iteration
+T}
+_
+T{
+__value__
+T}	T{
+value of element
+T}
+_
+.TE
+.sp
+Example of usage:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+<TMPL_foreach array as a>
+    value: <TMPL_var a> or <TMPL_var a.__value__>
+    index: <TMPL_var a.__index__>
+    <TMPL_if a.__first__>#first#</TMPL_if>
+    <TMPL_if a.__even__>#even#<TMPL_else>#odd#</TMPL_if>
+</TMPL_foreach>
+
+<TMPL_foreach map as m>
+    value: <TMPL_var m> or <TMPL_var m.__value__>
+    key: <TMPL_var m.__key__>
+    <TMPL_if m.__last__>#last#</TMPL_if>
+</TMPL_foreach>
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+The TMPL_break tag breaks the iteration of loop:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+<TMPL_verbose>
+<TMPL_foreach LIST("a", "b", "c") as char>
+    <TMPL_var char>
+    <TMPL_if (char == "b")><TMPL_break></TMPL_if>
+</TMPL_foreach>
+</TMPL_verbose>
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Output of the template is "ab".
+.UNINDENT
+.UNINDENT
+.SH FUNCTIONS
+.INDENT 0.0
+.INDENT 3.5
+CT++ has built\-in functions, that is described in \fI\%Library reference\fP\&.
+CT++ tags, that support it: TMPL_var, TMPL_if,
+TMPL_unless, TMPL_elsif, and TMPL_foreach\&.  For
+example:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+<TMPL_var SPRINTF(GETTEXT("%d minutes ago", min), min)>
+
+<TMPL_var DEFAULT(HTMLESCAPE(url), "\fI\%http://ctpp.havoc.ru\fP")>
+
+<TMPL_if (GET_TYPE(var) == "STRING")>
+    <TMPL_var GETTEXT("var is string")>
+</TMPL_if>
+
+<TMPL_foreach LIST("eeny", "meeny", "miny", "moe") as item>
+    <TMPL_var item>
+</TMPL_foreach>
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SH BLOCKS
+.INDENT 0.0
+.INDENT 3.5
+A block is reusable piece of a template called by name.
+.sp
+Example of usage:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+<TMPL_block "simple\-block">
+    Some text
+</TMPL_block>
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+The TMPL_call tag is used for calling a block:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+<TMPL_call "simple\-block">
+<TMPL_call some_var>
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+A block can have arguments:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+<TMPL_block \(aqsome\-block\(aq args(a, b, c)>
+    <TMPL_var a>, <TMPL_var b>, and <TMPL_var c>
+</TMPL_block>
+
+<TMPL_call \(aqsome\-block\(aq args(foo, bar, baz)>
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Definition blocks inside another blocks is forbidden.
+.UNINDENT
+.UNINDENT
+.SH LIBRARY REFERENCE
+.SS _ \fI(msgid[, msgid_plural, n][, domain])\fP
+.sp
+See \fI\%GETTEXT\fP\&.
+.SS AVG \fI(flag, a[, b, ...])\fP
+.INDENT 0.0
+.INDENT 3.5
+Return average of a[, b, ...], according to chosen algorithm by
+flag\&.  The values of flag are \(aqa\(aq for arithmetic mean,
+\(aqg\(aq for geometric mean, \(aqh\(aq for harmonic mean, and \(aqq\(aq
+for quadratic mean.
+.sp
+Examples:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+AVG(\(aqa\(aq, 1, 2, 3) \-> 2
+AVG(\(aqg\(aq, 1, 2, 3) \-> 1.81712059283
+AVG(\(aqh\(aq, 1, 2, 3) \-> 1.63636363636
+AVG(\(aqq\(aq, 1, 2, 3) \-> 2.16024689947
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SS BASE64_DECODE \fI(x)\fP
+.INDENT 0.0
+.INDENT 3.5
+Decode the Base64 encoded string x\&.
+.UNINDENT
+.UNINDENT
+.SS BASE64_ENCODE \fI(x)\fP
+.INDENT 0.0
+.INDENT 3.5
+Encode the string x use Base64.
+.UNINDENT
+.UNINDENT
+.SS CAST \fI(flag, x)\fP
+.INDENT 0.0
+.INDENT 3.5
+Convert the type of x to a type specified by flag\&.  The
+values of flag are "i[nteger]", "o[ctal]",
+"h[exadecimal]", "f[loat]", and "s[tring]"\&.
+.sp
+For x starts with 0x or 0X, "integer"
+flag behaves as "hexadecimal" flag\&.  For x
+starts with 0, "integer" flag behaves as
+"octal" flag\&.
+.sp
+Examples:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+CAST("int", 1.345) \-> 1
+CAST("dec", "010") \-> 10
+CAST("hex", "010") \-> 16
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SS CONCAT \fI(a[, b, ...])\fP
+.INDENT 0.0
+.INDENT 3.5
+Return a string which is the concatenation of the values a[, b,
+\&...]\&.
+.sp
+Example:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+CONCAT(\(aqa\(aq, 1, 2, 3) \-> a123
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SS CONTEXT \fI()\fP
+.INDENT 0.0
+.INDENT 3.5
+Return a mapping of the rendered context.
+.UNINDENT
+.UNINDENT
+.SS DATE_FORMAT \fI(x, format)\fP
+.INDENT 0.0
+.INDENT 3.5
+Formats x according to the format specification format (see
+\(aqman 3 strftime\(aq).  The argument x is the number of seconds elapsed
+since the Epoch, 1970\-01\-01 00:00:00 +0000 (UTC).
+.sp
+Example:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+DATE_FORMAT(1200490323, "%Y\-%m\-%d %H:%M:%S") \-> 2008\-01\-16 16:32:03
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SS DEFAULT \fI(x, y)\fP
+.INDENT 0.0
+.INDENT 3.5
+If x is nonzero return x else return y\&.
+.sp
+Examples:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+DEFAULT("", "default_string")   \-> default_string
+DEFAULT(nonexistent, "default") \-> default
+DEFAULT(0, 1)                   \-> 1
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SS DEFINED \fI(a[, b, ...])\fP
+.INDENT 0.0
+.INDENT 3.5
+If all of a[, b, ...] exist return 1 else return
+0\&.
+.UNINDENT
+.UNINDENT
+.SS ERROR \fI()\fP
+.INDENT 0.0
+.INDENT 3.5
+Create runtime error.
+.UNINDENT
+.UNINDENT
+.SS FORM_PARAM \fI(x, y)\fP
+.INDENT 0.0
+.INDENT 3.5
+With name x and value y, output a hidden field of HTML form.
+.sp
+It is equivalent to the next:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+<TMPL_verbose>
+<TMPL_if y>
+    <input type="hidden" name="x" value="<TMPL_var URLESCAPE(y)>">
+</TMPL_if>
+</TMPL_verbose>
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SS GETTEXT \fI(msgid[, msgid_plural, n][, domain])\fP
+.INDENT 0.0
+.INDENT 3.5
+Translate a text string msgid into the user\(aqs native language, by
+looking up the translation in a message catalog.
+.sp
+If a translation was found, the message is converted to the locale\(aqs
+codeset and returned. Otherwise msgid or msgid_plural is
+returned.
+.sp
+The appropriate plural form depends on the number n and the language
+of the message catalog where the translation was found.
+.sp
+The argument domain is a set of translatable messages.
+.sp
+The function _() is alias of GETTEXT()\&.
+.sp
+Examples:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+GETTEXT("Hello, World!")                                \-> Привет, Мир!
+_("Hello, World!")                                      \-> Привет, Мир!
+_("Hello, World!", "mydomain")                          \-> Привет, Другой Мир!
+SPRINTF(_("%d hour", "%d hours", 1), 1)                 \-> 1 час
+SPRINTF(_("%d minute", "%d minutes", 2, "mydomain"), 2) \-> 2 минуты
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SS GET_TYPE \fI(x)\fP
+.INDENT 0.0
+.INDENT 3.5
+Return a printable type of x\&.  The types are "*UNDEF*" for
+undefined variables, "STRING" for strings, "INTEGER" for
+integers, "REAL" for floating\-point numbers, "HASH" for
+mappings, and "ARRAY" for arrays.
+.UNINDENT
+.UNINDENT
+.SS HASH_KEYS \fI(x)\fP
+.INDENT 0.0
+.INDENT 3.5
+Return an array of x\(aqs keys.  The argument x should be
+mapping.
+.UNINDENT
+.UNINDENT
+.SS HMAC_MD5 \fI(x, key)\fP
+.INDENT 0.0
+.INDENT 3.5
+Compute a hash value for the specified x using the supplied key\&.
+.UNINDENT
+.UNINDENT
+.SS HOSTNAME \fI()\fP
+.INDENT 0.0
+.INDENT 3.5
+Return the hostname of the current processor.
+.UNINDENT
+.UNINDENT
+.SS HREF_PARAM \fI(x, y)\fP
+.INDENT 0.0
+.INDENT 3.5
+With name x and value y, output parameters of HTML links.
+.sp
+It is equivalent to the next:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+<TMPL_if a>x=<TMPL_var URLESCAPE(y)></TMPL_if>
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SS HTMLESCAPE \fI(a[, b, ...])\fP
+.INDENT 0.0
+.INDENT 3.5
+Escape &, <, \(aq, ", and > in
+the strings of data a[, b, ...]\&.
+.sp
+HTMLESCAPE() returns result of concatenation of the strings
+a[, b, ...]\&.
+.UNINDENT
+.UNINDENT
+.SS ICONV \fI(x, src, dst[, flags])\fP
+.INDENT 0.0
+.INDENT 3.5
+Convert the string x from the coded character set src to
+dst\&.
+.sp
+The argument flags are \(aqi\(aq or \(aqI\(aq for discarding
+illegal sequence, and \(aqt\(aq or \(aqT\(aq for enabling transliteration
+in the conversion.  The argument flags works in FreeBSD only.
+.sp
+See \(aqiconv \-l\(ga for list which contains all the coded character sets known.
+.UNINDENT
+.UNINDENT
+.SS IN_ARRAY \fI(x, array)\fP
+.INDENT 0.0
+.INDENT 3.5
+Return 1 if x was found in array, else return
+0\&.
+.UNINDENT
+.UNINDENT
+.SS IN_SET \fI(x, a[, b, ...])\fP
+.INDENT 0.0
+.INDENT 3.5
+Return 1 if x was found in a[, b, ...], else return
+0\&.
+.UNINDENT
+.UNINDENT
+.SS JSONESCAPE \fI(a[, b, ...])\fP
+.INDENT 0.0
+.INDENT 3.5
+Escape ", \e, /, \eb, \ef,
+\en, \er, \et, \(aq, \ev, and
+\e0 in the strings of data a[, b, ...]\&.  If character\(aqs
+value is smaller than \eu0032, it is encoded with \euXXXX
+format for hex digits XXXX\&.
+.sp
+JSONESCAPE() returns result of concatenation of the strings
+a[, b, ...]\&.
+.UNINDENT
+.UNINDENT
+.SS JSON \fI(x)\fP
+.INDENT 0.0
+.INDENT 3.5
+Serialize x to the JavaScript Object Notation (JSON).
+.UNINDENT
+.UNINDENT
+.SS LIST_ELEMENT \fI(a[, b, ...], x)\fP
+.INDENT 0.0
+.INDENT 3.5
+Return an element from a[, b, ...] by the index x\&.
+.UNINDENT
+.UNINDENT
+.SS LIST \fI([a, b, ...])\fP
+.INDENT 0.0
+.INDENT 3.5
+Return an array of [a, b, ...]\&. It can be empty.
+.UNINDENT
+.UNINDENT
+.SS LOG \fI(x[, base])\fP
+.INDENT 0.0
+.INDENT 3.5
+With one argument, return the natural logarithm of x (to base
+e).
+.sp
+With two arguments, return the logarithm of x to the given
+base, calculated as LOG(x) / LOG(base)\&.
+.UNINDENT
+.UNINDENT
+.SS MAX \fI(a[, b, ...])\fP
+.INDENT 0.0
+.INDENT 3.5
+Return the largest item of a[, b, ...]\&.
+.UNINDENT
+.UNINDENT
+.SS MB_SIZE \fI(x)\fP
+.INDENT 0.0
+.INDENT 3.5
+MB_ prefix marks function, which works with multibyte strings.
+.sp
+See \fI\%SIZE\fP\&.
+.UNINDENT
+.UNINDENT
+.SS MB_SUBSTR \fI(x, offset[, bytes[, y]]])\fP
+.INDENT 0.0
+.INDENT 3.5
+MB_ prefix marks function, which works with multibyte strings.
+.sp
+See \fI\%SUBSTR\fP\&.
+.UNINDENT
+.UNINDENT
+.SS MB_TRUNCATE \fI(x, offest[, addon])\fP
+.INDENT 0.0
+.INDENT 3.5
+MB_ prefix marks function, which works with multibyte strings.
+.sp
+See \fI\%TRUNCATE\fP\&.
+.UNINDENT
+.UNINDENT
+.SS MD5 \fI(a[, b, ...])\fP
+.INDENT 0.0
+.INDENT 3.5
+Return the MD5 hash of a[, b, ...]\&.
+.UNINDENT
+.UNINDENT
+.SS MIN \fI(a[, b, ...])\fP
+.INDENT 0.0
+.INDENT 3.5
+Return the smallest item of a[, b, ...]\&.
+.UNINDENT
+.UNINDENT
+.SS NUM_FORMAT \fI(x, y)\fP
+.INDENT 0.0
+.INDENT 3.5
+Return the formatted integer x with period y\&.
+.sp
+Example:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+NUM_FORMAT(1234567, ",") \-> 1,234,567
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SS OBJ_DUMP \fI([a, b, ...])\fP
+.INDENT 0.0
+.INDENT 3.5
+Return dump of the arguments [a, b, ...]\&.  Return dump of all variables
+if no arguments.
+.UNINDENT
+.UNINDENT
+.SS RANDOM \fI([[min,] max])\fP
+.INDENT 0.0
+.INDENT 3.5
+Return a random number in the range (min, max].  The range
+(min, max] equals to 0 .. RAND_MAX, if no arguments.
+.UNINDENT
+.UNINDENT
+.SS SIZE \fI(x)\fP
+.INDENT 0.0
+.INDENT 3.5
+Return the number of items of a sequence x\&.
+.UNINDENT
+.UNINDENT
+.SS SPRINTF \fI(format, a[, b, ...])\fP
+.INDENT 0.0
+.INDENT 3.5
+Produce output according to a format.  After the argument format, it
+expects at least as many additional arguments as specified in
+format\&.
+.sp
+The argument format can optionaly contain embedded format tags that
+are substituted by the values specified in a[, b, ...]\&.
+.sp
+See \(aqman 3 printf\(aq for more information.
+.UNINDENT
+.UNINDENT
+.SS SUBSTR \fI(x, offset[, bytes[, y]]])\fP
+.INDENT 0.0
+.INDENT 3.5
+Return the characters in the string x starting at a specified
+position offset and continuing for a specified number of characters
+bytes\&.  If the argument y exists, then return the string
+x with replaced the characters with y\&.
+.UNINDENT
+.UNINDENT
+.SS TRUNCATE \fI(x, offest[, addon])\fP
+.INDENT 0.0
+.INDENT 3.5
+Return the string x, if it is less than or equal to offset
+characters long.  If it is longer, it truncates the string.
+.sp
+Return the string with addon, if the argument addon exists.
+.UNINDENT
+.UNINDENT
+.SS URIESCAPE \fI(a[, b, ...])\fP
+.INDENT 0.0
+.INDENT 3.5
+Convert characters of the strings a[, b, ...] into their
+corresponding escape sequences.
+.sp
+URIESCAPE() returns result of concatenation of the strings
+a[, b, ...]\&.
+.UNINDENT
+.UNINDENT
+.SS URLESCAPE \fI(a[, b, ...])\fP
+.INDENT 0.0
+.INDENT 3.5
+Convert characters of the strings a[, b, ...] into their
+corresponding escape sequences.  It replaces spaces with "+" instead
+of "%20"\&.
+.sp
+URLESCAPE() returns result of concatenation of the strings
+a[, b, ...]\&.
+.UNINDENT
+.UNINDENT
+.SS VERSION \fI([x])\fP
+.INDENT 0.0
+.INDENT 3.5
+Return the current version of CT++.
+.sp
+Return extended information if x equals to "full"\&.
+.UNINDENT
+.UNINDENT
+.SS WMLESCAPE \fI(a[, b, ...])\fP
+.INDENT 0.0
+.INDENT 3.5
+Replace < with &gt;, > with &lt;,
+" with &quot;, \(aq with &apos;,
+$ with $$, and & with &amp; in the
+strings of data a[, b, ...]\&.
+.sp
+WMLESCAPE() returns result of concatenation of the strings
+a[, b, ...]\&.
+.UNINDENT
+.UNINDENT
+.SS XMLESCAPE \fI(a[, b, ...])\fP
+.INDENT 0.0
+.INDENT 3.5
+Replace < with &gt;, > with &lt;,
+" with &quot;, \(aq with &apos;, and
+& with &amp; in the strings of data a[, b, ...]\&.
+.sp
+XMLESCAPE() returns result of concatenation of the strings
+a[, b, ...]\&.
+.UNINDENT
+.UNINDENT
+.\" Generated by docutils manpage writer.
+.
