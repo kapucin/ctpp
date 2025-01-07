@@ -100,36 +100,33 @@ public:
   ~SyscallFactory() throw();
 
 private:
-  /**
-    @struct HandlerRefsSort SyscallFactory.hpp <SyscallFactory.hpp>
-    @brief Case-insensitive sorting functor
-  */
-  struct HandlerRefsSort:
-    public STLW::binary_function<STLW::string, STLW::string, bool>
+  struct ci_less
   {
-    /**
-      @brief comparison operator
-      @param x - first argument
-      @param y - first argument
-      @return true if x > y
-    */
-    inline bool operator() (const STLW::string  & x,
-                            const STLW::string  & y) const
+    // case-independent (ci) compare_less binary function
+    struct nocase_compare
     {
-      return (strcasecmp(x.c_str(), y.c_str()) > 0);
+      bool operator() (const unsigned char& c1, const unsigned char& c2) const {
+        return tolower (c1) < tolower (c2); 
+      }
+    };
+    bool operator() (const std::string & s1, const std::string & s2) const {
+      return std::lexicographical_compare 
+        (s1.begin (), s1.end (),   // source range
+         s2.begin (), s2.end (),   // dest range
+         nocase_compare ());  // comparison
     }
   };
 
   /** Max. allowed number of handlers            */
-  const UINT_32                      iMaxHandlers;
+  const UINT_32 iMaxHandlers;
   /** Max. used handler ID                       */
-  UINT_32                            iCurrHandlers;
+  UINT_32 iCurrHandlers;
   /** List of handlers                           */
-  SyscallHandler                  ** aHandlers;
+  SyscallHandler** aHandlers;
   /** Handler name-to-handler ID translation map */
-  STLW::map<STLW::string, UINT_32, HandlerRefsSort>     mHandlerRefs;
+  STLW::map<STLW::string, UINT_32, ci_less> mHandlerRefs;
 };
 
 } // namespace CTPP
+
 #endif // _CTPP2_SYSCALL_FACTORY_HPP__
-// End.

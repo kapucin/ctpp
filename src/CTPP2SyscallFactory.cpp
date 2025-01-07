@@ -58,11 +58,14 @@ return NULL;
 //
 SyscallHandler * SyscallFactory::GetHandlerByName(CCHAR_P szHandlerName) const
 {
-	STLW::map<STLW::string, UINT_32, HandlerRefsSort>::const_iterator itmHandlerRefs = mHandlerRefs.find(szHandlerName);
+	STLW::map<STLW::string, UINT_32, ci_less>::const_iterator itmHandlerRefs =
+    mHandlerRefs.find(szHandlerName);
 
-	if (itmHandlerRefs == mHandlerRefs.end()) { return NULL; }
+	if (itmHandlerRefs == mHandlerRefs.end()) {
+    return NULL;
+  }
 
-return aHandlers[itmHandlerRefs -> second];
+  return aHandlers[itmHandlerRefs -> second];
 }
 
 //
@@ -84,15 +87,17 @@ return iCurrHandlers++;
 //
 INT_32 SyscallFactory::RemoveHandler(CCHAR_P szHandlerName)
 {
-	STLW::map<STLW::string, UINT_32, HandlerRefsSort>::iterator itmHandlerRefs = mHandlerRefs.find(szHandlerName);
+	STLW::map<STLW::string, UINT_32, ci_less>::iterator itmHandlerRefs =
+    mHandlerRefs.find(szHandlerName);
 
-	if (itmHandlerRefs == mHandlerRefs.end()) { return -1; }
+	if (itmHandlerRefs == mHandlerRefs.end()) {
+    return -1;
+  }
 
 	aHandlers[itmHandlerRefs -> second] = NULL;
-
 	mHandlerRefs.erase(itmHandlerRefs);
 
-return 0;
+  return 0;
 }
 //
 // A destructor

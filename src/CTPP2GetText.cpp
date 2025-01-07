@@ -218,24 +218,20 @@ static void Split(const STLW::string & sStr, CHAR_8 cSep, STLW::vector<STLW::str
     vResult.push_back(sSubstr);
 }
 
-//
 // Remove trailing and leading spaces from string
 //
-static void Trim(STLW::string & s)
+static void Trim(STLW::string& str, const std::string& whitespace=" \r\n\t\v\f")
 {
-	s.erase(
-		STLW::find_if(s.rbegin(), s.rend(), STLW::not1(STLW::ptr_fun<INT_32, INT_32>(::isspace))).base(),
-		s.end());
-
-	s.erase(
-		s.begin(),
-		STLW::find_if(s.begin(), s.end(), STLW::not1(STLW::ptr_fun<INT_32, INT_32>(::isspace))));
+  str.erase(0, str.find_first_not_of(whitespace));
+  str.erase(str.find_last_not_of(whitespace) + 1);
 }
 
 //
 // A constructor
 //
-CTPP2GetText::CTPP2GetText() { sDefaultDomain.assign("default"); }
+CTPP2GetText::CTPP2GetText() {
+  sDefaultDomain.assign("default");
+}
 
 //
 // A destructor
@@ -1287,4 +1283,3 @@ CCHAR_P CTPP2GetText::StringifyInstruction(eCTPP2Instruction eType)
 }
 
 }  // namespace CTPP
-// End.
