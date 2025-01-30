@@ -43,6 +43,7 @@
             #define MD5_Final   MD5Final
         #else
             #include <openssl/md5.h>
+            #include <openssl/evp.h>
         #endif
     #endif // ifndef WIN32
 #endif // MD5_SUPPORT
@@ -59,26 +60,17 @@ FnMD5::FnMD5()
 #ifdef WIN32
 	// http://msdn.microsoft.com/en-us/library/aa382375(VS.85).aspx
 	// Get a handle to the default PROV_RSA_FULL provider.
-	if(CryptAcquireContext(&hCryptProv, NULL, NULL, PROV_RSA_FULL, 0))
-	{
+	if (CryptAcquireContext(&hCryptProv, NULL, NULL, PROV_RSA_FULL, 0)) {
 		// Okay
-	}
-	else
-	{
-		if (GetLastError() == NTE_BAD_KEYSET)
-		{
+	} else {
+		if (GetLastError() == NTE_BAD_KEYSET) {
 			// No default container was found. Attempt to create it.
-			if(CryptAcquireContext(&hCryptProv, NULL, NULL, PROV_RSA_FULL, CRYPT_NEWKEYSET))
-			{
+			if (CryptAcquireContext(&hCryptProv, NULL, NULL, PROV_RSA_FULL, CRYPT_NEWKEYSET)) {
 				// Okay
-			}
-			else
-			{
+			} else {
 				throw CTPPUnixException("Could not create the default key container.", GetLastError());
 			}
-		}
-		else
-		{
+		} else {
 			throw CTPPUnixException("A general error running CryptAcquireContext", GetLastError());
 		}
 	}
@@ -101,44 +93,44 @@ INT_32 FnMD5::Handler(CDT            * aArguments,
 {
 	static CHAR_8 aHex[] = "0123456789abcdef";
 	CHAR_8 szMD5[32];
+
 	// >0 arguments need
-	if (iArgNum == 0)
-	{
+	if (iArgNum == 0) {
 		oLogger.Emerg("Usage: MD5(a[, b, ...])");
 		return -1;
 	}
 
-	MD5_CTX oMD5Context;
-	MD5_Init(&oMD5Context);
+  // MD5_Init
+  EVP_MD_CTX* mdctx = EVP_MD_CTX_new();
+  EVP_DigestInit_ex(mdctx, EVP_md5(), NULL);
 
 	INT_32 iI = iArgNum - 1;
-	for (; iI >= 0; --iI)
-	{
-		// Data
+
+	for (; iI >= 0; --iI) {
 		const STLW::string & sTMP = aArguments[iI].GetString();
 		CCHAR_P szData = sTMP.c_str();
-		// Data length
 		const UINT_32 iDataLength = sTMP.size();
-
-		MD5_Update(&oMD5Context, (const unsigned char *)szData, iDataLength);
+    EVP_DigestUpdate(mdctx, (const unsigned char *)szData, iDataLength);
 	}
 
-	unsigned char sDigest[16];
-	MD5_Final(sDigest, &oMD5Context);
+  // MD5_Final
+  unsigned int md5_digest_len = EVP_MD_size(EVP_md5());
+  unsigned char* md5_digest = (unsigned char *) OPENSSL_malloc(md5_digest_len);
+  EVP_DigestFinal_ex(mdctx, md5_digest, &md5_digest_len);
+  EVP_MD_CTX_free(mdctx);
 
 	INT_32 iJ = 0;
-	for (iI = 0; iI < 16; ++iI)
-	{
-		szMD5[ iJ++] = aHex[ (sDigest[iI] >> 4 )& 0x0F ];
-		szMD5[ iJ++] = aHex[  sDigest[iI]       & 0x0F ];
+
+	for (iI = 0; iI < 16; ++iI) {
+		szMD5[ iJ++] = aHex[ (md5_digest[iI] >> 4 )& 0x0F ];
+		szMD5[ iJ++] = aHex[  md5_digest[iI]       & 0x0F ];
 	}
 
 	// Okay
 	oCDTRetVal = STLW::string(szMD5, 32);
-
-return 0;
-
+  return 0;
 }
+
 #else // WIN32
 
 //

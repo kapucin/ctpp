@@ -43,6 +43,7 @@
             #define MD5_Final   MD5Final
         #else
             #include <openssl/md5.h>
+            #include <openssl/evp.h>
         #endif
     #endif // ifndef WIN32
 #endif // MD5_SUPPORT
@@ -58,26 +59,17 @@ FnHMACMD5::FnHMACMD5()
 #ifdef WIN32
 	// http://msdn.microsoft.com/en-us/library/aa382375(VS.85).aspx
 	// Get a handle to the default PROV_RSA_FULL provider.
-	if(CryptAcquireContext(&hCryptProv, NULL, NULL, PROV_RSA_FULL, 0))
-	{
+	if(CryptAcquireContext(&hCryptProv, NULL, NULL, PROV_RSA_FULL, 0)) {
 		// Okay
-	}
-	else
-	{
-		if (GetLastError() == NTE_BAD_KEYSET)
-		{
+	} else {
+		if (GetLastError() == NTE_BAD_KEYSET) {
 			// No default container was found. Attempt to create it.
-			if(CryptAcquireContext(&hCryptProv, NULL, NULL, PROV_RSA_FULL, CRYPT_NEWKEYSET))
-			{
+			if(CryptAcquireContext(&hCryptProv, NULL, NULL, PROV_RSA_FULL, CRYPT_NEWKEYSET)) {
 				// Okay
-			}
-			else
-			{
+			} else {
 				throw CTPPUnixException("Could not create the default key container.", GetLastError());
 			}
-		}
-		else
-		{
+		} else {
 			throw CTPPUnixException("A general error running CryptAcquireContext", GetLastError());
 		}
 	}
@@ -99,25 +91,27 @@ INT_32 FnHMACMD5::Handler(CDT            * aArguments,
 	CHAR_8 szMD5[32];
 
 	// Only 2 args allowed
-	if (iArgNum != 2)
-	{
+	if (iArgNum != 2) {
 		oLogger.Emerg("Usage: HMAC_MD5(x, key)");
 		return -1;
 	}
 
-	MD5_CTX   oContext;
-	UCHAR_8  sIPad[65];
-	UCHAR_8  sOPad[65];
+	UCHAR_8 sIPad[65];
+	UCHAR_8 sOPad[65];
 
 	// Construct key
 	STLW::string sKey = aArguments[0].GetString();
+
 	// If key is longer than 64 bytes reset it to key=MD5(key)
-	if (sKey.size() > 64)
-	{
-		UCHAR_8  sTempKey[16];
-		MD5_Init(&oContext);
-		MD5_Update(&oContext, sKey.data(), sKey.size());
-		MD5_Final(sTempKey, &oContext);
+	if (sKey.size() > 64) {
+		UCHAR_8 sTempKey[16];
+
+    EVP_MD_CTX* mdctx = EVP_MD_CTX_new();
+    EVP_DigestInit_ex(mdctx, EVP_md5(), NULL);
+    EVP_DigestUpdate(mdctx, (const unsigned char *)sKey.data(), sKey.size());
+    unsigned int md5_digest_len = EVP_MD_size(EVP_md5());
+    EVP_DigestFinal_ex(mdctx, sTempKey, &md5_digest_len);
+    EVP_MD_CTX_free(mdctx);
 
 		sKey.assign((CCHAR_P)sTempKey, 16);
 	}
@@ -131,14 +125,13 @@ INT_32 FnHMACMD5::Handler(CDT            * aArguments,
 	 * and text is the data being protected
 	 */
 	UINT_32 iI = 0;
-	for(; iI < sKey.size(); ++iI)
-	{
+
+	for(; iI < sKey.size(); ++iI) {
 		sIPad[iI] = 0x36 ^ UCHAR_8(sKey[iI]);
 		sOPad[iI] = 0x5C ^ UCHAR_8(sKey[iI]);
 	}
 
-	for(; iI < 64; ++iI)
-	{
+	for(; iI < 64; ++iI) {
 		sIPad[iI] = 0x36;
 		sOPad[iI] = 0x5C;
 	}
@@ -146,29 +139,34 @@ INT_32 FnHMACMD5::Handler(CDT            * aArguments,
 	unsigned char sDigest[16];
 
 	STLW::string sSource = aArguments[1].GetString();
+
+  EVP_MD_CTX* mdctx = EVP_MD_CTX_new();
+  unsigned int md5_digest_len = EVP_MD_size(EVP_md5());
+
 	// Inner MD5
-	MD5_Init(&oContext);
-	MD5_Update(&oContext, sIPad, 64);
-	MD5_Update(&oContext, sSource.data(), sSource.size());
-	MD5_Final(sDigest, &oContext);
+  EVP_DigestInit_ex(mdctx, EVP_md5(), NULL);
+  EVP_DigestUpdate(mdctx, sIPad, 64);
+  EVP_DigestUpdate(mdctx, sSource.data(), sSource.size());
+  EVP_DigestFinal_ex(mdctx, sDigest, &md5_digest_len);
 
 	// Outer MD5
-	MD5_Init(&oContext);
-	MD5_Update(&oContext, sOPad, 64);
-	MD5_Update(&oContext, sDigest, 16);
-	MD5_Final(sDigest, &oContext);
+  EVP_DigestInit_ex(mdctx, EVP_md5(), NULL);
+  EVP_DigestUpdate(mdctx, sOPad, 64);
+  EVP_DigestUpdate(mdctx, sDigest, 16);
+  EVP_DigestFinal_ex(mdctx, sDigest, &md5_digest_len);
+
+  EVP_MD_CTX_free(mdctx);
 
 	INT_32 iJ = 0;
-	for (iI = 0; iI < 16; ++iI)
-	{
+
+	for (iI = 0; iI < 16; ++iI) {
 		szMD5[ iJ++] = aHex[ (sDigest[iI] >> 4 )& 0x0F ];
 		szMD5[ iJ++] = aHex[  sDigest[iI]       & 0x0F ];
 	}
 
 	// Okay
 	oCDTRetVal = STLW::string(szMD5, 32);
-
-return 0;
+  return 0;
 }
 
 #else // WIN32
@@ -180,8 +178,11 @@ INT_32 FnHMACMD5::Handler(CDT            * aArguments,
 {
 	static CHAR_8 aHex[] = "0123456789abcdef";
 	CHAR_8 szMD5[32];
+
 	// >0 arguments need
-	if (iArgNum != 2 || hCryptProv == 0) { return -1; }
+	if (iArgNum != 2 || hCryptProv == 0) {
+    return -1;
+  }
 
 	HCRYPTHASH hHash;
 	UCHAR_8  sIPad[65];
@@ -189,24 +190,26 @@ INT_32 FnHMACMD5::Handler(CDT            * aArguments,
 
 	// Construct key
 	STLW::string sKey = aArguments[0].GetString();
-	// If key is longer than 64 bytes reset it to key=MD5(key)
-	if (sKey.size() > 64)
-	{
-		if (::CryptCreateHash(hCryptProv, CALG_MD5, 0, 0, &hHash) == 0) { return -1; }
 
-		if (::CryptHashData(hHash, (BYTE *)sKey.c_str(), (DWORD)sKey.size(), 0) == 0)
-		{
+	// If key is longer than 64 bytes reset it to key=MD5(key)
+	if (sKey.size() > 64) {
+		if (::CryptCreateHash(hCryptProv, CALG_MD5, 0, 0, &hHash) == 0) {
+      return -1;
+    }
+
+		if (::CryptHashData(hHash, (BYTE *)sKey.c_str(), (DWORD)sKey.size(), 0) == 0) {
 			::CryptDestroyHash(hHash);
 			return -1;
 		}
 
 		BYTE sDigest[16];
 		DWORD dwCount = 16;
-		if (::CryptGetHashParam(hHash, HP_HASHVAL, sDigest, &dwCount, 0) == 0)
-		{
+
+		if (::CryptGetHashParam(hHash, HP_HASHVAL, sDigest, &dwCount, 0) == 0) {
 			::CryptDestroyHash(hHash);
 			return -1;
 		}
+
 		::CryptDestroyHash(hHash);
 		sKey.assign((CCHAR_P)sDigest, 16);
 	}
@@ -220,77 +223,72 @@ INT_32 FnHMACMD5::Handler(CDT            * aArguments,
 	 * and text is the data being protected
 	 */
 	UINT_32 iI = 0;
-	for(; iI < sKey.size(); ++iI)
-	{
+
+	for(; iI < sKey.size(); ++iI) {
 		sIPad[iI] = 0x36 ^ UCHAR_8(sKey[iI]);
 		sOPad[iI] = 0x5C ^ UCHAR_8(sKey[iI]);
 	}
 
-	for(; iI < 64; ++iI)
-	{
+	for(; iI < 64; ++iI) {
 		sIPad[iI] = 0x36;
 		sOPad[iI] = 0x5C;
 	}
-
 
 	BYTE sDigest[16];
 	DWORD dwCount = 16;
 
 	STLW::string sSource = aArguments[1].GetString();
 	// Inner MD5
-	if (::CryptCreateHash(hCryptProv, CALG_MD5, 0, 0, &hHash) == 0) { return -1; }
+	if (::CryptCreateHash(hCryptProv, CALG_MD5, 0, 0, &hHash) == 0) {
+    return -1;
+  }
 
-	if (::CryptHashData(hHash, (BYTE *)sIPad, (DWORD)64, 0) == 0)
-	{
+	if (::CryptHashData(hHash, (BYTE *)sIPad, (DWORD)64, 0) == 0) {
 		::CryptDestroyHash(hHash);
 		return -1;
 	}
 
-	if (::CryptHashData(hHash, (BYTE *)sSource.data(), (DWORD)sSource.size(), 0) == 0)
-	{
+	if (::CryptHashData(hHash, (BYTE *)sSource.data(), (DWORD)sSource.size(), 0) == 0) {
 		::CryptDestroyHash(hHash);
 		return -1;
 	}
 
-	if (::CryptGetHashParam(hHash, HP_HASHVAL, sDigest, &dwCount, 0) == 0)
-	{
+	if (::CryptGetHashParam(hHash, HP_HASHVAL, sDigest, &dwCount, 0) == 0) {
 		::CryptDestroyHash(hHash);
 		return -1;
 	}
 	::CryptDestroyHash(hHash);
 
-	if (::CryptCreateHash(hCryptProv, CALG_MD5, 0, 0, &hHash) == 0) { return -1; }
+	if (::CryptCreateHash(hCryptProv, CALG_MD5, 0, 0, &hHash) == 0) {
+    return -1;
+  }
 
-	if (::CryptHashData(hHash, (BYTE *)sOPad, (DWORD)64, 0) == 0)
-	{
+	if (::CryptHashData(hHash, (BYTE *)sOPad, (DWORD)64, 0) == 0) {
 		::CryptDestroyHash(hHash);
 		return -1;
 	}
 
-	if (::CryptHashData(hHash, (BYTE *)sDigest, (DWORD)16, 0) == 0)
-	{
+	if (::CryptHashData(hHash, (BYTE *)sDigest, (DWORD)16, 0) == 0) {
 		::CryptDestroyHash(hHash);
 		return -1;
 	}
 
-	if (::CryptGetHashParam(hHash, HP_HASHVAL, sDigest, &dwCount, 0) == 0)
-	{
+	if (::CryptGetHashParam(hHash, HP_HASHVAL, sDigest, &dwCount, 0) == 0) {
 		::CryptDestroyHash(hHash);
 		return -1;
 	}
 	::CryptDestroyHash(hHash);
 
 	INT_32 iJ = 0;
-	for (iI = 0; iI < 16; ++iI)
-	{
+
+	for (iI = 0; iI < 16; ++iI) {
 		szMD5[ iJ++] = aHex[ (sDigest[iI] >> 4 )& 0x0F ];
 		szMD5[ iJ++] = aHex[  sDigest[iI]       & 0x0F ];
 	}
 
 	// Okay
 	oCDTRetVal = STLW::string(szMD5, 32);
-
-return 0;
+  return 0;
 }
 #endif // WIN32
 //
